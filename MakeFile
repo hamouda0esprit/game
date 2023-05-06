@@ -1,8 +1,0 @@
-prog:carac.o mainn.o background.o
-	gcc carac.o mainn.o background.o -o prog -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -g
-mainn.o:mainn.c
-	gcc -c mainn.c -g
-carac.o:carac.c
-	gcc -c carac.c -g
-background.o:background.c
-	gcc -c background.c -g
