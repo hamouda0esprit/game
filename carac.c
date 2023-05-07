@@ -11,9 +11,9 @@
 
   const int NUM_FRAMES = 13; // number of animation frames
 	const int FRAME_DELAY = 50;
-	const int NUM_FRAMESright = 11; // number of animation frames
+	const int NUM_FRAMESright = 13; // number of animation frames
 	const int FRAME_DELAYright = 50;
-	const int NUM_FRAMESleft = 11; // number of animation frames
+	const int NUM_FRAMESleft = 13; // number of animation frames
 	const int FRAME_DELAYleft = 50;
 	int strStartsWith(const char *pre, const char *str)
 {
@@ -21,44 +21,9 @@
            lenstr = strlen(str);
     return lenstr < lenpre ? 0 : strncmp(pre, str, lenpre) == 0;
 }
-void initialiser_imageBACK(image *imge,char dest[])
-{
-imge->url=dest;
-imge->img=IMG_Load(imge->url);
-if (imge->img == NULL){
-	printf("unable to load background image %s \n",SDL_GetError()); 
-	return ;}
-imge->pos_img_ecran.x=0;
-imge->pos_img_ecran.y=0;
-imge->pos_img_affiche.x=0;
-imge->pos_img_affiche.y=0; 
-imge->pos_img_affiche.h=SCREEN_H;
-imge->pos_img_affiche.w=SCREEN_W;
-}
-void afficher_image(SDL_Surface *screen, image imge)
-{
-SDL_BlitSurface(imge.img, &imge.pos_img_affiche, screen, &imge.pos_img_ecran);
-
-}
-SDL_Surface* load_image(const char* filename) {
-    SDL_Surface* image = NULL;
-    SDL_Surface* optimized = NULL;
-
-    image = IMG_Load(filename);
-    if (image != NULL) {
-        // Set the color key for transparency
-        Uint32 colorkey = SDL_MapRGB(image->format, 0, 0xFF, 0xFF);
-        SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey);
-
-        optimized = SDL_DisplayFormatAlpha(image);
-        SDL_FreeSurface(image);
-    }
-
-    return optimized;
-}
 // FONCTIONS OF STOP
 //------------------------------------------------
-void update_animation(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES) {
+void update_animation2(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES) {
     // calculate time since last frame
     Uint32 current_time = SDL_GetTicks();
     Uint32 time_since_last_frame = current_time - *last_frame_time;
@@ -73,18 +38,8 @@ void update_animation(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES
         *last_frame_time = current_time;
     }
 }
-void init_bullet(bullet *b){
-        b->image = IMG_Load("bullet.png");
-}
-void affbullet(SDL_Surface *screen,bullet *b){
-        SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x+=20;
-        
-}
 
-
-
-void render_animation(SDL_Surface *screen, SDL_Surface **frames, int current_frame,int x,int y) {
+void render_animation2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,int x,int y) {
     // draw current animation frame to screen
     SDL_Rect dest;
     dest.x = x;
@@ -96,7 +51,7 @@ void render_animation(SDL_Surface *screen, SDL_Surface **frames, int current_fra
 
     SDL_Flip(screen);
 }
-void clear_animation(SDL_Surface **frames, int num_frames) {
+void clear_animation2(SDL_Surface **frames, int num_frames) {
     // free animation frames
     for (int i = 0; i < num_frames; i++) {
         SDL_FreeSurface(frames[i]);
@@ -106,7 +61,7 @@ void clear_animation(SDL_Surface **frames, int num_frames) {
 //------------------------------------------------
 // FONCTIONS OF right
 //------------------------------------------------
-void update_animationright(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES) {
+void update_animationright2(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES) {
     // calculate time since last frame
     Uint32 current_time = SDL_GetTicks();
     Uint32 time_since_last_frame = current_time - *last_frame_time;
@@ -123,7 +78,7 @@ void update_animationright(int *current_frame, Uint32 *last_frame_time,int NUM_F
 }
 
 
-void render_animationright(SDL_Surface *screen, SDL_Surface **frames, int current_frame,int x,int y) {
+void render_animationright2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,int x,int y) {
     // draw current animation frame to screen
     SDL_Rect dest;
     dest.x = x;
@@ -165,41 +120,41 @@ const int NUM_FRAMESjump = 6;
 					if ((*current_framejump)==5){
         			(*jump)==1;
         		}
-					update_animation(current_framejump, last_frame_timejump, NUM_FRAMESss);
-        			render_animationright(screen, framesjump, *current_framejump, p->cor.x, p->cor.y);
+					update_animation2(current_framejump, last_frame_timejump, NUM_FRAMESss);
+        			render_animationright2(screen, framesjump, *current_framejump, p->cor.x, p->cor.y);
         		
         		}
         		else if((*dir) ==0&& (*jump) ==0){
-					update_animation(current_framess, last_frame_timess, NUM_FRAMESss);
-        			render_animationright(screen, framesss, *current_framess, p->cor.x, p->cor.y);
+					update_animation2(current_framess, last_frame_timess, NUM_FRAMESss);
+        			render_animationright2(screen, framesss, *current_framess, p->cor.x, p->cor.y);
 				}		
 				else if((*dir)==0 &&(*jump)==1){
-					update_animationright(current_frameleft, last_frame_timeleft,NUM_FRAMESleft);
-        			render_animationright(screen, framesleft, *current_frameleft,p->cor.x,p->cor.y);       
+					update_animationright2(current_frameleft, last_frame_timeleft,NUM_FRAMESleft);
+        			render_animationright2(screen, framesleft, *current_frameleft,p->cor.x,p->cor.y);       
 				}
 				else if((*dir)==1 && (*jump)==1 ){
-					update_animationright(current_frame2, last_frame_time2,NUM_FRAMESright);
-        			render_animationright(screen, framesright, *current_frame2,p->cor.x,p->cor.y);        			
+					update_animationright2(current_frame2, last_frame_time2,NUM_FRAMESright);
+        			render_animationright2(screen, framesright, *current_frame2,p->cor.x,p->cor.y);        			
         		}
 				else if((*dir)==2 &&(*jump)==0&&(*orientation)==0){
 				if ((*current_framejump)==5){
         			(*jump)==1;
         		}    
-					update_animation(current_framejump, last_frame_timejump, NUM_FRAMESss);
-        			render_animationright(screen, framesjump, *current_framejump, p->cor.x, p->cor.y);   
+					update_animation2(current_framejump, last_frame_timejump, NUM_FRAMESss);
+        			render_animationright2(screen, framesjump, *current_framejump, p->cor.x, p->cor.y);   
         			
 				} 
 				else if((*dir)==2 &&(*jump)==0&&(*orientation)==1){
-					update_animation(current_framess, last_frame_timess, NUM_FRAMESss);
-        			render_animationright(screen, framesss, *current_framess, p->cor.x, p->cor.y);      
+					update_animation2(current_framess, last_frame_timess, NUM_FRAMESss);
+        			render_animationright2(screen, framesss, *current_framess, p->cor.x, p->cor.y);      
 				}        		
        		else if ((*stop)==1 && (*dir)==2 && (*orientation)==0){
-        			update_animation(current_frame_stop_right, last_frame_time_stop_right,NUM_FRAME_stop_right);
-        			render_animation(screen, frame_stop_right, *current_frame_stop_right,p->cor.x,p->cor.y);
+        			update_animation2(current_frame_stop_right, last_frame_time_stop_right,NUM_FRAME_stop_right);
+        			render_animation2(screen, frame_stop_right, *current_frame_stop_right,p->cor.x,p->cor.y);
         		}
        		else if ((*stop)==1 && (*dir)==2&&(*orientation)==1){
-      			update_animation(current_frame_stop_left, last_frame_time_stop_left,NUM_FRAMES_stop_left);
-       			render_animation(screen, frames_stop_left, *current_frame_stop_left,p->cor.x,p->cor.y);
+      			update_animation2(current_frame_stop_left, last_frame_time_stop_left,NUM_FRAMES_stop_left);
+       			render_animation2(screen, frames_stop_left, *current_frame_stop_left,p->cor.x,p->cor.y);
         		}
         		
         		
