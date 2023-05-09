@@ -1,4 +1,5 @@
 #include "fonction.h"
+#include "fonctionn.h"
 #include<SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
@@ -167,16 +168,16 @@ void move(Ennemi *e,SDL_Rect* dest)
 int collisionBB(SDL_Rect posp, SDL_Rect pose) {
       
        
-    if ((posp.x + posp.w/2 >= pose.x) && (posp.x <= pose.x+pose.w/2)  && (posp.y + posp.h/2 >= pose.y) && (posp.y <= pose.y + pose.h/2)) {       
+    if ((posp.x + posp.w>= pose.x+50) && (posp.x+50 <= pose.x+pose.w)) {       
         return 1;
     } else {
         return 0;
     }
 }
 
-void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest) {
-    
+void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest,bullett *b) {
         // Player is attacking
+     
        if ((dest->x - P->cor.x < 0) && (dest->x - P->cor.x > -400) && ((ennemi->STATE == 4)||(ennemi->STATE == 0)||(ennemi->STATE == 5))) {
             ennemi->STATE = 1; // Enemy is following the player
             if((dest->x - P->cor.x >-150))
@@ -192,7 +193,10 @@ void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest) {
           
         } 
         
-    
+  
+      if( ennemi->vie==0){
+     		 ennemi->STATE=6;
+      }
    // UpdateEnnemi(ennemi);
 }
 
