@@ -505,7 +505,7 @@ int Main_Menu() {
 		if(isPlayClicked){
 			//SDL_FreeSurface(background);
 			Resize(&(background), "M_Assets/BG_PLAY_C.png", SCREEN_WIDTH, SCREEN_HEIGHT);
-			return 1;
+			done = SDL_TRUE;
 		}else{
 			if(isSettingsClicked){
 				//SDL_FreeSurface(background);
@@ -610,6 +610,7 @@ int Main_Menu() {
 	
 	//Quit SDL
 	SDL_Quit();
+	return isPlayClicked;
 }
 
 //Mouse over detection function
