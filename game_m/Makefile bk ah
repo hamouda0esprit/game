@@ -1,0 +1,10 @@
+prog:background.o mainn.o carac.o fonction.o
+	gcc background.o mainn.o carac.o fonction.o -o prog -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -g
+mainn.o:mainn.c
+	gcc -c mainn.c -g
+background.o:background.c
+	gcc -c background.c -g
+carac.o:carac.c
+	gcc -c carac.c -g
+fonction.o:fonction.c
+	gcc -c fonction.c -g
