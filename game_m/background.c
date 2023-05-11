@@ -88,7 +88,7 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit ){
 			initBack(bg, SCREEN_WIDTH, SCREEN_HEIGHT, *anim_frame);
 			afficherBack(*bg,screen);
-			
+			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
 			

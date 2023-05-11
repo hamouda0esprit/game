@@ -106,11 +106,9 @@ void animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint
 
         *last_frame_time = current_time;
     }
-       
+
     dest->w = frames[*current_frame]->w;
     dest->h = frames[*current_frame]->h;
-
-    SDL_BlitSurface(frames[*current_frame], NULL, screen, dest);
 
     //SDL_Flip(screen);
     //return dest;
@@ -182,12 +180,13 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
           if (e->direction==-1)
           {
         animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, &dest);
-        
+        aff_e(framesleft,current_frameleft,screen,*dest);
         move(e,dest);
         }
           else 
           {
         animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,&dest);
+        aff_e(framesright,current_frame2,screen,*dest);
         move(e,dest);}
           
           }

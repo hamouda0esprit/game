@@ -444,7 +444,8 @@ printf("\nmovex : %d", movex);
       							e.direction=1;
       							hit2=1;
       							move_following(screen, framesright, &current_frame21, &last_frame_time21,NUM_FRAMES,&dest,p.cor,&e);
-      							//SDL_BlitSurface(framesright[current_frame21], NULL, screen, &dest);
+      							
+      							aff_e(&framesright,&current_frame21,screen,dest);
       							movex=dest.x; 
        							if(hitready2==0){
        								b2.pos.x=dest.x+100;
@@ -455,6 +456,8 @@ printf("\nmovex : %d", movex);
       							e.direction=-1;
       							hit2=1;
       							move_following(screen, framesleft, &current_frameleft1, &last_frame_timeleft1,NUM_FRAMES,&dest,p.cor,&e);
+      							aff_e(&framesleft,&current_frameleft1,screen,dest);
+      							
      							 	movex=dest.x;
       							if(hitready2==1){
        								b2.pos.x=dest.x+100;
@@ -467,8 +470,7 @@ printf("\nmovex : %d", movex);
  									hit2 = 0;
  									}
  
- }   dest.x-=SCREEN_W/40;
-movex-=SCREEN_W/40;
+ }
 //-----------------------------------------------END-----------------------------------        
  
 
@@ -479,6 +481,6 @@ SDL_FreeSurface(bg.S);
 }
 }
 
-/*void aff_e(SDL_Surface *(*framesright[]), current_frame21,screen,dest){
-       
-}*/
+void aff_e(SDL_Surface *(*framesright[]),int *current_frame21,SDL_Surface *screen,SDL_Rect dest){
+       SDL_BlitSurface(framesright[*current_frame21], NULL, screen, &dest);
+}
