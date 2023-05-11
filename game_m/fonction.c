@@ -8,15 +8,27 @@
 #define HEALTHBAR_HEIGHT 30
 #define SCORE_POSITION_X 10
 #define SCORE_POSITION_Y 10
+
      
 void init_bullet(bullet *b){
-        b->image = IMG_Load("bullet.png"); 
+			
+        b->image = IMG_Load("bullet.png");
 }
 void affbullet(SDL_Surface *screen,bullet *b){
-           
+        
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
         b->pos.x+=15;
 }
+void affbulletleft(SDL_Surface *screen,bullet *b){
+           
+        SDL_BlitSurface(b->image,NULL,screen,&b->pos);
+        b->pos.x-=15;
+        
+}
+
+
+
+
 void afficher_image(SDL_Surface *screen, image imge)
 {
 SDL_BlitSurface(imge.img, &imge.pos_img_affiche, screen, &imge.pos_img_ecran);
@@ -29,7 +41,7 @@ for (int i = 0; i < numframes; i++) {
         frames[i] = load_image(filename);
     }
 
-} 
+}
 void init_ennemi(Ennemi *e, int numframes, SDL_Surface **frames, SDL_Surface **framesl, SDL_Surface **framesright, SDL_Surface **framesleft) {
 	SDL_Surface *screen;
 	
@@ -78,7 +90,7 @@ SDL_Surface* load_image(const char* filename) {
 
     return optimized;
 }
-SDL_Rect animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, int x, int y) {
+void animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, SDL_Rect *dest) {
     
     const int FRAME_DELAY = 100;
     
@@ -94,49 +106,15 @@ SDL_Rect animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, 
 
         *last_frame_time = current_time;
     }
+       
+    dest->w = frames[*current_frame]->w;
+    dest->h = frames[*current_frame]->h;
 
-    
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.w = frames[*current_frame]->w;
-    dest.h = frames[*current_frame]->h;
-
-    SDL_BlitSurface(frames[*current_frame], NULL, screen, &dest);
+    SDL_BlitSurface(frames[*current_frame], NULL, screen, dest);
 
     //SDL_Flip(screen);
-    return dest;
+    //return dest;
 }
-
-SDL_Rect animate_place(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, int x, int y) {
-    
-    const int FRAME_DELAY = 100;
-    Uint32 current_time = SDL_GetTicks();
-    Uint32 time_since_last_frame = current_time - *last_frame_time;
-
- 
-    if (time_since_last_frame >= FRAME_DELAY) {
-        (*current_frame)++;
-        if (*current_frame == NUM_FRAMES) {
-            *current_frame = 0;
-        }
-
-        *last_frame_time = current_time;
-    }
-
-    
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.w = frames[*current_frame]->w;
-    dest.h = frames[*current_frame]->h;
-
-    SDL_BlitSurface(frames[*current_frame], NULL, screen, &dest);
-
-    //SDL_Flip(screen);
-    return dest;
-}
-
 
 
 void move(Ennemi *e,SDL_Rect* dest)
@@ -150,31 +128,31 @@ void move(Ennemi *e,SDL_Rect* dest)
 int collisionBB(SDL_Rect posp, SDL_Rect pose) {
       
        
-    if ((posp.x + posp.w>= pose.x+50) && (posp.x+50 <= pose.x+pose.w)) {       
+    if ((posp.x + posp.w/1.5>= pose.x+pose.w) && (posp.x <= pose.x+pose.w)&& posp.y <= pose.y && posp.y + posp.h >= posp.y + posp.h) {       
         return 1;
     } else {
         return 0;
     }
 }
 
-void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest,bullett *b,int x) {
+void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest,bullett *b) {
         // Player is attacking
      
-       if ((dest->x - P->cor.x < 0) && (dest->x - P->cor.x > -400) && ((ennemi->STATE == 4)||(ennemi->STATE == 0)||(ennemi->STATE == 5))) {
-            ennemi->STATE = 1; // Enemy is following the player
-            if((dest->x - P->cor.x >-150))
-               ennemi->STATE=5;}
-            
-            
+        if ((dest->x - P->cor.x < 0) && (dest->x - P->cor.x > -500)) {
+            ennemi->STATE = 1;} // Enemy is following the player
+           
        
-        if ((dest->x - P->cor.x >= 0) && (dest->x - P->cor.x < 400) && ((ennemi->STATE == 1)||(ennemi->STATE == 0)||(ennemi->STATE == 5))) {
+        else if ((dest->x - P->cor.x > 0) && (dest->x - P->cor.x < 500)) {
              ennemi->STATE = 4; // Enemy is following the player
-             if((dest->x - P->cor.x<200))
-               ennemi->STATE=5;
-            
-          
-        } 
-        
+        }
+        else  if((dest->x - P->cor.x>500)){
+        ennemi->STATE=0; 
+        }
+               
+        else  if((dest->x - P->cor.x>-300))
+               ennemi->STATE=0; 
+        else if(dest->x - P->cor.x==0)
+        ennemi->STATE=5; 
   
       if( ennemi->vie==0){
      		 ennemi->STATE=6;
@@ -203,13 +181,13 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
           {
           if (e->direction==-1)
           {
-        (*dest)= animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, dest->x, dest->y);
+        animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, &dest);
         
         move(e,dest);
         }
           else 
           {
-        (*dest)= animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,dest->x, dest->y);
+        animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,&dest);
         move(e,dest);}
           
           }
@@ -218,11 +196,14 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
 void move_following(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, SDL_Rect* dest,SDL_Rect posp,Ennemi *e)
 {
     
-       (*dest)=animate(screen, frames, current_frame, last_frame_time, NUM_FRAMES, dest->x, dest->y);
+       animate(screen, frames, current_frame, last_frame_time, NUM_FRAMES, dest);
        move(e,dest);
 
 
 }
+
+
+
 
 
 

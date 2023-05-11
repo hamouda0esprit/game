@@ -103,6 +103,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			}
 			
 			Uint8* keys = SDL_GetKeyState(NULL);
+			
 			if(!(*game_ended)){
 				if (keys[SDLK_RIGHT]){
 					Uint32 current_time = SDL_GetTicks();
@@ -110,7 +111,9 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 						if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
 							scrolling(&(bg->R),0,SCREEN_WIDTH);
 							if (!(*limit)){
-							       dest->x-=SCREEN_WIDTH/40;
+							       scrolling(dest,0,SCREEN_WIDTH);
+							       //dest->x-=SCREEN_WIDTH/40;
+							       
 							       b1->x-=SCREEN_WIDTH/40;
 							       b2->x-=SCREEN_WIDTH/40;
 							}
@@ -126,7 +129,8 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 						if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
 							scrolling(&(bg->R),1,SCREEN_WIDTH);
 							if (!(*limit)){
-							       dest->x+=SCREEN_WIDTH/40;
+							       scrolling(dest,1,SCREEN_WIDTH);
+							       //dest->x+=SCREEN_WIDTH/40;
 							       b1->x+=SCREEN_WIDTH/40;
 							       b2->x+=SCREEN_WIDTH/40;
 							}

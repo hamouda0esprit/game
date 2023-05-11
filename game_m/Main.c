@@ -1,10 +1,8 @@
 #include "Link.h"
 
 void main(){
-	int x;
-	x = Main_Menu();
-	printf("test outer");
-	printf("\n");
+	int x = 1;
+	//x = Main_Menu();
 	if (x==1){
 		main_2();
 	}
