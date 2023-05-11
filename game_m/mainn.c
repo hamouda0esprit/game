@@ -436,17 +436,16 @@ printf("\nmovex : %d", movex);
 			//---------------------------------------------MOUVEMENT ENEMY------------------------------
 			
      						IA(&e, &p,&dest,&b1);
-							if(e.STATE!=6){
+							
    							if(e.STATE==0){
    								hit2 = 0;
    								hit3 = 0;
-    								move_waiting(&movex,screen,frames,framesl,framesleft,framesright,NUM_FRAMES,&ok,&e,&dest,&current_frame1, &current_framel1,&last_frame_time1,&current_frameleft1,&last_frame_timeleft1,&current_frame21,&last_frame_time21);
+    								//move_waiting(&movex,screen,frames,framesl,framesleft,framesright,NUM_FRAMES,&ok,&e,&dest,&current_frame1, &current_framel1,&last_frame_time1,&current_frameleft1,&last_frame_timeleft1,&current_frame21,&last_frame_time21);
     								}
    							if(e.STATE==1){
       							e.direction=1;
       							hit2=1;
-      							move_following(screen, framesright, &current_frame21, &last_frame_time21,NUM_FRAMES,&dest,p.cor,&e);
-      							
+      							move_following(screen, framesright, &current_frame21, &last_frame_time21,NUM_FRAMESright,&dest,p.cor,&e);
       							aff_e(&framesright,&current_frame21,screen,dest);
       							movex=dest.x; 
        							if(hitready2==0){
@@ -457,7 +456,7 @@ printf("\nmovex : %d", movex);
   								if(e.STATE==4){
       							e.direction=-1;
       							hit2=1;
-      							move_following(screen, framesleft, &current_frameleft1, &last_frame_timeleft1,NUM_FRAMES,&dest,p.cor,&e);
+      							move_following(screen, framesleft, &current_frameleft1, &last_frame_timeleft1,NUM_FRAMESleft,&dest,p.cor,&e);
       							aff_e(&framesleft,&current_frameleft1,screen,dest);
       							
      							 	movex=dest.x;
@@ -467,12 +466,9 @@ printf("\nmovex : %d", movex);
        								hit2=1;
      	 								hitready2=0;
       							}}
- 								if(e.STATE==5){
- 									hit3 = 0;
- 									hit2 = 0;
- 									}
+ 								
  
- }
+ 
 //-----------------------------------------------END-----------------------------------        
  
 
