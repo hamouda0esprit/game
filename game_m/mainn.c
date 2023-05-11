@@ -336,19 +336,21 @@ printf("\nmovex : %d", movex);
 						//player4(&orientation2,&jump2,&dir2,&current_framess2,&last_frame_time_stop_right2,&last_frame_time_stop_left2,&last_frame_time22,&last_frame_timess2,&last_frame_timeleft2 ,&last_frame_timejump2,&current_framejump2,&current_frame2,&current_framel2,&current_frame22,&current_frameleft2,&p2,&grav2,&velocity2,&stop2,screen,frames,framesl,framesright,framesleft,framesjump,framesss);
  						}
      //----------------------COLLISION----------------- carac  ENEMY 
-     			if(x==0)
+     			
+     			
+     			/*if(x==0)
       				y = collisionBB(dest,b1.pos);
       	
       		if(x!=y){
      		 			e.vie--;
-     		 			y=1;}
+     		 			y=1;}*/
      //-------------------------BLINKING + VIE -------------------------------
-    			if(xp==0 && vie_counter>50){
+    			/*if(xp==0 && vie_counter>50){
      		 			pvieref=p.viep;
      				 	p.viep--;
      		 			vie_counter=0;}
      				//-BLINKING-
-    			/* if(pvieref>p.viep){
+    			 if(pvieref>p.viep){
       			if(vie_counter%3==0 ){
     						verif=1;}
      				if(vie_counter%3==1){
