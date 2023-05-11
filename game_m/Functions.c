@@ -569,6 +569,10 @@ int Main_Menu() {
 		if(isPlayClicked){
 			SDL_FreeSurface(background);
 			Resize(&(background), "M_Assets/BG_PLAY_C.png", SCREEN_WIDTH, SCREEN_HEIGHT);
+<<<<<<< HEAD
+=======
+			done = SDL_TRUE;
+>>>>>>> 597357077b3ca48311d57b96e20bca170c24d11b
 		}else{
 			if(isSettingsClicked){
 				SDL_FreeSurface(background);
@@ -707,11 +711,15 @@ int Main_Menu() {
 		}
 	//Quit SDL
 	SDL_Quit();
+<<<<<<< HEAD
 	
 	if(isPlayClicked){
 			printf("\ntest 10");
 			printf("\n");
 		}
+=======
+	return isPlayClicked;
+>>>>>>> 597357077b3ca48311d57b96e20bca170c24d11b
 }
 
 //Mouse over detection function
