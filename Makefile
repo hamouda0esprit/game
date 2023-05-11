@@ -18,17 +18,18 @@ LIBSPATH =
 # -I
 INCLUDESPATH = 
 
-SOURCES = mainn.c carac.c
+SOURCES = mainn.c  carac.c
 OBJECTS = $(SOURCES:.c=.o)
 
 
-all : mainn.o carac.o 
+all : mainn.o  carac.o 
 	$(CC) $^ -o $(EXEC) $(INCLUDESPATH) $(LIBSPATH) $(LIBS)
 
 %.o : %.c
 	$(CC)  $(LIBSPATH) $(INCLUDESPATH) -c $< -o $@ $(CFLAGS)
 carac.o : carac.c fonctionn.h
 	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
+
 clean :
 	$(RM) *.o
 	

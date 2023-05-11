@@ -39,16 +39,9 @@ void update_animation2(int *current_frame, Uint32 *last_frame_time,int NUM_FRAME
     }
 }
 
-void render_animation2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,int x,int y) {
+void render_animation2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,Personn *p) {
     // draw current animation frame to screen
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.w = frames[current_frame]->w;
-    dest.h = frames[current_frame]->h;
-
-    SDL_BlitSurface(frames[current_frame], NULL, screen, &dest);
-
+    SDL_BlitSurface(frames[current_frame], NULL, screen, &p->cor);
     SDL_Flip(screen);
 }
 void clear_animation2(SDL_Surface **frames, int num_frames) {
@@ -78,16 +71,9 @@ void update_animationright2(int *current_frame, Uint32 *last_frame_time,int NUM_
 }
 
 
-void render_animationright2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,int x,int y) {
+void render_animationright2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,Personn *p) {
     // draw current animation frame to screen
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.w = frames[current_frame]->w;
-    dest.h = frames[current_frame]->h;
-
-    SDL_BlitSurface(frames[current_frame], NULL, screen, &dest);
-
+    SDL_BlitSurface(frames[current_frame], NULL, screen, &p->cor);
     SDL_Flip(screen);
 }
 
@@ -113,48 +99,48 @@ const int NUM_FRAMESjump = 6;
 			//scrolling
 	
 				if((*dir)==1){
-					p->cor.x+=4;}
+					p->cor.x+=10;}
 				else if((*dir)==0){
-					p->cor.x-=4;}
+					p->cor.x-=10;}
 				if((*dir)==1 && (*jump) ==0){
 					if ((*current_framejump)==5){
         			(*jump)==1;
         		}
 					update_animation2(current_framejump, last_frame_timejump, NUM_FRAMESss);
-        			render_animationright2(screen, framesjump, *current_framejump, p->cor.x, p->cor.y);
+        			render_animationright2(screen, framesjump, *current_framejump,p);
         		
         		}
         		else if((*dir) ==0&& (*jump) ==0){
 					update_animation2(current_framess, last_frame_timess, NUM_FRAMESss);
-        			render_animationright2(screen, framesss, *current_framess, p->cor.x, p->cor.y);
+        			render_animationright2(screen, framesss, *current_framess,p);
 				}		
 				else if((*dir)==0 &&(*jump)==1){
 					update_animationright2(current_frameleft, last_frame_timeleft,NUM_FRAMESleft);
-        			render_animationright2(screen, framesleft, *current_frameleft,p->cor.x,p->cor.y);       
+        			render_animationright2(screen, framesleft, *current_frameleft,p);       
 				}
 				else if((*dir)==1 && (*jump)==1 ){
 					update_animationright2(current_frame2, last_frame_time2,NUM_FRAMESright);
-        			render_animationright2(screen, framesright, *current_frame2,p->cor.x,p->cor.y);        			
+        			render_animationright2(screen, framesright, *current_frame2,p);        			
         		}
 				else if((*dir)==2 &&(*jump)==0&&(*orientation)==0){
 				if ((*current_framejump)==5){
         			(*jump)==1;
         		}    
 					update_animation2(current_framejump, last_frame_timejump, NUM_FRAMESss);
-        			render_animationright2(screen, framesjump, *current_framejump, p->cor.x, p->cor.y);   
+        			render_animationright2(screen, framesjump, *current_framejump, p);   
         			
 				} 
 				else if((*dir)==2 &&(*jump)==0&&(*orientation)==1){
 					update_animation2(current_framess, last_frame_timess, NUM_FRAMESss);
-        			render_animationright2(screen, framesss, *current_framess, p->cor.x, p->cor.y);      
+        			render_animationright2(screen, framesss, *current_framess, p);      
 				}        		
        		else if ((*stop)==1 && (*dir)==2 && (*orientation)==0){
         			update_animation2(current_frame_stop_right, last_frame_time_stop_right,NUM_FRAME_stop_right);
-        			render_animation2(screen, frame_stop_right, *current_frame_stop_right,p->cor.x,p->cor.y);
+        			render_animation2(screen, frame_stop_right, *current_frame_stop_right,p);
         		}
        		else if ((*stop)==1 && (*dir)==2&&(*orientation)==1){
       			update_animation2(current_frame_stop_left, last_frame_time_stop_left,NUM_FRAMES_stop_left);
-       			render_animation2(screen, frames_stop_left, *current_frame_stop_left,p->cor.x,p->cor.y);
+       			render_animation2(screen, frames_stop_left, *current_frame_stop_left,p);
         		}
         		
         		

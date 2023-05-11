@@ -62,10 +62,10 @@ void move( Ennemi * e,SDL_Rect* dest);
 int collisionBB(SDL_Rect posp, SDL_Rect pose); 
 int collisionBB1(SDL_Rect posp, SDL_Rect pose); 
 SDL_Surface* load_image(const char* filename);
-
+void affbulletleft(SDL_Surface *screen,bullet *b);
 void init_bullet(bullet *b);
 void affbullet(SDL_Surface *screen,bullet *b);
-
+void count(int x, int dest_x, int cor_x);
 void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest,bullett *b);
 void UpdateEnnemi(SDL_Surface* screen, SDL_Surface** frames,SDL_Surface** framesl, SDL_Surface** framesleft, SDL_Surface** framesright, int NUM_FRAMES, int* xm, int ym, int* ok, Ennemi* e, SDL_Rect* dest, int *current_frame, int *current_frame0, int* last_frame_time, int* current_frameleft, int* last_frame_timeleft, int* current_frame2, int* last_frame_time2);
 

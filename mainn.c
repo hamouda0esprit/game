@@ -1,4 +1,5 @@
-#include<stdio.h>
+
+   #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #include <SDL/SDL.h>
@@ -18,18 +19,13 @@
 #define SCREEN_H 962
 
 
-int main(int argc, char* argv[])
-{
-
-//---------------------------------------------------
-
-bullet b1;
+int main(int argc, char* argv[]){int bullet_counter = 0,bullet_counter2 = 0;bullet b1;
 
 SDL_Rect dest;
 
-int i,bigx,bigy;
+int i,bigx,bigy,bigx2;
 int hitt=0;
-
+int test=0;
 int movex=1000;
 Ennemi e;
 e.direction=0;
@@ -37,8 +33,11 @@ int ok=0;
 dest.x=1000;
 dest.y=700;
 
-
-
+int hit3=0;
+int xp=0;
+int yp=1;
+int xp2=0;
+int yp2=1;
 Uint32 last_frame_time1 = 0;
 int current_frame1 = 0;
 int current_framel1 = 0;
@@ -46,7 +45,8 @@ Uint32 last_frame_time21 = 0;
 int current_frame21 = 3;
 Uint32 last_frame_timeleft1 = 0;
 int current_frameleft1 = 3;
-
+int vie_counter=49;
+int vie_counter2=49;
 
 e.vie=3;
 e.STATE=0;
@@ -103,7 +103,7 @@ Uint32 last_frame_timess2 = 0;
 Uint32 last_frame_timeleft2 = 0;
 int current_frameleft2 = 3;
 //jump
-int hitenemy=0;;
+int pvieref=0;
 Uint32 last_frame_timejump2 = 0;
 int current_framejump2 = 0;
 int orientation2=0,xm2=100,ym2,jump2=1,dir2=2,velocity2,stop2=1,verif2,grav2=700,hit2=0;
@@ -113,18 +113,21 @@ p2.cor.x=100;
 p2.cor.y=grav2;
 //----------------------------------------------------------------------------------
 //REST OF PROGRAM
-int orientation=0,verif=0,jump=1,dir=2,velocity,stop=1,grav=700,hit=0;
+int orientation=0,verif=1,jump=1,dir=2,velocity,stop=1,grav=700,hit=0;
 int boucle=1;
-int bigx2;
 SDL_Event event;
 SDL_Surface *screen;
 Personn p;
+p.viep=3;
 image imge;
 bullett b;
+b1.pos.x=5600;
+b1.pos.y=5600;
 p.cor.x=100;
 p.cor.y=grav;
 SDL_Surface* frames[NUM_FRAMES],*framesl[NUM_FRAMESl],*framesright[NUM_FRAMESright],*framesleft[NUM_FRAMESleft],*framesjump[NUM_FRAMESjump],*framesss[NUM_FRAMESss];  
- 
+ int hitready2=1;
+ int hitready3=1;
   /*if(!Arduino_connect(SERIAL_PORT, 9600))
         exit(EXIT_FAILURE);  */
 if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER)==-1)
@@ -136,7 +139,7 @@ return -1;
 screen=SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0,SDL_RESIZABLE);
 //-------------ennemi----------------------------
 
-   int y=0;
+   int y=1;
    int x;
     
 
@@ -182,8 +185,11 @@ initialiser_imageBACK(&imge,"1.png");
 init_ennemi(&e, NUM_FRAMES, frames,framesl,framesright,framesleft);
 init_bullet(&b1);
 init_bullet(&b2);
+b2.pos.w = 22;
+b2.pos.h = 22;
 while(boucle)
 {
+printf(" carac x=%d || y=%d  ------ enemy x=%d || y=%d------ balls= x=%d ||y=%d ---- vie=%d \n",p.cor.x,p.cor.y,dest.x,dest.y,b2.pos.x,b2.pos.y,p.viep);
 afficher_image(screen,imge);
 //----------------------------------------------------
 x = collisionBB(dest,b1.pos);
@@ -210,7 +216,7 @@ while(SDL_PollEvent(&event))
                     if (event.key.keysym.sym == SDLK_UP) {
                         jump=0;
                         if(p.cor.y==grav)
-                        velocity=-14;
+                        velocity=-20;
                               } 
                     if (event.key.keysym.sym == SDLK_ESCAPE) {
                         b1.pos.x=p.cor.x+100;
@@ -228,12 +234,12 @@ while(SDL_PollEvent(&event))
                     if (event.key.keysym.sym == SDLK_z) {
                         jump2=0;
                         if(p2.cor.y==grav2)
-                        velocity2=-14;
+                        velocity2=-30;
                               } 
                     if (event.key.keysym.sym == SDLK_f) {
-                        b2.pos.x=p2.cor.x+100;
-                        b2.pos.y=p2.cor.y+150;
-                        
+                       
+                        b2.pos.x=dest.x+100;
+        						 b2.pos.y=dest.y+100;
                         hit2=1; }                            
                     break;
                  
@@ -274,62 +280,151 @@ while(SDL_PollEvent(&event))
                     break;
 		                    
 		     
-}}
-//----------------------BULLET----------------- SHOOT    
-if(hit==1&&b1.pos.x<bigx+300 &&b1.pos.x<dest.x+70){
-			affbullet(screen,&b1);
-	}		
-if(hitenemy==1){
-			affbullet(screen,&b2);
-			verif=0;
-	}		
-	//----------------------mouvement----------------- PLAYER      	
-	player4(&orientation,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&p,&grav,&velocity,&stop,screen,frames,framesl,framesright,framesleft,framesjump,framesss);///player4(&orientation2,&jump2,&dir2,&current_framess2,&last_frame_time_stop_right2,&last_frame_time_stop_left2,&last_frame_time22,&last_frame_timess2,&last_frame_timeleft2 ,&last_frame_timejump2,&current_framejump2,&current_frame2,&current_framel2,&current_frame22,&current_frameleft2,&p2,&grav2,&velocity2,&stop2,screen,frames,framesl,framesright,framesleft,framesjump,framesss);
- 
-     //----------------------COLLISION----------------- carac / ENEMY 
-     if(x==0){
-      	y = collisionBB(dest,b1.pos);
+}}				
+
+//----------------------SHOOTING CARACTERE--------------------
+
+				if(hit==1&&b1.pos.x<bigx+300 &&b1.pos.x<dest.x+70){
+						affbullet(screen,&b1);
+				}
+	
+//----------------------mouvement----------------- PLAYER  
+				if(p.viep>0){
+						player4(&orientation,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&p,&grav,&velocity,&stop,screen,frames,framesl,framesright,framesleft,framesjump,framesss);	
+						//player4(&orientation2,&jump2,&dir2,&current_framess2,&last_frame_time_stop_right2,&last_frame_time_stop_left2,&last_frame_time22,&last_frame_timess2,&last_frame_timeleft2 ,&last_frame_timejump2,&current_framejump2,&current_frame2,&current_framel2,&current_frame22,&current_frameleft2,&p2,&grav2,&velocity2,&stop2,screen,frames,framesl,framesright,framesleft,framesjump,framesss);
+ 						}
+     //----------------------COLLISION----------------- carac  ENEMY 
+     			if(x==0)
+      				y = collisionBB(dest,b1.pos);
+      	
+      		if(x!=y){
+     		 			e.vie--;
+     		 			y=1;}
+     //-------------------------BLINKING + VIE -------------------------------
+    			if(xp==0 && vie_counter>50){
+     		 			pvieref=p.viep;
+     				 	p.viep--;
+     		 			vie_counter=0;}
+     				//-BLINKING-
+    			/* if(pvieref>p.viep){
+      			if(vie_counter%3==0 ){
+    						verif=1;}
+     				if(vie_counter%3==1){
+     						verif=1;}		
+     				if(vie_counter%3==2){
+     						verif=0;}
+     				if(vie_counter>10){
+     						pvieref=p.viep;}}*/
      
-      	}
-      if(x!=y){
-     		 e.vie--;
-     		 y=1;
- //----------------------mouvement----------------- ENEMY      	
-      }  
-IA(&e, &p,&dest,&b1);
-if(e.STATE!=6){
-   if(e.STATE==0)       { move_waiting(&movex,screen,frames,framesl,framesleft,framesright,NUM_FRAMES,&ok,&e,&dest,&current_frame1, &current_framel1,&last_frame_time1,&current_frameleft1,&last_frame_timeleft1,&current_frame21,&last_frame_time21);
-    }
-       if(e.STATE==1)
-      {e.direction=1;
-      move_following(screen, framesright, &current_frame21, &last_frame_time21,NUM_FRAMES,&dest,p.cor,&e);
-      if(dest.x-p.cor.x<=-200){
-          e.STATE=0;
-          movex=dest.x;}
- }
-   if(e.STATE==4)
-      {e.direction=-1;
-      move_following(screen, framesleft, &current_frameleft1, &last_frame_timeleft1,NUM_FRAMES,&dest,p.cor,&e);
-      if(dest.x-p.cor.x>=200){
-          e.STATE=0;
-          movex=dest.x+200;}
- }
- if(e.STATE==5)
- {dest=animate_place(screen,frames,&current_frame1, &last_frame_time1,NUM_FRAMES,dest.x,dest.y);
- hitenemy=1;
- if (verif==0){
- b2.pos.x=dest.x+100;
- b2.pos.y=dest.y+100;
- verif=1;
- }}}
+     	 
+     
+    //---------------------------------------------COLLISION ENEMY/BULLET  TO LEFT-------------------------------   
+      			if(e.direction<0){
+     							if(xp==1)
+    							 	vie_counter++;
+      						if (hitready2==0)
+      							bullet_counter2++;
+      	 		if(p.viep!=0){
+     				 if (!(p.cor.x + p.cor.w/1.5 >= b2.pos.x + b2.pos.w && p.cor.x <= b2.pos.x && p.cor.y <= b2.pos.y && p.cor.y + p.cor.h >= b2.pos.y + b2.pos.h)&& hit2 == 1 && hitready2==0){
+      					affbulletleft(screen,&b2);
+      					xp=1;}	
+       				else{
+       					xp=0;
+      					SDL_FreeSurface(&b2.image);
+							b2.pos.x=-100;
+							b2.pos.y=0;
+						if (bullet_counter2>50){
+							hitready2=1;
+							bullet_counter2=0;}
+							}
+      				if (b2.pos.x<=0){
+      					SDL_FreeSurface(&b2.image);
+							b2.pos.x=-100;
+							b2.pos.y=0;
+						if (bullet_counter2>50){
+							hitready2=1;
+							bullet_counter2=0;}
+						}}}
+		 //---------------------------------------------COLLISION ENEMY/BULLET  TO RIGHT-------------------------------
+					
+					
+					
+					if(e.direction>0){
+					if(xp2==1 && vie_counter2>80){
+     		 			pvieref=p.viep;
+     				 	p.viep--;
+     		 			vie_counter2=0;}
+					if(xp2==0){
+					vie_counter2++;
+					}
+    							 
+						if (hitready2==1){
+      				bullet_counter++;
+      					} 								   
+      				//-WHILE NOT COLLIDED-
+     					if(p.viep>0){
+     					 if (!(p.cor.x + p.cor.w/1.5 >= b2.pos.x + b2.pos.w && p.cor.x <= b2.pos.x && p.cor.y <= b2.pos.y && p.cor.y + p.cor.h >= b2.pos.y + b2.pos.h)&& hit2 == 1 && hitready2==1&&bullet_counter>50){
+      				affbullet(screen,&b2);
+      				xp2=0;}	
+       				//-WHILE  COLLIDED-
+      				 else{
+     		 					
+     		 					if(vie_counter2<=79){
+     		 						xp2=0;}
+     		 					else{xp2=1;
+     		 					}
+      						SDL_FreeSurface(&b2.image);
+								b2.pos.x=dest.x+100;
+								b2.pos.y=dest.y+100;
+								if (bullet_counter>50){
+									hitready2=0;
+									bullet_counter=0;}
+								}
+						//-WHILE  OUT OF RANGE-
+     					 if (b2.pos.x>=p.cor.x+800){
+      						SDL_FreeSurface(&b2.image);
+								b2.pos.x=dest.x+100;
+								b2.pos.y=dest.y+100;
+								if (bullet_counter>50){
+									hitready2=0;
+									bullet_counter=0;}}
+						}	}	
+			//---------------------------------------------MOUVEMENT ENEMY------------------------------
+     						IA(&e, &p,&dest,&b1);
+							if(e.STATE!=6){
+   							if(e.STATE==0){
+   								hit2 = 0;
+   								hit3 = 0;
+    								move_waiting(&movex,screen,frames,framesl,framesleft,framesright,NUM_FRAMES,&ok,&e,&dest,&current_frame1, &current_framel1,&last_frame_time1,&current_frameleft1,&last_frame_timeleft1,&current_frame21,&last_frame_time21);
+    								}
+   							if(e.STATE==1){
+      							e.direction=1;
+      							hit2=1;
+      							move_following(screen, framesright, &current_frame21, &last_frame_time21,NUM_FRAMES,&dest,p.cor,&e);
+      							movex=dest.x; 
+       							if(hitready2==0){
+       								b2.pos.x=dest.x+100;
+       								b2.pos.y=dest.y+100;
+       								hit2=1;
+     	 								hitready2=1;}}     									
+  								if(e.STATE==4){
+      							e.direction=-1;
+      							hit2=1;
+      							move_following(screen, framesleft, &current_frameleft1, &last_frame_timeleft1,NUM_FRAMES,&dest,p.cor,&e);
+     							 	movex=dest.x;
+      							if(hitready2==1){
+       								b2.pos.x=dest.x+100;
+      							 	b2.pos.y=dest.y+100;
+       								hit2=1;
+     	 								hitready2=0;
+      							}}
+ 								if(e.STATE==5){
+ 									hit3 = 0;
+ 									hit2 = 0;
+ 									dest=animate_place(screen,frames,&current_frame1, &last_frame_time1,NUM_FRAMES,dest.x,dest.y);}
  
-
+ }   
+//-----------------------------------------------END-----------------------------------        
 SDL_Flip(screen);
-
-SDL_Delay(10);
-}
-
-
-
-    return EXIT_SUCCESS;
-}
+SDL_Delay(100);}
+    return EXIT_SUCCESS;}  

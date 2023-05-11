@@ -12,13 +12,21 @@
 #define SCREEN_H 962
      
 void init_bullet(bullet *b){
+			
         b->image = IMG_Load("bullet.png");
 }
 void affbullet(SDL_Surface *screen,bullet *b){
-           
+        
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
         b->pos.x+=15;
 }
+void affbulletleft(SDL_Surface *screen,bullet *b){
+           
+        SDL_BlitSurface(b->image,NULL,screen,&b->pos);
+        b->pos.x-=15;
+        
+}
+
 
 
 void initialiser_imageBACK(image *imge,char dest[])
@@ -168,7 +176,7 @@ void move(Ennemi *e,SDL_Rect* dest)
 int collisionBB(SDL_Rect posp, SDL_Rect pose) {
       
        
-    if ((posp.x + posp.w>= pose.x+50) && (posp.x+50 <= pose.x+pose.w)) {       
+    if ((posp.x + posp.w/1.5>= pose.x+pose.w) && (posp.x <= pose.x+pose.w)&& posp.y <= pose.y && posp.y + posp.h >= posp.y + posp.h) {       
         return 1;
     } else {
         return 0;
@@ -178,21 +186,21 @@ int collisionBB(SDL_Rect posp, SDL_Rect pose) {
 void IA(Ennemi *ennemi, Personn *P, SDL_Rect* dest,bullett *b) {
         // Player is attacking
      
-       if ((dest->x - P->cor.x < 0) && (dest->x - P->cor.x > -400) && ((ennemi->STATE == 4)||(ennemi->STATE == 0)||(ennemi->STATE == 5))) {
-            ennemi->STATE = 1; // Enemy is following the player
-            if((dest->x - P->cor.x >-150))
-               ennemi->STATE=5;}
-            
-            
+        if ((dest->x - P->cor.x < 0) && (dest->x - P->cor.x > -500)) {
+            ennemi->STATE = 1;} // Enemy is following the player
+           
        
-        if ((dest->x - P->cor.x >= 0) && (dest->x - P->cor.x < 400) && ((ennemi->STATE == 1)||(ennemi->STATE == 0)||(ennemi->STATE == 5))) {
+        else if ((dest->x - P->cor.x > 0) && (dest->x - P->cor.x < 500)) {
              ennemi->STATE = 4; // Enemy is following the player
-             if((dest->x - P->cor.x<200))
-               ennemi->STATE=5;
-            
-          
-        } 
-        
+        }
+        else  if((dest->x - P->cor.x>500)){
+        ennemi->STATE=0; 
+        }
+               
+        else  if((dest->x - P->cor.x>-300))
+               ennemi->STATE=0; 
+        else if(dest->x - P->cor.x==0)
+        ennemi->STATE=5; 
   
       if( ennemi->vie==0){
      		 ennemi->STATE=6;
