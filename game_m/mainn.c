@@ -40,8 +40,6 @@ int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);;
 	Uint32 move_interval = 5;
 	Uint32 last_move_time = SDL_GetTicks();
 	
-	button B1;
-	initButton(&B1, SCREEN_W);
 	player P;
 	P.score =0;
 	
@@ -317,7 +315,7 @@ while(SDL_PollEvent(&event))
 		     
 }}
 //printf("\n p cor : %d",p.cor.x);
-run_game(&bg, &P, &B1, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &dest, &b1, &b2, &limit);
+run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &dest, &b1, &b2, &limit);
 //printf("\n player pos : %d | %d",p.cor.x,p.cor.y);
 //----------------------BULLET----------------- SHOOT    
 if(hit==1&&b1.pos.x<bigx+300 &&b1.pos.x<dest.x+70){

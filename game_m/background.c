@@ -25,14 +25,6 @@ void initAnim(int anim_frame, char *ch){
 	sprintf(ch, "Assets/bg/bg%d.png", anim_frame);
 }
 
-void initButton(button *B1, int SCREEN_WIDTH){
-	Resize(&(B1->S), "Assets/B_Score.png", SCREEN_WIDTH/8, SCREEN_WIDTH/16);
-	B1->R.x=SCREEN_WIDTH/80;  
-	B1->R.y=SCREEN_WIDTH/80;
-	B1->R.w = SCREEN_WIDTH/8;
-	B1->R.h = SCREEN_WIDTH/16;
-}
-
 void Score_Storing(player *P){
 	FILE *fp = fopen("Assets/Files/scores.txt", "a");
 	
@@ -93,11 +85,10 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, button* B1, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit ){
+void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit ){
 			initBack(bg, SCREEN_WIDTH, SCREEN_HEIGHT, *anim_frame);
 			afficherBack(*bg,screen);
 			
-			SDL_BlitSurface(B1->S, 0, screen, &(B1->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
 			
