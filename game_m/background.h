@@ -29,6 +29,6 @@ void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH);
 void initAnim(int anim_frame, char *ch);
 void initButton(button *B1, int SCREEN_WIDTH);
 void Score_Storing(player *P);
-void Score_Extracting();
+void Score_Extracting(char *ch1, int *x1, char *ch2, int *x2, char *ch3, int *x3);
 int comparePlayers(const void *a, const void *b);
 void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT);

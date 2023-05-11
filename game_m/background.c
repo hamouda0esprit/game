@@ -45,7 +45,7 @@ void Score_Storing(player *P){
 	fclose(fp);
 }
 
-void Score_Extracting(){
+void Score_Extracting(char *ch1, int *x1, char *ch2, int *x2, char *ch3, int *x3){
 	FILE *fp = fopen("Assets/Files/scores.txt", "r");
 	
 	player players[200];
@@ -58,12 +58,19 @@ void Score_Extracting(){
 	
 	qsort(players, num_players, sizeof(player), comparePlayers);
 	
-	printf("\n\nTop 3 scoring players:");
+	strcpy(ch1, players[0].name);
+	*x1 = players[0].score;
+	
+	strcpy(ch2, players[1].name);
+	*x2 = players[1].score;
+	
+	strcpy(ch3, players[2].name);
+	*x3 = players[2].score;
+	
+	/*printf("\n\nTop 3 scoring players:");
 	for (int i = 0; i < 3 && i < num_players; i++) {
 		printf("\n%d. %s - %d", i+1, players[i].name, players[i].score);
-	}
-	
-	printf("\n");
+	}*/
 	fclose(fp);
 }
 

@@ -313,11 +313,7 @@ while(SDL_PollEvent(&event))
                   }
                    
                     break;
-                case SDL_MOUSEBUTTONDOWN:
-			if (x2 >= B1.R.x && x2 <= B1.R.x + B1.R.w && y2 >= B1.R.y && y2 <= B1.R.y + B1.R.h){
-				Score_Extracting();
-			}
-			break;             
+            
 		     
 }}
 //printf("\n p cor : %d",p.cor.x);

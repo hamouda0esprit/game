@@ -75,6 +75,7 @@ int Main_Menu() {
 	SDL_Rect button3Rect;// = {center_x, center_y + SCREEN_WIDTH/10, BUTTON_WIDTH, BUTTON_HEIGHT};
 	SDL_Rect button4Rect;// = {SCREEN_WIDTH/40, SCREEN_HEIGHT/40, S_BUTTON_WIDTH, S_BUTTON_HEIGHT};
 	SDL_Rect button5Rect;
+	SDL_Rect button6Rect;
 	
 	SDL_Surface *button1Image ; 
 	SDL_Surface *button1HImage ; 
@@ -91,6 +92,9 @@ int Main_Menu() {
 	SDL_Surface *button5Image ;
 	SDL_Surface *button5HImage ; 
 	
+	SDL_Surface *button6Image ;
+	SDL_Surface *button6HImage ;
+	
 	//Audio Controller
 	SDL_Rect slider;// = {slider_center_x, slider_center_y - (SCREEN_HEIGHT/6), SLIDER_WIDTH, SLIDER_HEIGHT};
 	SDL_Rect slider_k;// = {0, slider_center_y - (SCREEN_HEIGHT/6), SLIDER_WIDTH_KNOB, SLIDER_HEIGHT_KNOB};
@@ -100,7 +104,29 @@ int Main_Menu() {
 	
 	//Sound text
 	SDL_Rect text_rect;// = {0, slider_center_y - (SCREEN_HEIGHT/4.4)};
-	SDL_Surface *text_Sound;// = TTF_RenderText_Blended(font, "Sound Controls", text_color);
+	SDL_Surface *text_Sound;
+	/*SDL_Rect top3_1_rect;
+	SDL_Surface *top3_1;
+	SDL_Rect top3_2_rect;
+	SDL_Surface *top3_2;
+	SDL_Rect top3_3_rect;
+	SDL_Surface *top3_3;// = TTF_RenderText_Blended(font, "Sound Controls", text_color);
+	
+	//Top players variables & Text
+	char top3_1_ch[12]="",top3_2_ch[12]="",top3_3_ch[12]="";
+	int top3_1_x=0, top3_2_x=0, top3_3_x=0;
+	
+	Score_Extracting(&top3_1_ch, &top3_1_x, &top3_2_ch, &top3_2_x, &top3_3_ch, &top3_3_x);
+	
+	char chf1[16], chf2[16], chf3[16];
+	sprintf(chf1, "%s %d", top3_1_ch,top3_1_x);
+	sprintf(chf2, "%s %d", top3_2_ch,top3_2_x);
+	sprintf(chf3, "%s %d", top3_3_ch,top3_3_x);*/
+	
+	/*printf("\n top3_1_ch = %s",chf1);
+	printf("\n top3_2_ch = %s",chf2);
+	printf("\n top3_3_ch = %s",chf3);
+	printf("\n");*/
 	//text_rect.x = (screen->w - text_Sound->w) / 2;
 	
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_DOUBLEBUF);
@@ -120,7 +146,7 @@ int Main_Menu() {
 	// Loading the animation frames
 	const int num_frames = 88;
 	SDL_Surface* frames[num_frames];
-	char filename[40];
+	char filename[16];
 	for (j = 0; j < num_frames; j++) {
 		// Format the filename
 		sprintf(filename, "M_Assets/Animation/BG/BG_%d.jpg", j);
@@ -158,15 +184,18 @@ int Main_Menu() {
 	bool isMouseOverButton3 = false;
 	bool isMouseOverButton4 = false;
 	bool isMouseOverButton5 = false;
+	bool isMouseOverButton6 = false;
 	
 	bool isSettingsClicked = false;
 	bool isPlayClicked = false;
+	bool isScorebClicked = false;
 	
 	bool AlreadyHovered1 = false;
 	bool AlreadyHovered2 = false;
 	bool AlreadyHovered3 = false;
 	bool AlreadyHovered4 = false;
 	bool AlreadyHovered5 = false;
+	bool AlreadyHovered6 = false;
 	
 	bool isAudioControllerClicked = false;
 	
@@ -185,6 +214,12 @@ int Main_Menu() {
 	SDL_Event event;
 	SDL_bool done = SDL_FALSE;
 	while(!done){
+		
+		if(isPlayClicked){
+			printf("\ntest");
+			printf("\n"); 
+		}
+		
 		while(SDL_PollEvent(&event)){
 			switch(event.type){
 				case SDL_QUIT:
@@ -321,11 +356,14 @@ int Main_Menu() {
 						selector3=0;
 						//Mouse over buttons detection
 						if(!isPlayClicked){
-							MOD(&AlreadyHovered1, &isMouseOverButton1, isSettingsClicked, event, button1Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
-							MOD(&AlreadyHovered2, &isMouseOverButton2, isSettingsClicked, event, button2Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
-							MOD(&AlreadyHovered3, &isMouseOverButton3, isSettingsClicked, event, button3Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
-							MOD(&AlreadyHovered4, &isMouseOverButton4, !isSettingsClicked, event, button4Rect, S_BUTTON_WIDTH, S_BUTTON_HEIGHT, Audio_Button_Hover);
-							MOD(&AlreadyHovered5, &isMouseOverButton5, !isSettingsClicked, event, button5Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
+							if (!isScorebClicked){
+								MOD(&AlreadyHovered1, &isMouseOverButton1, isSettingsClicked, event, button1Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
+								MOD(&AlreadyHovered2, &isMouseOverButton2, isSettingsClicked, event, button2Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
+								MOD(&AlreadyHovered3, &isMouseOverButton3, isSettingsClicked, event, button3Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
+								MOD(&AlreadyHovered4, &isMouseOverButton4, !isSettingsClicked, event, button4Rect, S_BUTTON_WIDTH, S_BUTTON_HEIGHT, Audio_Button_Hover);
+								MOD(&AlreadyHovered5, &isMouseOverButton5, !isSettingsClicked, event, button5Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
+							}
+							MOD(&AlreadyHovered6, &isMouseOverButton6, isSettingsClicked, event, button6Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
 						}else{
 							MOD(&AlreadyHovered4, &isMouseOverButton4, isSettingsClicked, event, button4Rect, S_BUTTON_WIDTH, S_BUTTON_HEIGHT, Audio_Button_Hover);
 						}
@@ -379,6 +417,16 @@ int Main_Menu() {
 									
 									done = SDL_TRUE;
 								}
+								if (isMouseOverButton6 && ! isSettingsClicked) {
+									//Playing Audio
+									Play_Audio(Audio_Click);
+									
+									if (isScorebClicked){
+										isScorebClicked = false;
+									}else{
+										isScorebClicked = true;
+									}
+								}
 							}
 							
 							if (isMouseOverButton4 && (isSettingsClicked || isPlayClicked)) {
@@ -404,7 +452,10 @@ int Main_Menu() {
 			}
 		}
 		
-		
+		if(isPlayClicked){
+			printf("\ntest 2");
+			printf("\n");
+		}
 		
 		//Render FullScreen
 		i++;
@@ -435,6 +486,7 @@ int Main_Menu() {
 			button3Rect = calc_Rec(button3Rect ,center_x ,center_y + SCREEN_WIDTH/8, BUTTON_WIDTH, BUTTON_HEIGHT);
 			button4Rect = calc_Rec(button4Rect ,SCREEN_WIDTH/40 , SCREEN_HEIGHT/40, S_BUTTON_WIDTH, S_BUTTON_HEIGHT);
 			button5Rect = calc_Rec(button5Rect ,center_x , center_y  + SCREEN_WIDTH/7, BUTTON_WIDTH, BUTTON_HEIGHT);
+			button6Rect = calc_Rec(button5Rect ,SCREEN_WIDTH - SCREEN_WIDTH/15 , SCREEN_HEIGHT - SCREEN_HEIGHT/8.5, BUTTON_WIDTH, BUTTON_HEIGHT);
 			
 			//Resizing and repositioning audio slider
 			slider = calc_Rec(slider,slider_center_x, slider_center_y - (SCREEN_HEIGHT/9), SLIDER_WIDTH, SLIDER_HEIGHT);
@@ -445,6 +497,10 @@ int Main_Menu() {
 			font = TTF_OpenFont("M_Assets/Fonts/Helvetica-Bold.ttf", SCREEN_WIDTH/40);
 			text_Sound = TTF_RenderText_Blended(font, "Sound Controls", text_color);
 			
+			/*top3_1 = TTF_RenderText_Blended(font, chf1, text_color);
+			top3_2 = TTF_RenderText_Blended(font, chf2, text_color);
+			top3_3 = TTF_RenderText_Blended(font, chf3, text_color);*/
+			
 			//Resizing textures
 			Resize(&(button1Image), "M_Assets/button1.png", BUTTON_WIDTH, BUTTON_HEIGHT);
 			Resize(&(button1HImage), "M_Assets/button1_hover.png", BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -454,6 +510,8 @@ int Main_Menu() {
 			Resize(&(button3HImage), "M_Assets/button3_hover.png", BUTTON_WIDTH, BUTTON_HEIGHT);
 			Resize(&(button4Image), "M_Assets/Back_button.png", S_BUTTON_WIDTH, S_BUTTON_HEIGHT);
 			Resize(&(button4HImage), "M_Assets/Back_button_hover.png", S_BUTTON_WIDTH, S_BUTTON_HEIGHT);
+			Resize(&(button6Image), "M_Assets/B_SB.png", S_BUTTON_WIDTH/4, S_BUTTON_WIDTH/4);
+			Resize(&(button6HImage), "M_Assets/B_SB_H.png", S_BUTTON_WIDTH/4, S_BUTTON_WIDTH/4);
 			if(res==1){
 				Resize(&(button5Image), "M_Assets/FSM_button.png", BUTTON_WIDTH, BUTTON_HEIGHT);
 				Resize(&(button5HImage), "M_Assets/FSM_button_hover.png", BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -466,8 +524,14 @@ int Main_Menu() {
 			
 			//Repositioning text
 			text_rect = calc_Rec(text_rect, (screen->w - text_Sound->w) / 2, slider_center_y - (SCREEN_HEIGHT/6), 1, 1);
+			/*top3_1_rect = calc_Rec(top3_1_rect, (screen->w - top3_1->w) / 2, slider_center_y - (SCREEN_HEIGHT/10), 1, 1);
+			top3_2_rect = calc_Rec(top3_2_rect, (screen->w - top3_2->w) / 2, slider_center_y, 1, 1);
+			top3_3_rect = calc_Rec(top3_3_rect, (screen->w - top3_3->w) / 2, slider_center_y + (SCREEN_HEIGHT/10), 1, 1);*/
 		}
-		
+		if(isPlayClicked){
+			printf("\ntest 3");
+			printf("\n");
+		}
 		// Update the opening animation
 		Uint32 current_time = SDL_GetTicks();
 		if (current_time - last_frame_time >= frame_interval && !loop) {
@@ -503,43 +567,52 @@ int Main_Menu() {
 		}
 		
 		if(isPlayClicked){
-			//SDL_FreeSurface(background);
+			SDL_FreeSurface(background);
 			Resize(&(background), "M_Assets/BG_PLAY_C.png", SCREEN_WIDTH, SCREEN_HEIGHT);
-			return 1;
 		}else{
 			if(isSettingsClicked){
-				//SDL_FreeSurface(background);
+				SDL_FreeSurface(background);
 				Resize(&(background), "M_Assets/BG_S.png", SCREEN_WIDTH, SCREEN_HEIGHT);
 			}else{
-				//SDL_FreeSurface(background);
+				SDL_FreeSurface(background);
 				Resize(&(background), "M_Assets/BG.png", SCREEN_WIDTH, SCREEN_HEIGHT);
 			}
 		}
-		
+		if(isPlayClicked){
+			printf("\ntest 4");
+			printf("\n");
+		}
 		if(loop){
 			if(!isPlayClicked){
 				selector3=0;
 				if (!isSettingsClicked){
 					selector2=0;
-					if(selector==1){
-						isMouseOverButton1=true;
-						isMouseOverButton2=false;
-						isMouseOverButton3=false;
+					if (!isScorebClicked){
+						if(selector==1){
+							isMouseOverButton1=true;
+							isMouseOverButton2=false;
+							isMouseOverButton3=false;
+						}
+						if (selector==2){
+							isMouseOverButton1=false;
+							isMouseOverButton2=true;
+							isMouseOverButton3=false;
+						}
+						if (selector==3){
+							isMouseOverButton1=false;
+							isMouseOverButton2=false;
+							isMouseOverButton3=true;
+						}
+						//Buttons hover textures change
+						BHTC(isMouseOverButton1, screen, button1HImage, button1Image, button1Rect);
+						BHTC(isMouseOverButton2, screen, button2HImage, button2Image, button2Rect);
+						BHTC(isMouseOverButton3, screen, button3HImage, button3Image, button3Rect);
+					}else{
+						/*SDL_BlitSurface(top3_1, NULL, screen, &top3_1_rect);
+						SDL_BlitSurface(top3_2, NULL, screen, &top3_2_rect);
+						SDL_BlitSurface(top3_3, NULL, screen, &top3_3_rect);*/
 					}
-					if (selector==2){
-						isMouseOverButton1=false;
-						isMouseOverButton2=true;
-						isMouseOverButton3=false;
-					}
-					if (selector==3){
-						isMouseOverButton1=false;
-						isMouseOverButton2=false;
-						isMouseOverButton3=true;
-					}
-					//Buttons hover textures change
-					BHTC(isMouseOverButton1, screen, button1HImage, button1Image, button1Rect);
-					BHTC(isMouseOverButton2, screen, button2HImage, button2Image, button2Rect);
-					BHTC(isMouseOverButton3, screen, button3HImage, button3Image, button3Rect);
+					BHTC(isMouseOverButton6, screen, button6HImage, button6Image, button6Rect);
 				}else{
 					selector=0;
 					if(selector2==1){
@@ -574,11 +647,18 @@ int Main_Menu() {
 			// Draw cursor
 			SDL_BlitSurface(cursorSurface, NULL, screen, &cursorPos);
 		}
+		if(isPlayClicked){
+			printf("\ntest 5");
+			printf("\n");
+		}
 		//Update screen
 		SDL_Flip(screen);
 		SDL_Delay(5);
 	}
-	
+	if(isPlayClicked){
+			printf("\ntest 6");
+			printf("\n");
+		}
 	//Freeing Buttons Textures & Surfaces
 	SDL_FreeSurface(button1Image);
 	SDL_FreeSurface(button1HImage);
@@ -590,6 +670,13 @@ int Main_Menu() {
 	SDL_FreeSurface(button4HImage);
 	SDL_FreeSurface(button5Image);
 	SDL_FreeSurface(button5HImage);
+	SDL_FreeSurface(button6Image);
+	SDL_FreeSurface(button6HImage);
+	
+	if(isPlayClicked){
+			printf("\ntest 7");
+			printf("\n");
+		}
 	
 	//Freeing the background
 	SDL_FreeSurface(background);
@@ -598,6 +685,15 @@ int Main_Menu() {
 	TTF_CloseFont(font);
 	SDL_FreeSurface(text_Sound);
 	
+	/*SDL_FreeSurface(top3_1);
+	SDL_FreeSurface(top3_2);
+	SDL_FreeSurface(top3_3);*/
+	
+	if(isPlayClicked){
+			printf("\ntest 8");
+			printf("\n");
+		}
+	
 	//Freeing Audio
 	Mix_FreeChunk(Audio_Click);
 	Mix_FreeChunk(Audio_Quit);
@@ -605,11 +701,17 @@ int Main_Menu() {
 	Mix_FreeMusic(Audio_Bg_Music);
 	Mix_CloseAudio();
 	
-	//Clear screen
-	SDL_SetVideoMode(0, 0, 0, 0);
-	
+	if(isPlayClicked){
+			printf("\ntest 9");
+			printf("\n");
+		}
 	//Quit SDL
 	SDL_Quit();
+	
+	if(isPlayClicked){
+			printf("\ntest 10");
+			printf("\n");
+		}
 }
 
 //Mouse over detection function
@@ -699,7 +801,4 @@ SDL_Rect calc_Rec(SDL_Rect Rec, int m_center_x, int m_center_y, int MENU_BG_WIDT
 	Rec.w=MENU_BG_WIDTH;
 	Rec.h=MENU_BG_HEIGHT;
 	return Rec;
-}
-void menu(){
-	
 }
