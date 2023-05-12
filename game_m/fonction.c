@@ -17,13 +17,13 @@ void init_bullet(bullet *b){
 void affbullet(SDL_Surface *screen,bullet *b){
         
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x+=15;
+        b->pos.x+=20;
         SDL_Flip(screen);
 }
 void affbulletleft(SDL_Surface *screen,bullet *b){
            
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x-=15;
+        b->pos.x-=20;
         SDL_Flip(screen);
         
 }
@@ -120,7 +120,7 @@ void animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint
 void move(Ennemi *e,SDL_Rect* dest)
 {
     
-           (dest->x)+=e->direction*2;   
+           (dest->x)+=e->direction*10;   
     
     
 }
@@ -181,13 +181,13 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
           {
           if (e->direction==-1)
           {
-        animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, &dest);
+        //animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, &dest);
         //aff_e(framesleft,current_frameleft,screen,*dest);
         move(e,dest);
         }
           else 
           {
-        animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,&dest);
+        //animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,&dest);
         //aff_e(framesright,current_frame2,screen,*dest);
         move(e,dest);}
           

@@ -88,7 +88,7 @@ const int NUM_FRAMESjump = 6;
  			if(p->cor.y<=(*grav)){
 		     p->cor.y=p->cor.y+(*velocity);
 		     if (p->cor.y!=(*grav)){
-		     (*velocity)+=1;
+		     (*velocity)+=4;
 		     }
 		   } 
 		   else{
@@ -99,9 +99,9 @@ const int NUM_FRAMESjump = 6;
 			//scrolling
 	
 				if((*dir)==1){
-					p->cor.x+=10;}
+					p->cor.x+=20;}
 				else if((*dir)==0){
-					p->cor.x-=10;}
+					p->cor.x-=20;}
 				if((*dir)==1 && (*jump) ==0){
 					if ((*current_framejump)==5){
         			(*jump)==1;
