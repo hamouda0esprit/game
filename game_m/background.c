@@ -4,7 +4,7 @@ void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT, int anim_frame
 	char ch[20];
 	initAnim(anim_frame,ch);
 	
-	Resize(&(b->S), ch, SCREEN_WIDTH*3.3, SCREEN_HEIGHT*2.16);
+	Resize(&(b->S), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	b->R.w = SCREEN_WIDTH;
 	b->R.h = SCREEN_HEIGHT;
 }
@@ -91,7 +91,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			
+			bg->R.y=-SCREEN_HEIGHT*.87;
 			P->score++;
 			*anim_frame_time+=1;
 			if(*anim_frame_time ==10){
@@ -147,26 +147,49 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 					*done = 0;
 				}
 			}
-			
-			*trigger = 0;
-			if(rect->x <= SCREEN_WIDTH/3){
-				rect->x = SCREEN_WIDTH/3;
-				*trigger = 1;
-			}
-			if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
-				rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
-				*trigger = 1;
-			}
-			//printf("\n bg pos = %d", bg->R.x);
 			if(bg->R.x >= 0){
 				bg->R.x = 0;
 				*limit = 1;
 			}
-			if (bg->R.x <= -SCREEN_WIDTH*2-SCREEN_WIDTH/3){
-				bg->R.x = -SCREEN_WIDTH*2-SCREEN_WIDTH/3;
+			if (bg->R.x <= -SCREEN_WIDTH*2.4175-SCREEN_WIDTH/3){
+				bg->R.x = -SCREEN_WIDTH*2.4175-SCREEN_WIDTH/3;
 				*limit = 1;
 			}
-			if ((bg->R.x > -SCREEN_WIDTH*2-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
+			if ((bg->R.x > -SCREEN_WIDTH*2.41-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
 			       *limit = 0;
 			}
+			
+			*trigger = 0;
+			printf("\nplayer pos : %d",rect->x);
+			if(*limit){
+				if(bg->R.x >=(-SCREEN_WIDTH*2.4175)/2){
+					if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
+						rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
+						*trigger = 1;
+					}
+				}else{
+					if(rect->x <= SCREEN_WIDTH/3){
+						rect->x = SCREEN_WIDTH/3;
+						*trigger = 1;
+					}
+					if(rect->x+rect->w >= SCREEN_WIDTH - SCREEN_WIDTH/50){
+						rect->x = SCREEN_WIDTH-rect->w-SCREEN_WIDTH/50;
+					}
+				}
+				
+			}else{
+				if(rect->x <= SCREEN_WIDTH/3){
+					rect->x = SCREEN_WIDTH/3;
+					*trigger = 1;
+				}
+				if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
+					rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
+					*trigger = 1;
+				}
+			}
+			
+			
+			
+			//printf("\n bg pos = %d", bg->R.x);
+			
 }
