@@ -18,11 +18,11 @@ LIBSPATH =
 # -I
 INCLUDESPATH = 
 
-SOURCES = mainn.c carac.c background.c fonction.c Menu.c Functions.c
+SOURCES = mainn.c carac.c background.c fonction.c Menu.c Functions.c minimap.c -lm
 OBJECTS = $(SOURCES:.c=.o)
 
 
-all : mainn.o carac.o background.o fonction.o Main.o Functions.o
+all : mainn.o carac.o background.o fonction.o Main.o Functions.o minimap.o -lm
 	$(CC) $^ -o $(EXEC) $(INCLUDESPATH) $(LIBSPATH) $(LIBS)
 
 %.o : %.c
@@ -38,6 +38,8 @@ Functions.o : Functions.c Link.h
 mainn.o : mainn.c Link.h
 	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
 Main.o : Main.c Link.h
+	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
+minimap.o : minimap.c minimap.h
 	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
 clean :
 	$(RM) *.o

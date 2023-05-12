@@ -16,17 +16,24 @@
 #define SCORE_POSITION_Y 10
 #include "Link.h"
 
-
+#include "minimap.h"
 
 
 
 void main_2()
 {
+int xp_map;
 int SCREEN_W = 1710;
 int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);;
 //Background task
 
 //Variables
+
+	
+	SDL_Surface * enigme = NULL;
+    SDL_Rect eg = {SCREEN_W/4, SCREEN_H/2, 50, 100};
+
+
        background bg;
        bg.R.x = 0;
        bg.R.y = 0;
@@ -159,6 +166,15 @@ bullett b;
 p.cor.x=SCREEN_W/2;
 p.cor.y=grav;
 p.cor.w=180;
+
+minimap  m;
+initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png");
+
+Uint32 start_time = SDL_GetTicks();
+printf("aaaaa %d \n",ms_to_sec(start_time));
+char temps[20];
+
+
 SDL_Surface* frames[NUM_FRAMES],*framesl[NUM_FRAMESl],*framesright[NUM_FRAMESright],*framesleft[NUM_FRAMESleft],*framesjump[NUM_FRAMESjump],*framesss[NUM_FRAMESss];  
  
   /*if(!Arduino_connect(SERIAL_PORT, 9600))
@@ -226,7 +242,7 @@ while(boucle)
 x = collisionBB(dest,b1.pos);
 printf(" hitready=%d || xp=%d || counter=%d || vie=%d\n",hitready2,xp2,bullet_counter,p.viep);
 
-
+bool pressing_m = false;
 //---------------------------------------------
 while(SDL_PollEvent(&event))
 {
@@ -275,10 +291,18 @@ while(SDL_PollEvent(&event))
                         b2.pos.x=p2.cor.x+100;
                         b2.pos.y=p2.cor.y+150;
                         
-                        hit2=1; }                            
+                        hit2=1; }  
+					if(event.key.keysym.sym == SDLK_TAB){
+                        pressing_m = true;
+                        printf("m yes\n");
+                    }                             
                     break;
                  
         case SDL_KEYUP:
+					if(event.key.keysym.sym == SDLK_TAB){
+                        pressing_m = false;
+                        printf("m no\n");
+                    }
                     if (event.key.keysym.sym == SDLK_RIGHT) {
                         orientation=0;
                         dir=2;
@@ -318,6 +342,19 @@ while(SDL_PollEvent(&event))
 }}
 //printf("\n p cor : %d",p.cor.x);
 run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &dest, &b1, &b2, &limit);
+
+affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
+printf("\nt = %d\n",start_time);
+
+xp_map=p.cor.x-bg.R.x;
+SDL_Rect RP;
+RP = p.cor;
+RP.x = xp_map;
+miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
+
+
+
+
 /*dest.x-=SCREEN_W/40;
 movex-=SCREEN_W/40;*/
 //printf("\nenemy pos x : %d", dest.x);
@@ -474,6 +511,7 @@ movex-=SCREEN_W/40;*/
 //-----------------------------------------------END-----------------------------------        
  
 
+printf("\nxp_map : %d",xp_map);
 SDL_Flip(screen);
 
 SDL_Delay(10);
@@ -484,3 +522,4 @@ SDL_FreeSurface(bg.S);
 void aff_e(SDL_Surface *(*framesright[]),int *current_frame21,SDL_Surface *screen,SDL_Rect dest){
        SDL_BlitSurface(framesright[*current_frame21], NULL, screen, &dest);
 }
+
