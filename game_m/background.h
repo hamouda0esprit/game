@@ -9,6 +9,7 @@
 
 typedef struct{
 	SDL_Surface *S;
+	SDL_Surface *M;
 	SDL_Rect R;
 }background;
 
