@@ -4,7 +4,9 @@ void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT, int anim_frame
 	char ch[20];
 	initAnim(anim_frame,ch);
 	
+	Resize(&(b->M), "Assets/BG_M.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	Resize(&(b->S), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+	
 	b->R.w = SCREEN_WIDTH;
 	b->R.h = SCREEN_HEIGHT;
 }
