@@ -18,13 +18,13 @@ void affbullet(SDL_Surface *screen,bullet *b){
         
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
         b->pos.x+=20;
-        SDL_Flip(screen);
+        //SDL_Flip(screen);
 }
 void affbulletleft(SDL_Surface *screen,bullet *b){
            
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
         b->pos.x-=20;
-        SDL_Flip(screen);
+        //SDL_Flip(screen);
         
 }
 
