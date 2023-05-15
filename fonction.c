@@ -8,8 +8,7 @@
 #define HEALTHBAR_HEIGHT 30
 #define SCORE_POSITION_X 10
 #define SCORE_POSITION_Y 10
-#define SCREEN_W 1710
-#define SCREEN_H 962
+
      
 void init_bullet(bullet *b){
 			
@@ -18,31 +17,28 @@ void init_bullet(bullet *b){
 void affbullet(SDL_Surface *screen,bullet *b){
         
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x+=15;
+        b->pos.x+=20;
+<<<<<<< HEAD
+        
+=======
+        //SDL_Flip(screen);
+>>>>>>> 0940caa559d9b0823af3fdf7b87a2feb8aa80cac
 }
 void affbulletleft(SDL_Surface *screen,bullet *b){
            
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x-=15;
+        b->pos.x-=20;
+<<<<<<< HEAD
+
+=======
+        //SDL_Flip(screen);
+>>>>>>> 0940caa559d9b0823af3fdf7b87a2feb8aa80cac
         
 }
 
 
 
-void initialiser_imageBACK(image *imge,char dest[])
-{
-imge->url=dest;
-imge->img=IMG_Load(imge->url);
-if (imge->img == NULL){
-	printf("unable to load background image %s \n",SDL_GetError()); 
-	return ;}
-imge->pos_img_ecran.x=0;
-imge->pos_img_ecran.y=0;
-imge->pos_img_affiche.x=0;
-imge->pos_img_affiche.y=0; 
-imge->pos_img_affiche.h=SCREEN_H;
-imge->pos_img_affiche.w=SCREEN_W;
-}
+
 void afficher_image(SDL_Surface *screen, image imge)
 {
 SDL_BlitSurface(imge.img, &imge.pos_img_affiche, screen, &imge.pos_img_ecran);
@@ -104,7 +100,7 @@ SDL_Surface* load_image(const char* filename) {
 
     return optimized;
 }
-SDL_Rect animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, int x, int y) {
+void animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, SDL_Rect *dest) {
     
     const int FRAME_DELAY = 100;
     
@@ -121,54 +117,18 @@ SDL_Rect animate(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, 
         *last_frame_time = current_time;
     }
 
-    
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.w = frames[*current_frame]->w;
-    dest.h = frames[*current_frame]->h;
+    dest->w = frames[*current_frame]->w;
+    dest->h = frames[*current_frame]->h;
 
-    SDL_BlitSurface(frames[*current_frame], NULL, screen, &dest);
-
-    SDL_Flip(screen);
-    return dest;
+    //SDL_Flip(screen);
+    //return dest;
 }
-
-SDL_Rect animate_place(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, int x, int y) {
-    
-    const int FRAME_DELAY = 100;
-    Uint32 current_time = SDL_GetTicks();
-    Uint32 time_since_last_frame = current_time - *last_frame_time;
-
- 
-    if (time_since_last_frame >= FRAME_DELAY) {
-        (*current_frame)++;
-        if (*current_frame == NUM_FRAMES) {
-            *current_frame = 0;
-        }
-
-        *last_frame_time = current_time;
-    }
-
-    
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.w = frames[*current_frame]->w;
-    dest.h = frames[*current_frame]->h;
-
-    SDL_BlitSurface(frames[*current_frame], NULL, screen, &dest);
-
-    SDL_Flip(screen);
-    return dest;
-}
-
 
 
 void move(Ennemi *e,SDL_Rect* dest)
 {
     
-           (dest->x)+=e->direction*2;   
+           (dest->x)+=e->direction*10;   
     
     
 }
@@ -229,25 +189,24 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
           {
           if (e->direction==-1)
           {
-        (*dest)= animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, dest->x, dest->y);
-        
+        //animate(screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMES, &dest);
+        //aff_e(framesleft,current_frameleft,screen,*dest);
         move(e,dest);
         }
           else 
           {
-        (*dest)= animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,dest->x, dest->y);
+        //animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,&dest);
+        //aff_e(framesright,current_frame2,screen,*dest);
         move(e,dest);}
           
           }
 
 }
+
 void move_following(SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, SDL_Rect* dest,SDL_Rect posp,Ennemi *e)
-{
-    
-       (*dest)=animate(screen, frames, current_frame, last_frame_time, NUM_FRAMES, dest->x, dest->y);
+{    
+       animate(screen, frames, current_frame, last_frame_time, NUM_FRAMES, dest);
        move(e,dest);
-
-
 }
 
 

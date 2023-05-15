@@ -149,7 +149,7 @@ if(moving_left &&  p.jr.x + 10 +  p.jr.w >= 0){
        // printf("collision = %d \n",collisionBB(p.jr,dest));
         
         
-SDL_Flip(screen);
+//SDL_Flip(screen);
 SDL_Delay(10);}
 return 0;
 }
