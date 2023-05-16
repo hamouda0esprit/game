@@ -7,7 +7,7 @@ void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 		initAnim(i,&ch);
 		Resize(&(b->S[i]), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	}
-	b->R.y=-SCREEN_HEIGHT*.87;
+	b->R.y=-SCREEN_HEIGHT*.85;
 	Resize(&(b->M), "Assets/BG_M.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	
 	b->R.w = SCREEN_WIDTH;
@@ -113,15 +113,15 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 					if (rect->x>1385){
 						if (keys[SDLK_UP] && bg->R.y < 0){
 							bg->R.y=0;
-							b1->y+=SCREEN_HEIGHT*.87;
-							b2->y+=SCREEN_HEIGHT*.87;
-							dest->y+=SCREEN_HEIGHT*.87;
+							b1->y+=SCREEN_HEIGHT*.85;
+							b2->y+=SCREEN_HEIGHT*.85;
+							dest->y+=SCREEN_HEIGHT*.85;
 						}
-						if (keys[SDLK_DOWN] && bg->R.y > -SCREEN_HEIGHT*.87){
-							bg->R.y=-SCREEN_HEIGHT*.87;
-							b1->y-=SCREEN_HEIGHT*.87;
-							b2->y-=SCREEN_HEIGHT*.87;
-							dest->y-=SCREEN_HEIGHT*.87;
+						if (keys[SDLK_DOWN] && bg->R.y > -SCREEN_HEIGHT*.85){
+							bg->R.y=-SCREEN_HEIGHT*.85;
+							b1->y-=SCREEN_HEIGHT*.85;
+							b2->y-=SCREEN_HEIGHT*.85;
+							dest->y-=SCREEN_HEIGHT*.85;
 						}
 					}
 				}
