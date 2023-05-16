@@ -402,6 +402,7 @@ movex-=SCREEN_W/40;*/
      	 
      
     //---------------------------------------------COLLISION ENEMY/BULLET  TO LEFT-------------------------------   
+      			if(bg.R.y<0){
       			if(p.viep!=0){
       			if(e.direction<0){
      							if(xp==1)
@@ -506,7 +507,7 @@ movex-=SCREEN_W/40;*/
       							 	b2.pos.y=dest.y+100;
        								hit2=1;
      	 								hitready2=0;
-      							}}}
+      							}}}}
  								
  
  
