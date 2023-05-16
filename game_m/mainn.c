@@ -22,6 +22,7 @@
 
 void main_2()
 {
+int level=1;
 int xp_map;
 int SCREEN_W = 1710;
 int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);;
@@ -38,9 +39,10 @@ int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);;
        bg.R.x = 0;
        bg.R.y = 0;
 
-       char ch[20];
 	int anim_frame=0;
 	int anim_frame_time=0;
+	initBack(&bg, SCREEN_W, SCREEN_H);
+	
 	
 	int trigger;
 	
@@ -171,7 +173,7 @@ minimap  m;
 initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png");
 
 Uint32 start_time = SDL_GetTicks();
-printf("aaaaa %d \n",ms_to_sec(start_time));
+//printf("aaaaa %d \n",ms_to_sec(start_time));
 char temps[20];
 
 
@@ -240,7 +242,7 @@ while(boucle)
 //afficher_image(screen,imge);
 //----------------------------------------------------
 x = collisionBB(dest,b1.pos);
-printf(" hitready=%d || xp=%d || counter=%d || vie=%d\n",hitready2,xp2,bullet_counter,p.viep);
+//printf(" hitready=%d || xp=%d || counter=%d || vie=%d\n",hitready2,xp2,bullet_counter,p.viep);
 
 bool pressing_m = false;
 //---------------------------------------------
@@ -340,11 +342,11 @@ while(SDL_PollEvent(&event))
             
 		     
 }}
-//printf("\n p cor : %d",p.cor.x);
-run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &dest, &b1, &b2, &limit);
-
+printf("\n p cor : %d",p.cor.x);
+run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &dest, &b1, &b2, &limit, &level);
+//printf("\n dest.x : %d",dest.x);
 affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
-printf("\nt = %d\n",start_time);
+//printf("\nt = %d\n",start_time);
 
 xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;
@@ -511,11 +513,10 @@ movex-=SCREEN_W/40;*/
 //-----------------------------------------------END-----------------------------------        
  
 
-printf("\nxp_map : %d",xp_map);
+//printf("\nxp_map : %d",xp_map);
 SDL_Flip(screen);
 
-SDL_Delay(10);
-SDL_FreeSurface(bg.S);
+SDL_Delay(1);
 }
 }
 

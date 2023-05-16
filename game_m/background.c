@@ -1,18 +1,21 @@
 #include "background.h"
 
-void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT, int anim_frame){
+void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 	char ch[20];
-	initAnim(anim_frame,ch);
 	
+	for (int i=0;i<=9;i++){
+		initAnim(i,&ch);
+		Resize(&(b->S[i]), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+	}
+	b->R.y=-SCREEN_HEIGHT*.87;
 	Resize(&(b->M), "Assets/BG_M.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
-	Resize(&(b->S), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	
 	b->R.w = SCREEN_WIDTH;
 	b->R.h = SCREEN_HEIGHT;
 }
 
 void afficherBack(background bg, SDL_Surface * screen){
-	SDL_BlitSurface(bg.S, 0, screen, &bg.R);
+	SDL_BlitSurface(bg.S[0], 0, screen, &bg.R);
 }
 
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
@@ -23,8 +26,8 @@ void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
 	}
 }
 
-void initAnim(int anim_frame, char *ch){
-	sprintf(ch, "Assets/bg/bg%d.png", anim_frame);
+void initAnim(int i, char *ch){
+	sprintf(ch, "Assets/bg/bg%d.png", i);
 }
 
 void Score_Storing(player *P){
@@ -87,13 +90,11 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit ){
-			initBack(bg, SCREEN_WIDTH, SCREEN_HEIGHT, *anim_frame);
+void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level){
 			afficherBack(*bg,screen);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			bg->R.y=-SCREEN_HEIGHT*.87;
 			P->score++;
 			*anim_frame_time+=1;
 			if(*anim_frame_time ==10){
@@ -107,6 +108,22 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			Uint8* keys = SDL_GetKeyState(NULL);
 			
 			if(!(*game_ended)){
+			
+				if (*level == 1){
+					if (rect->x>1385){
+						if (keys[SDLK_UP] && bg->R.y < 0){
+							bg->R.y=0;
+							b1->y+=SCREEN_HEIGHT*.87;
+							b2->y+=SCREEN_HEIGHT*.87;
+						}
+						if (keys[SDLK_DOWN] && bg->R.y > -SCREEN_HEIGHT*.87){
+							bg->R.y=-SCREEN_HEIGHT*.87;
+							b1->y-=SCREEN_HEIGHT*.87;
+							b2->y-=SCREEN_HEIGHT*.87;
+						}
+					}
+				}
+			
 				if (keys[SDLK_RIGHT]){
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){
