@@ -90,7 +90,7 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level){
+void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex){
 			afficherBack(*bg,screen);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
@@ -104,9 +104,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			if(*anim_frame==9){
 				*anim_frame=0;
 			}
-			
-			Uint8* keys = SDL_GetKeyState(NULL);
-			
+			Uint8* keys = SDL_GetKeyState(NULL);	
 			if(!(*game_ended)){
 			
 				if (*level == 1){
@@ -117,7 +115,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							b2->y+=SCREEN_HEIGHT*.85;
 							dest->y+=SCREEN_HEIGHT*.85;
 						}
-						if (keys[SDLK_DOWN] && bg->R.y > -SCREEN_HEIGHT*.85){
+						if (keys[SDLK_DOWN] && bg->R.y == 0){
 							bg->R.y=-SCREEN_HEIGHT*.85;
 							b1->y-=SCREEN_HEIGHT*.85;
 							b2->y-=SCREEN_HEIGHT*.85;
@@ -134,12 +132,12 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							if (!(*limit)){
 							       scrolling(dest,0,SCREEN_WIDTH);
 							       //dest->x-=SCREEN_WIDTH/40;
-							       
+							       *movex-=SCREEN_WIDTH/40;
 							       b1->x-=SCREEN_WIDTH/40;
 							       b2->x-=SCREEN_WIDTH/40;
 							}
 						}
-						scrolling(rect,1,SCREEN_WIDTH);
+						//scrolling(rect,1,SCREEN_WIDTH);
 						last_move_time = current_time;
 					}
 				}
@@ -152,11 +150,12 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							if (!(*limit)){
 							       scrolling(dest,1,SCREEN_WIDTH);
 							       //dest->x+=SCREEN_WIDTH/40;
+							        *movex+=SCREEN_WIDTH/40;
 							       b1->x+=SCREEN_WIDTH/40;
 							       b2->x+=SCREEN_WIDTH/40;
 							}
 						}
-						scrolling(rect,0,SCREEN_WIDTH);
+						//scrolling(rect,0,SCREEN_WIDTH);
 						last_move_time = current_time;
 					}
 				}

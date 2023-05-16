@@ -5,144 +5,168 @@
 #include<SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_ttf.h>
-#define SCREEN_W 1710
-#define SCREEN_H 962
 #include "fonctionn.h"
+#include "fonction.h"
+ int SCREEN_W = 1920;
+	int SCREEN_H =  1080;
 
-  const int NUM_FRAMES = 13; // number of animation frames
-	const int FRAME_DELAY = 50;
-	const int NUM_FRAMESright = 13; // number of animation frames
-	const int FRAME_DELAYright = 50;
-	const int NUM_FRAMESleft = 13; // number of animation frames
-	const int FRAME_DELAYleft = 50;
-	int strStartsWith(const char *pre, const char *str)
-{
-    size_t lenpre = strlen(pre),
-           lenstr = strlen(str);
-    return lenstr < lenpre ? 0 : strncmp(pre, str, lenpre) == 0;
-}
 // FONCTIONS OF STOP
 //------------------------------------------------
-void update_animation2(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES) {
+void initialiser_imageBACK(image *imge,char dest[])
+{
+imge->url=dest;
+imge->img=IMG_Load(imge->url);
+if (imge->img == NULL){
+	printf("unable to load background image %s \n",SDL_GetError()); 
+	return ;}
+imge->pos_img_ecran.x=0;
+imge->pos_img_ecran.y=0;
+imge->pos_img_affiche.x=0;
+imge->pos_img_affiche.y=0; 
+imge->pos_img_affiche.h=1080;
+imge->pos_img_affiche.w=1920;
+}
+void loadanimationcaractere(int numframes ,SDL_Surface **frames,char dest[],int SCREEN_WIDTH, int SCREEN_HEIGHT){
+for (int i = 0; i < numframes; i++) {
+        char filename[20];
+        sprintf(filename, dest, i);
+        //frames[i] = load_image(filename);
+        Resizecaractere(&(frames[i]), filename, 100, 150);
+        
+    }
+
+}
+
+void Resizecaractere(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
+	SDL_Surface *Buffer = IMG_Load(dir);
+	
+	// Create the resized surface
+	*(Image) = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, Buffer->format->BitsPerPixel, Buffer->format->Rmask, Buffer->format->Gmask,  Buffer->format->Bmask, Buffer->format->Amask);
+
+	// Scale the original surface to the new size
+	SDL_SoftStretch(Buffer, NULL, *(Image), NULL);
+	
+	SDL_FreeSurface(Buffer);
+}
+
+
+void update_and_render_animationcaractere(int rep,SDL_Surface *screen, SDL_Surface **frames, int *current_frame, Uint32 *last_frame_time, int NUM_FRAMES, Personn *p,int SCREEN_WIDTH,int SCREEN_HEIGHT ) {
     // calculate time since last frame
     Uint32 current_time = SDL_GetTicks();
     Uint32 time_since_last_frame = current_time - *last_frame_time;
 
     // update animation frame if enough time has elapsed
-    if (time_since_last_frame >= FRAME_DELAY) {
+    if (time_since_last_frame >= 100) {
         (*current_frame)++;
+        
         if (*current_frame == NUM_FRAMES) {
-            *current_frame = 0;
-        }
-
-        *last_frame_time = current_time;
+  				*current_frame = rep;
+        } 
+             *last_frame_time = current_time;
     }
-}
+    
 
-void render_animation2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,Personn *p) {
-    // draw current animation frame to screen
-    SDL_BlitSurface(frames[current_frame], NULL, screen, &p->cor);
-    //SDL_Flip(screen);
-}
-void clear_animation2(SDL_Surface **frames, int num_frames) {
-    // free animation frames
-    for (int i = 0; i < num_frames; i++) {
-        SDL_FreeSurface(frames[i]);
-    }
-    free(frames);
+    SDL_BlitSurface(frames[*current_frame], NULL, screen, &p->cor);
 }
 //------------------------------------------------
 // FONCTIONS OF right
 //------------------------------------------------
-void update_animationright2(int *current_frame, Uint32 *last_frame_time,int NUM_FRAMES) {
-    // calculate time since last frame
-    Uint32 current_time = SDL_GetTicks();
-    Uint32 time_since_last_frame = current_time - *last_frame_time;
 
-    // update animation frame if enough time has elapsed
-    if (time_since_last_frame >= FRAME_DELAY) {
-        (*current_frame)++;
-        if (*current_frame == NUM_FRAMES) {
-            *current_frame = 4;
-        }
-
-        *last_frame_time = current_time;
-    }
-}
-
-
-void render_animationright2(SDL_Surface *screen, SDL_Surface **frames, int current_frame,Personn *p) {
-    // draw current animation frame to screen
-    SDL_BlitSurface(frames[current_frame], NULL, screen, &p->cor);
-    //SDL_Flip(screen);
-}
-
-void player4(int* orientation,int* jump,int* dir,int* current_framess,Uint32* last_frame_time_stop_right,Uint32* last_frame_time_stop_left,Uint32* last_frame_time2,Uint32* last_frame_timess,Uint32* last_frame_timeleft ,Uint32* last_frame_timejump,int* current_framejump,int* current_frame_stop_right,int* current_frame_stop_left,int* current_frame2,int* current_frameleft,Personn *p,int* grav,int* velocity,int* stop,SDL_Surface *screen,SDL_Surface **frame_stop_right,SDL_Surface**frames_stop_left,SDL_Surface**framesright,SDL_Surface**framesleft,SDL_Surface**framesjump,SDL_Surface**framesss){
+void player4(int *stopr,int *stopl,int* orientation,int *move,int* jump,int* dir,int* current_framess,Uint32* last_frame_time_stop_right,Uint32* last_frame_time_stop_left,Uint32* last_frame_time2,Uint32* last_frame_timess,Uint32* last_frame_timeleft ,Uint32* last_frame_timejump,int* current_framejump,int* current_frame_stop_right,int* current_frame_stop_left,int* current_frame2,int* current_frameleft,Personn *p,int* grav,int* velocity,int* stop,SDL_Surface *screen,SDL_Surface **frame_stop_right,SDL_Surface**frames_stop_left,SDL_Surface**framesright,SDL_Surface**framesleft,SDL_Surface**framesjump,SDL_Surface**framesss, int SCREEN_HEIGHT, int SCREEN_WIDTH){
 const int NUM_FRAME_stop_right = 13;
 const int NUM_FRAMES_stop_left = 13;
 const int NUM_FRAMESright = 13; 
 const int NUM_FRAMESleft = 13;
 const int NUM_FRAMESss = 6; 
 const int NUM_FRAMESjump = 6;
-//jump
+
+
+//-------------CONDITIONS FOR MOUVEMENTS------------------			
+if((*stopr)==1&&(*stopl)==1){
+(*stop)=1;
+}
+if((*stopr)==0&&(*stopl)==0){
+(*stop)=0;
+}
+if((*stopr)!=(*stopl)){
+(*stop)=0;
+}
+if((*stopl)==0 && (*dir)==2){
+(*dir)=0;
+}
+if((*stopr)==0 && (*dir)==2){
+(*dir)=1;
+}
+//--------------------------VELOCITY UP
  			if(p->cor.y<=(*grav)){
 		     p->cor.y=p->cor.y+(*velocity);
 		     if (p->cor.y!=(*grav)){
-		     (*velocity)+=4;
+		     (*velocity)+=1;
 		     }
 		   } 
 		   else{
 		     p->cor.y=(*grav);
 		     (*velocity)=0;
+		     (*jump)=1;
 		     }    
-		    // JUMP CONDITION
-			//scrolling
-	
+		    
+			
+	//-----------------------RIGHT AND lEFT------------------
 				if((*dir)==1){
-					p->cor.x+=20;}
+					p->cor.x+=SCREEN_WIDTH/40;
+					printf("test");}
 				else if((*dir)==0){
-					p->cor.x-=20;}
-				if((*dir)==1 && (*jump) ==0){
-					if ((*current_framejump)==5){
-        			(*jump)==1;
-        		}
-					update_animation2(current_framejump, last_frame_timejump, NUM_FRAMESss);
-        			render_animationright2(screen, framesjump, *current_framejump,p);
+					p->cor.x-=SCREEN_WIDTH/40;}
+	//-----------------------JUMP ANIMATION------------------
+				if((*dir)==1 && (*jump) ==0&& (*velocity)!=0){
+					     update_and_render_animationcaractere(0,screen, framesjump, current_framejump, last_frame_timejump, NUM_FRAMESss, p,SCREEN_W,SCREEN_H);      			
         		
         		}
-        		else if((*dir) ==0&& (*jump) ==0){
-					update_animation2(current_framess, last_frame_timess, NUM_FRAMESss);
-        			render_animationright2(screen, framesss, *current_framess,p);
-				}		
-				else if((*dir)==0 &&(*jump)==1){
-					update_animationright2(current_frameleft, last_frame_timeleft,NUM_FRAMESleft);
-        			render_animationright2(screen, framesleft, *current_frameleft,p);       
-				}
-				else if((*dir)==1 && (*jump)==1 ){
-					update_animationright2(current_frame2, last_frame_time2,NUM_FRAMESright);
-        			render_animationright2(screen, framesright, *current_frame2,p);        			
-        		}
-				else if((*dir)==2 &&(*jump)==0&&(*orientation)==0){
-				if ((*current_framejump)==5){
-        			(*jump)==1;
-        		}    
-					update_animation2(current_framejump, last_frame_timejump, NUM_FRAMESss);
-        			render_animationright2(screen, framesjump, *current_framejump, p);   
-        			
+        			 if((*stop)==1 &&(*jump)==0&&(*orientation)==0&& (*velocity)!=0){
+        			 update_and_render_animationcaractere(0,screen, framesjump,current_framejump, last_frame_timejump, NUM_FRAMESss, p,SCREEN_W,SCREEN_H);   
+        	
 				} 
-				else if((*dir)==2 &&(*jump)==0&&(*orientation)==1){
-					update_animation2(current_framess, last_frame_timess, NUM_FRAMESss);
-        			render_animationright2(screen, framesss, *current_framess, p);      
-				}        		
-       		else if ((*stop)==1 && (*dir)==2 && (*orientation)==0){
-        			update_animation2(current_frame_stop_right, last_frame_time_stop_right,NUM_FRAME_stop_right);
-        			render_animation2(screen, frame_stop_right, *current_frame_stop_right,p);
+				 if((*stop)==1 &&(*jump)==0&&(*orientation)==1&&(*velocity)!=0){
+				
+        	update_and_render_animationcaractere(0,screen, framesss, current_framess, last_frame_timess, NUM_FRAMESss, p,SCREEN_W,SCREEN_H);
+         	
+				}
+        		 if((*dir) ==0 && (*jump) ==0&&(*velocity)!=0){	
+        		 		
+        			update_and_render_animationcaractere(0,screen, framesss, current_framess, last_frame_timess, NUM_FRAMESss, p,SCREEN_W,SCREEN_H);  
         		}
-       		else if ((*stop)==1 && (*dir)==2&&(*orientation)==1){
-      			update_animation2(current_frame_stop_left, last_frame_time_stop_left,NUM_FRAMES_stop_left);
-       			render_animation2(screen, frames_stop_left, *current_frame_stop_left,p);
+			//-----------------------RIGHT AND LEFT AND STOP------------------	
+				 if((*dir)==0 && (*velocity)==0){
+							
+        			        update_and_render_animationcaractere(4,screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMESleft, p,SCREEN_W,SCREEN_H);   	      
+				}
+				 if((*dir)==1 && (*velocity)==0){
+						
+        			    update_and_render_animationcaractere(4,screen, framesright, current_frame2, last_frame_time2, NUM_FRAMESright, p,SCREEN_W,SCREEN_H);   	
+        		}
+        		 if((*dir)==0 && (*velocity)!=0&& (*jump) ==1){
+							
+        			        update_and_render_animationcaractere(4,screen, framesleft, current_frameleft, last_frame_timeleft, NUM_FRAMESleft, p,SCREEN_W,SCREEN_H);   	      
+				}
+				 if((*dir)==1 && (*velocity)!=0&& (*jump) ==1){
+						
+        			    update_and_render_animationcaractere(4,screen, framesright, current_frame2, last_frame_time2, NUM_FRAMESright, p,SCREEN_W,SCREEN_H);   	
+        		}
+        		
+			
+				//----------------STOP CONDITION-----------------        		
+       		 if ((*stop)==1 &&  (*orientation)==0&& (*velocity)==0&& (*dir)==2){
+        	update_and_render_animationcaractere(0,screen, frame_stop_right, current_frame_stop_right, last_frame_time_stop_right, NUM_FRAME_stop_right, p,SCREEN_W,SCREEN_H);
+        		}
+        		if ((*stop)==1 &&  (*orientation)==0&& (*velocity)!=0&& (*dir)==2&& (*jump) ==1){
+        	update_and_render_animationcaractere(0,screen, frame_stop_right, current_frame_stop_right, last_frame_time_stop_right, NUM_FRAME_stop_right, p,SCREEN_W,SCREEN_H);
+        		}
+       		if ((*stop)==1 && (*orientation)==1&& (*velocity)==0&& (*dir)==2){
+      	update_and_render_animationcaractere(0,screen, frames_stop_left, current_frame_stop_left, last_frame_time_stop_left, NUM_FRAMES_stop_left, p,SCREEN_W,SCREEN_H);
+        		}
+        		if ((*stop)==1 && (*orientation)==1&& (*velocity)!=0&& (*dir)==2&& (*jump) ==1){
+      	update_and_render_animationcaractere(0,screen, frames_stop_left, current_frame_stop_left, last_frame_time_stop_left, NUM_FRAMES_stop_left, p,SCREEN_W,SCREEN_H);
         		}
         		
         		
         		}
-
