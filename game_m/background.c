@@ -115,11 +115,13 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							bg->R.y=0;
 							b1->y+=SCREEN_HEIGHT*.87;
 							b2->y+=SCREEN_HEIGHT*.87;
+							dest->y+=SCREEN_HEIGHT*.87;
 						}
 						if (keys[SDLK_DOWN] && bg->R.y > -SCREEN_HEIGHT*.87){
 							bg->R.y=-SCREEN_HEIGHT*.87;
 							b1->y-=SCREEN_HEIGHT*.87;
 							b2->y-=SCREEN_HEIGHT*.87;
+							dest->y-=SCREEN_HEIGHT*.87;
 						}
 					}
 				}
