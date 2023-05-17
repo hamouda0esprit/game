@@ -47,7 +47,7 @@ void format_time(int seconds, char time_str[]);
 void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] );
 void afficherminimap (minimap m, SDL_Surface * screen,int SCREEN_W,int SCREEN_H);
 void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, minimap *m, int redimensionnement,int SCREEN_W,int SCREEN_H);
-void affichertemps(int start_time, SDL_Surface* screen, char tmp[],int SCREEN_W,int SCREEN_);
+void affichertemps(SDL_Surface* screen, char tmp[], int SCREEN_W, int SCREEN_H);
 int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect); 
 void get_points(int x,int y,int w,int h,points *p); 
 SDL_Color GetPixel(SDL_Surface *pSurface,int x,int y); 
