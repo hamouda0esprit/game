@@ -34,17 +34,24 @@ void get_points(int x,int y,int w,int h, points *p){
 }
 SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y) {
     SDL_Color color;
-    Uint32 pixel;
+    Uint32 pixel = 0;  // Initialize pixel to a default value
     Uint8 *pPixel;
 
-    // Get the pixel at the specified coordinates
-    Uint8 bytesPerPixel = pSurface->format->BytesPerPixel;
-    Uint8 *pRow = (Uint8 *)pSurface->pixels + y * pSurface->pitch;
-    pPixel = pRow + x * bytesPerPixel;
-    memcpy(&pixel, pPixel, bytesPerPixel);
+    // Check if the provided coordinates are within the surface bounds
+    if (x >= 0 && x < pSurface->w && y >= 0 && y < pSurface->h) {
+        // Get the pixel at the specified coordinates
+        Uint8 bytesPerPixel = pSurface->format->BytesPerPixel;
+        Uint8 *pRow = (Uint8 *)pSurface->pixels + y * pSurface->pitch;
+        pPixel = pRow + x * bytesPerPixel;
 
-    // Get the individual color components
-    SDL_GetRGB(pixel, pSurface->format, &color.r, &color.g, &color.b);
+        // Perform a memory access check before copying the pixel data
+        if (pPixel >= (Uint8 *)pSurface->pixels && pPixel < ((Uint8 *)pSurface->pixels + pSurface->pitch * pSurface->h)) {
+            memcpy(&pixel, pPixel, bytesPerPixel);
+
+            // Get the individual color components
+            SDL_GetRGB(pixel, pSurface->format, &color.r, &color.g, &color.b);
+        }
+    }
 
     return color;
 }
