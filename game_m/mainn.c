@@ -22,6 +22,8 @@
 
 void main_2()
 {
+
+//Uint32 start_time = SDL_GetTicks();
 int level=1;
 int xp_map;
 int SCREEN_W = 1710;
@@ -178,7 +180,7 @@ int tee;
 minimap  m;
 initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png");
 
-Uint32 start_time = SDL_GetTicks();
+
 //printf("aaaaa %d \n",ms_to_sec(start_time));
 char temps[20];
 
@@ -215,14 +217,20 @@ loadanimationcaractere(13,framesleftenemy,"leftROBOT/left%d.png",SCREEN_WIDTH,SC
 
 init_bullett(&b1);
 init_bullet(&b2);
+
 e.dest.w=p.cor.w;
 e.dest.h=p.cor.h;
 b1.pos.x=-6000;
 				b1.pos.y=-6000;
+<<<<<<< HEAD
  points p_points;			
+=======
+		int t=0;		
+>>>>>>> 9c257218ba60236d1ea8b05cccd51396ff688948
 while(boucle)
 {      
 x = collisionBB(e.dest,b1.pos);
+t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
 //printf("\nplayer w & h : %d %d",p.cor.w,p.cor.h);
 
        x2 = event.button.x;
@@ -334,6 +342,7 @@ while(SDL_PollEvent(&event))
 //printf("\n p cor : %d",p.cor.x);
 run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex);
 //printf("\n movex : %d",movex);
+<<<<<<< HEAD
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
 
@@ -345,10 +354,33 @@ t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
 
 
 
+=======
+
+affichertemps(screen,temps,SCREEN_W,SCREEN_H);
+//printf("\nt = %d\n",start_time);
+printf("col = %d\n",t);
+>>>>>>> 9c257218ba60236d1ea8b05cccd51396ff688948
 xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;
 RP = p.cor;
 RP.x = xp_map;
+<<<<<<< HEAD
+=======
+//miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
+
+if(t==3 && verif==1){
+grav=p.cor.y;
+verif=0;}
+if(t==0 && verif ==0){
+	grav=SCREEN_H-p.cor.h*1.4;
+	verif=1;
+}
+
+
+
+
+
+>>>>>>> 9c257218ba60236d1ea8b05cccd51396ff688948
 
 //printf("col = %d\n",collisionPP(p->cor,bg->M,bg->R));
 //miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");

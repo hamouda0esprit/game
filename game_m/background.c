@@ -15,7 +15,7 @@ void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 }
 
 void afficherBack(background bg, SDL_Surface * screen){
-	SDL_BlitSurface(bg.S[0], 0, screen, &bg.R);
+	SDL_BlitSurface(bg.M ,0, screen, &bg.R);
 }
 
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
