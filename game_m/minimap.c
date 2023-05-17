@@ -38,14 +38,19 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y) {
     Uint8 *pPixel;
 
     // Get the pixel at the specified coordinates
-    pixel = *(Uint32 *)(pSurface->pixels + y * pSurface->pitch + x * pSurface->format->BytesPerPixel);
+    Uint8 bytesPerPixel = pSurface->format->BytesPerPixel;
+    Uint8 *pRow = (Uint8 *)pSurface->pixels + y * pSurface->pitch;
+    pPixel = pRow + x * bytesPerPixel;
+    memcpy(&pixel, pPixel, bytesPerPixel);
 
     // Get the individual color components
-    pPixel = (Uint8 *)&pixel;
     SDL_GetRGB(pixel, pSurface->format, &color.r, &color.g, &color.b);
 
     return color;
 }
+
+
+
 
 
 
@@ -246,13 +251,13 @@ void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, mi
 
 
 
-int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect) {
+int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,int B) {
     printf("collisionPP\n");
     points p_points;
     get_points(p.x + abs(MasqueRect.x), p.y + abs(MasqueRect.y),
                p.w, p.h, &p_points);
-    SDL_Color color = {251, 220, 156, 0};
-
+    SDL_Color color = {R, G, B, 0};
+    printf("1\n");
     for (int i = 1; i <= 8; i++) {
         int x = 0, y = 0;
         switch (i) {
@@ -289,7 +294,10 @@ int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect) {
                 y = p_points.p8y;
                 break;
         }
+        printf("2\n");
+
         SDL_Color pixel_color = GetPixel(Masque, x, y);
+        printf("3\n");
         printf("passed ?\n");
         if (pixel_color.r == color.r && pixel_color.g == color.g && pixel_color.b == color.b) {
             printf("pass1\n");

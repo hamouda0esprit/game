@@ -226,7 +226,7 @@ b1.pos.x=-6000;
 while(boucle)
 {      
 x = collisionBB(e.dest,b1.pos);
-t=collisionPP(p.cor,bg.M,bg.R);
+t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
 //printf("\nplayer w & h : %d %d",p.cor.w,p.cor.h);
 
        x2 = event.button.x;
