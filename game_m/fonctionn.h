@@ -14,6 +14,8 @@ typedef struct{
 SDL_Rect pos;
 SDL_Surface *image;
 }bullett;
+void init_bullett(bullett *b);
+void aff_b(bullett b,SDL_Surface *screen);
 void aff_e(SDL_Surface **framesright,int *current_frame21,SDL_Surface *screen,SDL_Rect dest);
 void initcarac(int NUM_FRAMESstopleft,int NUM_FRAMESstopright,int NUM_FRAMESright,int NUM_FRAMESjump,int NUM_FRAMESleft, SDL_Surface **frames, SDL_Surface **framesl, SDL_Surface **framesright, SDL_Surface **framesleft, SDL_Surface **framesjump,SDL_Surface **framesss);
 void loadanimationcaractere(int numframes ,SDL_Surface **frames,char dest[],int SCREEN_WIDTH, int SCREEN_HEIGHT);

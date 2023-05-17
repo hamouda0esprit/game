@@ -73,13 +73,12 @@ SDL_Rect dest;
    int x;
 int i,bigx,bigy;
 int hitt=0;
-bullet b1;
-int movex=1000;
+bullett b1;
+int movex=2000;
 Ennemi e;
 e.direction=0;
 int ok=0;
-e.dest.x=1000;
-e.dest.y=700;
+e.dest.x=2000;
 int hit3=0;
 int xp=0;
 int yp=1;
@@ -94,7 +93,7 @@ Uint32 last_frame_timeleft1 = 0;
 int current_frameleft1 = 3;
 int vie_counter=49;
 int vie_counter2=49;
-e.vie=3;
+e.vie=4;
 e.STATE=0;
 
 
@@ -160,7 +159,10 @@ p2.cor.x=100;
 p2.cor.y=grav2;
 //----------------------------------------------------------------------------------
 //REST OF PROGRAM
-int orientation=0,verif=1,jump=1,dir=2,velocity,stop=1,grav=700,hit=0;
+p.cor.w=SCREEN_WIDTH/10;
+p.cor.h=SCREEN_WIDTH/7+SCREEN_WIDTH/40;
+
+int orientation=0,verif=1,jump=1,dir=2,velocity,stop=1,grav=SCREEN_H-p.cor.h*1.4,hit=0;
 int boucle=1;
 int bigx2;
 SDL_Event event;
@@ -169,7 +171,9 @@ image imge;
 bullett b;
 p.cor.x=SCREEN_W/2;
 p.cor.y=grav;
-p.cor.w=180;
+e.dest.y=grav;
+
+
 
 minimap  m;
 initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png");
@@ -208,19 +212,25 @@ loadanimationcaractere(NUM_FRAMESleft,framesleftcarac,"left/left%d.png",SCREEN_W
 loadanimationcaractere(NUM_FRAMESjump,framessscarac,"stopp/stopaa%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadanimationcaractere(13,framesrightenemy,"rightROBOT/right%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadanimationcaractere(13,framesleftenemy,"leftROBOT/left%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-init_bullet(&b1);
+
+init_bullett(&b1);
 init_bullet(&b2);
-b2.pos.w = 22;
-b2.pos.h = 22;
+e.dest.w=p.cor.w;
+e.dest.h=p.cor.h;
+b1.pos.x=-6000;
+				b1.pos.y=-6000;
+				
 while(boucle)
 {      
+x = collisionBB(e.dest,b1.pos);
+//printf("\nplayer w & h : %d %d",p.cor.w,p.cor.h);
+
        x2 = event.button.x;
 	y2 = event.button.y;
 //afficher_image(screen,imge);
 //----------------------------------------------------
-x = collisionBB(dest,b1.pos);
-//printf(" hitready=%d || xp=%d || counter=%d || vie=%d\n",hitready2,xp2,bullet_counter,p.viep);
 
+printf(" y=%d || x=%d || xenemy=%d ||  viecounter=%d",y,x,e.dest.x,vie_counter);
 bool pressing_m = false;
 //---------------------------------------------
 while(SDL_PollEvent(&event))
@@ -288,6 +298,7 @@ while(SDL_PollEvent(&event))
                         stopr=1;
                          
                     }
+     
                     if (event.key.keysym.sym == SDLK_LEFT) {
                         orientation=1;
                         dir=2;
@@ -319,9 +330,9 @@ while(SDL_PollEvent(&event))
             
 		     
 }}
-printf("\n p cor : %d",p.cor.x);
+//printf("\n p cor : %d",p.cor.x);
 run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex);
-printf("\n movex : %d",movex);
+//printf("\n movex : %d",movex);
 affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
 
@@ -329,7 +340,7 @@ xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;
 RP = p.cor;
 RP.x = xp_map;
-miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
+//miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
 
 
 
@@ -343,10 +354,20 @@ movex-=SCREEN_W/40;*/
 //----------------------SHOOTING CARACTERE--------------------
 //----------------------SHOOTING CARACTERE--------------------
 
-				if(hit==1&&b1.pos.x<bigx+300 &&b1.pos.x<e.dest.x+70){
-						affbullet(screen,&b1);
+				if(hit==1&&b1.pos.x<bigx+300 &&b1.pos.x<e.dest.x && e.dest.x>p.cor.x){
+						aff_b(b1,screen);
+						b1.pos.x+=10;
 				}
-				
+				else if(hit==1&&b1.pos.x>bigx-300 &&b1.pos.x>e.dest.x && e.dest.x<p.cor.x){
+						aff_b(b1,screen);
+						b1.pos.x-=10;
+				}
+				else{
+				hit=0;
+				b1.pos.x=-6000;
+				b1.pos.y=-6000;
+				}
+				if(p.viep>0)
 			player4(&stopr,&stopl,&orientation,&move,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&p,&grav,&velocity,&stop,screen,framescarac,frameslcarac,framesrightcarac,framesleftcarac,framesjumpcarac,framessscarac,SCREEN_HEIGHT,SCREEN_WIDTH);	
 //----------------------COLLISION----------------- carac  ENEMY 
      			
@@ -354,7 +375,7 @@ movex-=SCREEN_W/40;*/
      			if(x==0)
       				y = collisionBB(e.dest,b1.pos);
       	
-      		if(x!=y){
+      		       if(x!=y){
      		 			e.vie--;
      		 			y=1;}
      //-------------------------BLINKING + VIE -------------------------------
@@ -365,6 +386,7 @@ movex-=SCREEN_W/40;*/
      		
      
      	//-------------------------SENDING BULLET TO LEFT ------------------------------- 
+     			if(e.vie>0){
      			if (bg.R.y<0){
       			if(e.direction<0){
      							if(xp==1)
@@ -372,7 +394,7 @@ movex-=SCREEN_W/40;*/
       						if (hitready2==0)
       							bullet_counter2++;
       	 		
-     				 if (!(p.cor.x + p.cor.w/1.5 >= b2.pos.x + b2.pos.w && p.cor.x <= b2.pos.x && p.cor.y <= b2.pos.y && p.cor.y + p.cor.h >= b2.pos.y + b2.pos.h)&& hit2 == 1 && hitready2==0 && bullet_counter2>20){
+     				 if (!(p.cor.x + p.cor.w/1.5 >= b2.pos.x + b2.pos.w && p.cor.x <= b2.pos.x && p.cor.y <= b2.pos.y && p.cor.y + p.cor.h >= b2.pos.y + b2.pos.h)&& hit2 == 1 && hitready2==0 && bullet_counter2>50){
       					
       					affbulletleft(screen,&b2);
       					xp=1;}	
@@ -382,7 +404,7 @@ movex-=SCREEN_W/40;*/
        					       xp=0;}
        					       b2.pos.x=e.dest.x+100;
 							b2.pos.y=e.dest.y+100;
-						if (bullet_counter2>20){
+						if (bullet_counter2>50){
 							hitready2=1;
 							bullet_counter2=0;}
 							}
@@ -391,7 +413,7 @@ movex-=SCREEN_W/40;*/
       				if (b2.pos.x<=p.cor.x-200){
       				                     b2.pos.x=e.dest.x+100;
 							b2.pos.y=e.dest.y+100;
-						if (bullet_counter2>20){
+						if (bullet_counter2>50){
 							hitready2=1;
 							bullet_counter2=0;}}
 							
@@ -447,7 +469,7 @@ movex-=SCREEN_W/40;*/
 
     		
      	 					IA(&e, &p);
-     	 					if(e.vie>0){
+     	 					
    							if(e.STATE==0){
    								hit2 = 0;
    								hit3 = 0;
@@ -482,11 +504,14 @@ movex-=SCREEN_W/40;*/
 //printf("\nxp_map : %d",xp_map);
 SDL_Flip(screen);
 
-SDL_Delay(1);
+SDL_Delay(10);
 }
 }
 
 void aff_e(SDL_Surface **framesright,int *current_frame21,SDL_Surface *screen,SDL_Rect dest){
        SDL_BlitSurface(framesright[*current_frame21], NULL, screen, &dest);
+}
+void aff_b(bullett b,SDL_Surface *screen){
+       SDL_BlitSurface(b.image, NULL, screen, &b.pos);
 }
 

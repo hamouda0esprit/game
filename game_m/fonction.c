@@ -10,18 +10,24 @@ int SCREEN_WI=1080;
      
 void init_bullet(bullet *b){
 			
-        b->image = IMG_Load("bullet.png");
+        //b->image = IMG_Load("bullet.png");
+        Resizecaractere(&b->image, "bullet.png", 50,  50);
+}
+void init_bullett(bullett *b){
+			
+        //b->image = IMG_Load("bullet.png");
+        Resizecaractere(&b->image, "bullet.png", 50,  50);
 }
 void affbullet(SDL_Surface *screen,bullet *b){
         
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x+=40;
+        b->pos.x+=20;
 
 }
 void affbulletleft(SDL_Surface *screen,bullet *b){
            
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x-=40;
+        b->pos.x-=20;
         
 }
 void afficher_image(SDL_Surface *screen, image imge)
@@ -97,7 +103,7 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
        if (e->direction==-1)
           {update_and_render_animationenemy(4,screen,framesleft,current_frameleft,last_frame_timeleft,NUM_FRAMES,e,SCREEN_WI,SCREEN_HEI );
           aff_e(framesleft,current_frameleft,screen,e->dest);
-     			e->dest.x+=e->direction*5;
+     			e->dest.x+=e->direction;
      			
         }
         if((e->direction==1))
@@ -105,7 +111,7 @@ void move_waiting(int* movex,SDL_Surface* screen, SDL_Surface** frames,SDL_Surfa
           
      			update_and_render_animationenemy(4,screen,framesright,current_frame2,last_frame_time2,NUM_FRAMES,e,SCREEN_WI,SCREEN_HEI );
      			aff_e(framesright,current_frame2,screen,e->dest);
-     			 e->dest.x+=e->direction*5;
+     			 e->dest.x+=e->direction;
      			      			
         //animate(screen, framesright, current_frame2, last_frame_time2, NUM_FRAMES,&dest);
         //aff_e(framesright,current_frame2,screen,*dest);
@@ -120,5 +126,5 @@ void move_following(SDL_Surface *screen, SDL_Surface **frames, int *current_fram
 {    update_and_render_animationenemy(4,screen,frames,current_frame,last_frame_time,NUM_FRAMES,e,SCREEN_WI,SCREEN_HEI );
 	aff_e(frames,current_frame,screen,e->dest);
      			      		
-       e->dest.x+=e->direction*10;
+       e->dest.x+=e->direction*2;
 }

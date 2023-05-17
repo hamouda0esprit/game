@@ -31,7 +31,7 @@ for (int i = 0; i < numframes; i++) {
         char filename[20];
         sprintf(filename, dest, i);
         //frames[i] = load_image(filename);
-        Resizecaractere(&(frames[i]), filename, 100, 150);
+        Resizecaractere(&(frames[i]), filename, SCREEN_WIDTH/10,  SCREEN_WIDTH/7+SCREEN_WIDTH/40);
         
     }
 
@@ -64,9 +64,8 @@ void update_and_render_animationcaractere(int rep,SDL_Surface *screen, SDL_Surfa
         } 
              *last_frame_time = current_time;
     }
-    
 
-    SDL_BlitSurface(frames[*current_frame], NULL, screen, &p->cor);
+       aff_e(frames,current_frame,screen,p->cor);
 }
 //------------------------------------------------
 // FONCTIONS OF right
@@ -113,10 +112,12 @@ if((*stopr)==0 && (*dir)==2){
 			
 	//-----------------------RIGHT AND lEFT------------------
 				if((*dir)==1){
-					p->cor.x+=SCREEN_WIDTH/40;
+					//p->cor.x+=SCREEN_WIDTH/40;
+					p->cor.x+=20;
 					printf("test");}
 				else if((*dir)==0){
-					p->cor.x-=SCREEN_WIDTH/40;}
+					//p->cor.x-=SCREEN_WIDTH/40;
+					p->cor.x-=20;}
 	//-----------------------JUMP ANIMATION------------------
 				if((*dir)==1 && (*jump) ==0&& (*velocity)!=0){
 					     update_and_render_animationcaractere(0,screen, framesjump, current_framejump, last_frame_timejump, NUM_FRAMESss, p,SCREEN_W,SCREEN_H);      			
