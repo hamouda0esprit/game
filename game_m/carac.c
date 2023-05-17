@@ -97,6 +97,7 @@ if((*stopr)==0 && (*dir)==2){
 (*dir)=1;
 }
 //--------------------------VELOCITY UP
+
  			if(p->cor.y<=(*grav)){
 		     p->cor.y=p->cor.y+(*velocity);
 		     if (p->cor.y!=(*grav)){

@@ -6,6 +6,7 @@
 #include <SDL/SDL_ttf.h>
 
 
+
 typedef struct{
 SDL_Rect cor;
 int viep;
