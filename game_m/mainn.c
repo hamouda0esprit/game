@@ -335,7 +335,7 @@ run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, 
 //printf("\n movex : %d",movex);
 affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
-
+printf("col = %d\n",collisionPP(p.cor,bg.M,bg.R));
 xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;
 RP = p.cor;

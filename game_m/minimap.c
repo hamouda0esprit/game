@@ -252,11 +252,11 @@ void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, mi
 
 
 
-int collisionPP(SDL_Rect p, SDL_Surface *Masque) {
+int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect) {
+    
     points p_points;
-    get_points(p.x, p.y,
+    get_points(p.x + abs(MasqueRect.x), p.y + abs(MasqueRect.y),
                p.w, p.h, &p_points);
-
     SDL_Color color = {251, 220, 156, 0};
 
     for (int i = 1; i <= 8; i++) {
@@ -295,11 +295,19 @@ int collisionPP(SDL_Rect p, SDL_Surface *Masque) {
                 y = p_points.p8y;
                 break;
         }
-
         SDL_Color pixel_color = GetPixel(Masque, x, y);
         
         if (pixel_color.r == color.r && pixel_color.g == color.g && pixel_color.b == color.b) {
-            return 1;
+            printf("pass1\n");
+            if(i == 1 || i == 4)
+                return 1;
+            printf("pass2\n");
+            if(i == 3 || i == 8)
+                return 2;
+            printf("pass3\n");
+            if(i == 5 || i == 6 || i == 7)
+                return 3;
+            printf("pass4\n");
         }
         
     }
