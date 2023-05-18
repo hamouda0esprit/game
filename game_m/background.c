@@ -20,9 +20,9 @@ void afficherBack(background bg, SDL_Surface * screen){
 
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
 	if (direction==1){
-		r->x+=SCREEN_WIDTH/40;
+		r->x+=SCREEN_WIDTH/80;
 	}else{
-		r->x-=SCREEN_WIDTH/40;
+		r->x-=SCREEN_WIDTH/80;
 	}
 }
 
@@ -95,8 +95,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			printf("\ncol = %d",det_green);
-			printf("\ne1_stage = %d",*e1_stage);
+			
 			if (det_green != 0){
 				if(bg->R.x <= 0 && bg->R.x > -1100 && bg->R.y != 0){
 					*e1_stage = 1;
@@ -154,9 +153,9 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							if (!(*limit)){
 							       scrolling(dest,0,SCREEN_WIDTH);
 							       //dest->x-=SCREEN_WIDTH/40;
-							       *movex-=SCREEN_WIDTH/40;
-							       b1->x-=SCREEN_WIDTH/40;
-							       b2->x-=SCREEN_WIDTH/40;
+							       *movex-=SCREEN_WIDTH/80;
+							       b1->x-=SCREEN_WIDTH/80;
+							       b2->x-=SCREEN_WIDTH/80;
 							}
 						}
 						//scrolling(rect,1,SCREEN_WIDTH);
@@ -172,9 +171,9 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							if (!(*limit)){
 							       scrolling(dest,1,SCREEN_WIDTH);
 							       //dest->x+=SCREEN_WIDTH/40;
-							        *movex+=SCREEN_WIDTH/40;
-							       b1->x+=SCREEN_WIDTH/40;
-							       b2->x+=SCREEN_WIDTH/40;
+							        *movex+=SCREEN_WIDTH/80;
+							       b1->x+=SCREEN_WIDTH/80;
+							       b2->x+=SCREEN_WIDTH/80;
 							}
 						}
 						//scrolling(rect,0,SCREEN_WIDTH);
@@ -200,7 +199,9 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			if ((bg->R.x > -SCREEN_WIDTH*2.41-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
 			       *limit = 0;
 			}
-			
+			if (rect->x < rect->w/3){
+						rect->x = rect->w/3;
+					}
 			*trigger = 0;
 			printf("\nplayer pos : %d",rect->x);
 			if(*limit){

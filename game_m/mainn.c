@@ -345,13 +345,12 @@ run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, 
 
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
-
+//printf("\ne1_stage = %d",e1_stage);
 
 affichertemps(screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
-printf("\nbg pos = %d",bg.R.x);
-printf("\ncol = %d",det_green);
-printf("\ne1_stage = %d",e1_stage);
+//printf("\nbg pos = %d",bg.R.x);
+printf("\ncol = %d",t);
 
 xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;
