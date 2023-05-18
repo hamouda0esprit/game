@@ -100,13 +100,13 @@ Uint32 last_frame_timeleft1 = 0;
 int current_frameleft1 = 3;
 int vie_counter=49;
 int vie_counter2=49;
-e.vie=1;
+e.vie=3;
 e.STATE=0;
 
 //----------------------enemy2------------------------
 Ennemi e2;
 
-e2.vie=1;
+e2.vie=3;
 e2.STATE=0;
 
 
@@ -236,20 +236,21 @@ e.dest.h=p.cor.h;
 b1.pos.x=-6000;
 				b1.pos.y=-6000;
  points p_points;					
-SDL_Surface framesattend[10],framesnumber1[9],framesnumber2[9],framesnumber3[9],framesnumber4[9],framefinal[4],viecaractere[4];;
+SDL_Surface framesattend[10],framesnumber1[9],framesnumber2[9],framesnumber3[9],framesnumber4[9],framefinal[4],viecaractere[4],vieenemy[4];
 loadenigmenumbers(10,framesattend,"numbers/r%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(9,framesnumber1,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(9,framesnumber2,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(9,framesnumber3,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(9,framesnumber4,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(9,framesnumber1,"answer/%d.png",150,100);
+loadenigmeanswer(9,framesnumber2,"answer/%d.png",150,100);
+loadenigmeanswer(9,framesnumber3,"answer/%d.png",150,100);
+loadenigmeanswer(9,framesnumber4,"answer/%d.png",150,100);
 loadenigmenumbers(4,framefinal,"final2/a%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-//loadenigmenumbers(4,framefinal,"lives/live%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-reponse r,r2,r3,r4; 
+loadenigmeanswer(4,viecaractere,"lives/live%d.png",220,90);
+loadenigmeanswer(4,vieenemy,"livesenemy/live%d.png",220,90);
+reponse r,r2,r3,r4,r5,r6; 
 		
 srand(time(0));
 int alea=rand()%(4)+1; 
 int gamestate=1;
-int currentframeenigme=1, currentframelive=1;
+int currentframeenigme=1, currentframelive=4, currentframeliveenemy=4;
 int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,current_framereponse4=0;
 int next=0;
 int frame;
@@ -261,10 +262,16 @@ int verifshoot=1;
 int orr_b = 0;
 b1.pos.w=0;
 b1.pos.h=65535;
+r5.r.x=50;
+r5.r.y=50;
+r6.r.x=700;
+r6.r.y=50;
+
 while(boucle)
-{      
+{   
+ 
 x = collisionBB(e.dest,b1.pos);
-//printf("\nplayer w & h : %d %d",p.cor.w,p.cor.h);
+printf("\ncurrentframe : %d || x= %d|| y=%d",currentframelive,r5.r.x,r5.r.y);
 
        x2 = event.button.x;
 	y2 = event.button.y;
@@ -388,7 +395,8 @@ if (enigme1==1){
 if(gamestate==1){
 
 run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
-//printf("\n movex : %d",movex);
+aff_e(&viecaractere,&currentframelive,screen,r5.r); 
+aff_e(&vieenemy,&currentframeliveenemy,screen,r6.r);//printf("\n movex : %d",movex);
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
 //printf("\ne1_stage = %d",e1_stage);
@@ -437,11 +445,11 @@ if(t==0 && verif ==0){
 
 				if(hit==1&&b1.pos.x<bigx+500  && orr_b==0 ){		
 						aff_b(b1,screen);
-						b1.pos.x+=10;
+						b1.pos.x+=20;
 				}
 				else if(hit==1&&b1.pos.x>bigx-500  && orr_b==1){
 						aff_b(b1,screen);
-						b1.pos.x-=10;
+						b1.pos.x-=20;
 				}
 				else{
 				hit=0;
@@ -458,6 +466,7 @@ if(t==0 && verif ==0){
       	
       		       if(x!=y){
      		 			e.vie--;
+     		 			currentframeliveenemy--;
      		 			y=1;}
      //-------------------------BLINKING + VIE -------------------------------
      				//-BLINKING-
@@ -471,7 +480,9 @@ if(t==0 && verif ==0){
      				if(vie_counter>10){
      						pvieref=p.viep;}}*/
     			if(xp==0 && vie_counter>10){
+     				 	currentframelive=p.viep;
      				 	p.viep--;
+     				 	
      		 			vie_counter=0;}
      		 			
      		 			
@@ -502,7 +513,7 @@ if(t==0 && verif ==0){
 							}
 						
 							
-      				if (b2.pos.x<=p.cor.x-200){
+      				if (b2.pos.x<=p.cor.x-400){
       				                     b2.pos.x=e.dest.x+100;
 							b2.pos.y=e.dest.y+100;
 						if (bullet_counter2>50){
@@ -513,8 +524,10 @@ if(t==0 && verif ==0){
 						}
 						//-------------------- Bullet to the right------------
 						if(xp2==0 && vie_counter2>50){
+     		 			currentframelive=p.viep;
      		 			pvieref=p.viep;
      				 	p.viep--;
+     				 	
      		 			vie_counter2=0;}
 						if(e.direction>0){
 					
@@ -544,7 +557,7 @@ if(t==0 && verif ==0){
 									
 								}
 						
-     					if (b2.pos.x>=p.cor.x+200){
+     					if (b2.pos.x>=p.cor.x+300){
 								b2.pos.x=dest.x+100;
 								b2.pos.y=dest.y+100;
 								if (bullet_counter>50){

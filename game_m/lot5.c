@@ -39,7 +39,7 @@ for (int i = 1; i <= numbers; i++) {
         char filename[20];
         sprintf(filename, dest, i);
         //frames[i] = load_image(filename);
-        Resizeenigme(&(frames[i]), filename, 150,  100);
+        Resizeenigme(&(frames[i]), filename, SCREEN_WIDT,  SCREEN_HEIG);
         
     }}
 //------------------------------------------------
