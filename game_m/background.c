@@ -113,6 +113,8 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 				if(bg->R.x <= 0 && bg->R.x > -600 && bg->R.y == 0){
 					*e1_stage = 5;
 				}
+			}else{
+				*e1_stage = 0;
 			}
 			
 			P->score++;
