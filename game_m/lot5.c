@@ -44,16 +44,16 @@ for (int i = 1; i <= numbers; i++) {
     }}
 //------------------------------------------------
 void enigmefinal(int *enigme1,int*gamestate, int ref,reponse *r,reponse *r2,reponse *r3,reponse *r4,int *next,int *frame,int* currentframeenigme,int* current_framereponse,int* current_framereponse2,int* current_framereponse3,int* current_framereponse4,SDL_Surface *screen,enigmme *e1,int *e1_stage,SDL_Surface **framesattend,SDL_Surface **framesnumber1,SDL_Surface **framesnumber2,SDL_Surface **framesnumber3,SDL_Surface **framesnumber4,SDL_Surface **framefinal){
-
+if(*next==0){
 e1->eni.x=0;
 e1->eni.y=0;
-aff_e(framesattend,e1_stage,screen,e1->eni);
+aff_e(framesattend,e1_stage,screen,e1->eni);}
  if(*e1_stage==5){
  if(*next==1){
  ref=(*e1_stage)+1;
  aff_e(framesattend,&ref,screen,e1->eni);
  *current_framereponse=*frame;
-  if(*current_framereponse==10){
+  if(*current_framereponse>9){
  *frame=1;
  }
  r->r.x=SCREEN_WIDT/4+200;
@@ -63,7 +63,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
   if(*next==2){
   ref=(*e1_stage)+2;
  aff_e(framesattend,&ref,screen,e1->eni);
-  if(*current_framereponse2==10){
+  if(*current_framereponse2>9){
  *frame=1;
  }
   *current_framereponse2=*frame;
@@ -77,7 +77,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
  if(*next==3){
  ref=(*e1_stage)+3;
  aff_e(framesattend,&ref,screen,e1->eni);
- if(*current_framereponse3==10){
+ if(*current_framereponse3>9){
  *frame=1;
  }
   *current_framereponse3=*frame;
@@ -107,14 +107,19 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
  }
  if(*next==5){
  if(*current_framereponse==1&&*current_framereponse2==8&&*current_framereponse3==7&&*current_framereponse4==3){
+ *currentframeenigme=3;
  aff_e(framefinal,currentframeenigme,screen,e1->eni);
  *enigme1=1;
  }
  else{
- *gamestate=1;
- *next=0;
+ *currentframeenigme=4;
+ aff_e(framefinal,currentframeenigme,screen,e1->eni);
  }}
-  
+ if(*next==6){
+ 
+ *gamestate=1;
+ 
+ }
  }
  }
 

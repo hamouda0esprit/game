@@ -236,25 +236,28 @@ e.dest.h=p.cor.h;
 b1.pos.x=-6000;
 				b1.pos.y=-6000;
  points p_points;					
-SDL_Surface *framesattend[10],*framesnumber1[9],*framesnumber2[9],*framesnumber3[9],*framesnumber4[9],framefinal[1];
+SDL_Surface framesattend[10],framesnumber1[9],framesnumber2[9],framesnumber3[9],framesnumber4[9],framefinal[4],viecaractere[4];;
 loadenigmenumbers(10,framesattend,"numbers/r%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmeanswer(9,framesnumber1,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmeanswer(9,framesnumber2,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmeanswer(9,framesnumber3,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmeanswer(9,framesnumber4,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmenumbers(1,framefinal,"final2/a%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmenumbers(4,framefinal,"final2/a%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmenumbers(4,framefinal,"lives/live%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 reponse r,r2,r3,r4; 
 		
 srand(time(0));
 int alea=rand()%(4)+1; 
 int gamestate=1;
-int currentframeenigme=1;
+int currentframeenigme=1,int currentframelive=1;
 int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,current_framereponse4=0;
 int next=0;
 int frame;
 int ref;
 enigmme e1;
 int enigme1 = 0;
+int verifshoot=1;
+int orr_b = 0;
 b1.pos.w=0;
 b1.pos.h=65535;
 while(boucle)
@@ -293,29 +296,35 @@ while(SDL_PollEvent(&event))
                     if (event.key.keysym.sym == SDLK_UP) {
                         jump=0;
                         if(p.cor.y==grav)
-                        velocity=-30;
+                        velocity=-20;
                               } 
-                    if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    if (event.key.keysym.sym == SDLK_SPACE && verifshoot==1) {
                         b1.pos.x=p.cor.x+100;
                         b1.pos.y=p.cor.y+100;
                         bigx= b1.pos.x;
-                        hit=1; }  
+                        hit=1; 
+                        orr_b = orientation;
+                        verifshoot=0;}  
                      if (event.key.keysym.sym == SDLK_RETURN && e1_stage!=0) {
                        gamestate=2;
                        next=0;
                     }   
-                 if (event.key.keysym.sym == SDLK_c && e1_stage!=0) {
+                 if (event.key.keysym.sym == SDLK_ESCAPE && e1_stage!=0) {
                  gamestate=1;
                  next=0;
                       }  
-                 if (event.key.keysym.sym == SDLK_k && e1_stage==5 && gamestate==2) {
+                 if (event.key.keysym.sym == SDLK_UP && e1_stage==5 && gamestate==2) {
                  frame++;
                       }
-                 if (event.key.keysym.sym == SDLK_SPACE && e1_stage==5 && gamestate==2) {
+                 if (event.key.keysym.sym == SDLK_RIGHT && e1_stage==5 && gamestate==2) {
                     next++;
                     frame=1;
           
-                    }    
+                    } 
+                      if (event.key.keysym.sym == SDLK_LEFT && e1_stage==5 && gamestate==2) {
+                    next--;
+              
+                    }       
 					if(event.key.keysym.sym == SDLK_TAB){
                         pressing_m = true;
                         printf("m yes\n");
@@ -425,11 +434,11 @@ if(t==0 && verif ==0){
 	verif=1;
 }
 
-				if(hit==1&&b1.pos.x<bigx+500 &&b1.pos.x<e.dest.x && e.dest.x>p.cor.x){
+				if(hit==1&&b1.pos.x<bigx+500  && orr_b==0 ){		
 						aff_b(b1,screen);
 						b1.pos.x+=10;
 				}
-				else if(hit==1&&b1.pos.x>bigx-500 &&b1.pos.x>e.dest.x && e.dest.x<p.cor.x){
+				else if(hit==1&&b1.pos.x>bigx-500  && orr_b==1){
 						aff_b(b1,screen);
 						b1.pos.x-=10;
 				}
@@ -437,8 +446,9 @@ if(t==0 && verif ==0){
 				hit=0;
 				b1.pos.x=-6000;
 				b1.pos.y=-6000;
+				verifshoot=1;
 				}
-				if(p.viep>0 )
+				if(p.viep>0)
 			player4(&stopr,&stopl,&orientation,&move,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&p,&grav,&velocity,&stop,screen,framescarac,frameslcarac,framesrightcarac,framesleftcarac,framesjumpcarac,framessscarac,SCREEN_HEIGHT,SCREEN_WIDTH);	
 //----------------------COLLISION----------------- carac  ENEMY 
     			
