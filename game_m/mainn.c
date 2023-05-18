@@ -25,11 +25,15 @@ void main_2()
 
 //Uint32 start_time = SDL_GetTicks();
 int level=1;
+int enigme1 = 0;
 int xp_map;
 int SCREEN_W = 1710;
 int SCREEN_WIDTH = 1710;
 int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);
 int SCREEN_HEIGHT = (float)(SCREEN_W / 1.7777777777777777);
+
+int lvl_depl = 0;
+
 //Background task
 
 //Variables
@@ -200,7 +204,10 @@ printf("Could not initialize SDL: %s.\n", SDL_GetError());
 screen=SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0,SDL_RESIZABLE);
 
   int t;
+  int det_black;
   int det_green;
+  int det_red;
+  int det_blue;
   int e1_stage=0;
 
 //----------------------------------------------------------------
@@ -229,7 +236,6 @@ b1.pos.x=-6000;
 while(boucle)
 {      
 x = collisionBB(e.dest,b1.pos);
-t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
 //printf("\nplayer w & h : %d %d",p.cor.w,p.cor.h);
 
        x2 = event.button.x;
@@ -337,10 +343,25 @@ while(SDL_PollEvent(&event))
             
 		     
 }}
-t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
-det_green=collisionPP(p.cor,bg.M,bg.R,40, 200, 40);
+if (level == 1){
+	t=collisionPP(p.cor,bg.M[0],bg.R,251, 220, 156);
+	det_green=collisionPP(p.cor,bg.M[0],bg.R,40, 200, 40);
+}
+if (level == 3){
+	lvl_depl++;
+	t=collisionPP(p.cor,bg.M[1],bg.R,251, 220, 156);
+	det_black=collisionPP(p.cor,bg.M[1],bg.R,200, 200, 200);
+	det_green=collisionPP(p.cor,bg.M[1],bg.R,40, 200, 40);
+	det_red=collisionPP(p.cor,bg.M[1],bg.R,200, 40, 40);
+	det_blue=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 200);
+}
+if (lvl_depl==1){
+	bg.R.x = 0;
+	bg.R.y = -SCREEN_HEIGHT*.85;
+	p.cor.x = SCREEN_WIDTH/2+p.cor.w/2;
+}
 //printf("\n p cor : %d",p.cor.x);
-run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, &e1_stage);
+run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1);
 //printf("\n movex : %d",movex);
 
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
@@ -413,7 +434,6 @@ if(t==0 && verif ==0){
      		 			e.vie--;
      		 			y=1;}
      //-------------------------BLINKING + VIE -------------------------------
-    
      				//-BLINKING-
     			/* if(pvieref>p.viep){
       			if(vie_counter%3==0 ){

@@ -114,11 +114,12 @@ if((*stopr)==0 && (*dir)==2){
 	//-----------------------RIGHT AND lEFT------------------
 				if((*dir)==1){
 					//p->cor.x+=SCREEN_WIDTH/40;
-					p->cor.x+=20;
+					//p->cor.x+=20;
 					printf("test");}
 				else if((*dir)==0){
 					//p->cor.x-=SCREEN_WIDTH/40;
-					p->cor.x-=20;}
+					//p->cor.x-=20;
+					}
 	//-----------------------JUMP ANIMATION------------------
 				if((*dir)==1 && (*jump) ==0&& (*velocity)!=0){
 					     update_and_render_animationcaractere(0,screen, framesjump, current_framejump, last_frame_timejump, NUM_FRAMESss, p,SCREEN_W,SCREEN_H);      			

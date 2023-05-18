@@ -26,11 +26,11 @@ void get_points(int x,int y,int w,int h, points *p){
     p->p1x = x+w/6; p->p1y = y;
     p->p2x = x+w/2; p->p2y = y; 
     p->p3x = x+w-w/6; p->p3y = y; 
-    p->p4x = x+w/6; p->p4y = y+h/2; 
+    p->p4x = x+w/6; p->p4y = y+h*0.75; 
     p->p5x = x+w/6; p->p5y = y+h; 
     p->p6x = x+w/2; p->p6y = y+h; 
     p->p7x = x+w-w/6; p->p7y = y+h; 
-    p->p8x = x+w-w/6; p->p8y = y+h/2;  
+    p->p8x = x+w-w/6; p->p8y = y+h*0.75;  
 }
 SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y) {
     SDL_Color color;

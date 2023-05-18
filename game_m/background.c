@@ -3,19 +3,26 @@
 void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 	char ch[20];
 	
-	for (int i=0;i<=9;i++){
+	for (int i=0;i<=2;i++){
 		initAnim(i,&ch);
-		Resize(&(b->S[i]), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+		if(i==0 || i==2){
+			Resize(&(b->S[i]), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+		}
+		if(i==1){
+			Resize(&(b->S[i]), ch, SCREEN_WIDTH*2, SCREEN_HEIGHT);
+		}
+		
 	}
 	b->R.y=-SCREEN_HEIGHT*.85;
-	Resize(&(b->M), "Assets/BG_M.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+	Resize(&(b->M[0]), "Assets/BG_M.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+	Resize(&(b->M[1]), "Assets/BG_M2.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	
 	b->R.w = SCREEN_WIDTH;
 	b->R.h = SCREEN_HEIGHT;
 }
 
-void afficherBack(background bg, SDL_Surface * screen){
-	SDL_BlitSurface(bg.S[0] ,0, screen, &bg.R);
+void afficherBack(background bg, SDL_Surface * screen, int level){
+	SDL_BlitSurface(bg.S[level-1] ,0, screen, &bg.R);
 }
 
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
@@ -90,30 +97,43 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int *e1_stage){
-			afficherBack(*bg,screen);
+void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1){
+			afficherBack(*bg,screen,*level);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
 			
 			if (det_green != 0){
-				if(bg->R.x <= 0 && bg->R.x > -1100 && bg->R.y != 0){
-					*e1_stage = 1;
-				}
-				if(bg->R.x <= -1100 && bg->R.x > -2800 && bg->R.y != 0){
-					*e1_stage = 2;
-				}
-				if(bg->R.x <= -3700 && bg->R.y != 0){
-					*e1_stage = 3;
-				}
-				if(bg->R.x <= -4000 && bg->R.y == 0){
-					*e1_stage = 4;
-				}
-				if(bg->R.x <= 0 && bg->R.x > -600 && bg->R.y == 0){
+				if(*level==1){
+					if(bg->R.x <= 0 && bg->R.x > -1100 && bg->R.y != 0){
+						*e1_stage = 1;
+					}
+					if(bg->R.x <= -1100 && bg->R.x > -2800 && bg->R.y != 0){
+						*e1_stage = 2;
+					}
+					if(bg->R.x <= -3700 && bg->R.y != 0){
+						*e1_stage = 3;
+					}
+					if(bg->R.x <= -4000 && bg->R.y == 0){
+						*e1_stage = 4;
+					}
+					if(bg->R.x <= 0 && bg->R.x > -600 && bg->R.y == 0){
 					*e1_stage = 5;
+					}
 				}
+				
 			}else{
 				*e1_stage = 0;
+			}
+			if (*level==1 /*&& enigme1==1*/){
+				if(bg->R.x <= 0 && bg->R.x > -400 && bg->R.y == 0 && *limit){
+					*level+=1;
+				}
+			}
+			if (*level==2){
+				if (rect->x > SCREEN_WIDTH-SCREEN_WIDTH/4){
+					*level+=1;
+				}
 			}
 			
 			P->score++;
@@ -144,21 +164,24 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 						}
 					}
 				}
-			
 				if (keys[SDLK_RIGHT]){
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){
-						if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
-							scrolling(&(bg->R),0,SCREEN_WIDTH);
-							if (!(*limit)){
-							       scrolling(dest,0,SCREEN_WIDTH);
-							       //dest->x-=SCREEN_WIDTH/40;
-							       *movex-=SCREEN_WIDTH/80;
-							       b1->x-=SCREEN_WIDTH/80;
-							       b2->x-=SCREEN_WIDTH/80;
+							if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
+							if(t==0 || t==1 || t==3){
+								scrolling(&(bg->R),0,SCREEN_WIDTH);
+								if (!(*limit)){
+									   scrolling(dest,0,SCREEN_WIDTH);
+									   //dest->x-=SCREEN_WIDTH/40;
+										   *movex-=SCREEN_WIDTH/80;
+									   b1->x-=SCREEN_WIDTH/80;
+									   b2->x-=SCREEN_WIDTH/80;
+								}
 							}
 						}
-						//scrolling(rect,1,SCREEN_WIDTH);
+						if(t==0 || t==1 || t==3){
+							scrolling(rect,1,SCREEN_WIDTH);
+						}
 						last_move_time = current_time;
 					}
 				}
@@ -167,16 +190,21 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){ 
 						if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
-							scrolling(&(bg->R),1,SCREEN_WIDTH);
-							if (!(*limit)){
-							       scrolling(dest,1,SCREEN_WIDTH);
-							       //dest->x+=SCREEN_WIDTH/40;
-							        *movex+=SCREEN_WIDTH/80;
-							       b1->x+=SCREEN_WIDTH/80;
-							       b2->x+=SCREEN_WIDTH/80;
+							if(t==0 || t==2 || t==3){
+								scrolling(&(bg->R),1,SCREEN_WIDTH);
+								if (!(*limit)){
+									   scrolling(dest,1,SCREEN_WIDTH);
+									   //dest->x+=SCREEN_WIDTH/40;
+										*movex+=SCREEN_WIDTH/80;
+									   b1->x+=SCREEN_WIDTH/80;
+									   b2->x+=SCREEN_WIDTH/80;
+								}
 							}
 						}
-						//scrolling(rect,0,SCREEN_WIDTH);
+						if(t==0 || t==2 || t==3){
+							scrolling(rect,0,SCREEN_WIDTH);
+						}
+						
 						last_move_time = current_time;
 					}
 				}
@@ -188,38 +216,71 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 					*done = 0;
 				}
 			}
-			if(bg->R.x >= 0){
-				bg->R.x = 0;
-				*limit = 1;
-			}
-			if (bg->R.x <= -SCREEN_WIDTH*2.4175-SCREEN_WIDTH/3){
-				bg->R.x = -SCREEN_WIDTH*2.4175-SCREEN_WIDTH/3;
-				*limit = 1;
-			}
-			if ((bg->R.x > -SCREEN_WIDTH*2.41-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
+			if(*level==1 || *level==3){
+				if(bg->R.x >= 0){
+					bg->R.x = 0;
+					*limit = 1;
+				}
+				if (bg->R.x <= -SCREEN_WIDTH*2.4175-SCREEN_WIDTH/3){
+					bg->R.x = -SCREEN_WIDTH*2.4175-SCREEN_WIDTH/3;
+					*limit = 1;
+				}
+				if ((bg->R.x > -SCREEN_WIDTH*2.41-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
 			       *limit = 0;
+				}
 			}
+			if(*level==2){
+				if(bg->R.x >= 0){
+					bg->R.x = 0;
+					*limit = 1;
+				}
+				if (bg->R.x <= -SCREEN_WIDTH*0.5175-SCREEN_WIDTH/3){
+					bg->R.x = -SCREEN_WIDTH*0.5175-SCREEN_WIDTH/3;
+					*limit = 1;
+				}
+				if ((bg->R.x > -SCREEN_WIDTH*0.5-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
+			       *limit = 0;
+				}
+			}
+			printf("\nlevel & limit= %d | %d",*level,*limit);
+			
 			if (rect->x < rect->w/3){
 						rect->x = rect->w/3;
 					}
 			*trigger = 0;
 			printf("\nplayer pos : %d",rect->x);
 			if(*limit){
-				if(bg->R.x >=(-SCREEN_WIDTH*2.4175)/2){
-					if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
-						rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
-						*trigger = 1;
+				if(*level==1 || *level==3){
+					if(bg->R.x >=(-SCREEN_WIDTH*2.4175)/2){
+						if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
+							rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
+							*trigger = 1;
+						}
+					}else{
+						if(rect->x <= SCREEN_WIDTH/3){
+							rect->x = SCREEN_WIDTH/3;
+							*trigger = 1;
+						}
+						if(rect->x+rect->w >= SCREEN_WIDTH - SCREEN_WIDTH/50){
+							rect->x = SCREEN_WIDTH-rect->w-SCREEN_WIDTH/50;
+						}
 					}
-				}else{
-					if(rect->x <= SCREEN_WIDTH/3){
-						rect->x = SCREEN_WIDTH/3;
-						*trigger = 1;
-					}
-					if(rect->x+rect->w >= SCREEN_WIDTH - SCREEN_WIDTH/50){
-						rect->x = SCREEN_WIDTH-rect->w-SCREEN_WIDTH/50;
+				}if(*level==2){
+					if(bg->R.x >=(-SCREEN_WIDTH*0.5175)/2){
+						if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
+							rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
+							*trigger = 1;
+						}
+					}else{
+						if(rect->x <= SCREEN_WIDTH/3){
+							rect->x = SCREEN_WIDTH/3;
+							*trigger = 1;
+						}
+						if(rect->x+rect->w >= SCREEN_WIDTH - SCREEN_WIDTH/50){
+							rect->x = SCREEN_WIDTH-rect->w-SCREEN_WIDTH/50;
+						}
 					}
 				}
-				
 			}else{
 				if(rect->x <= SCREEN_WIDTH/3){
 					rect->x = SCREEN_WIDTH/3;
