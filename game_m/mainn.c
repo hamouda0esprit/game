@@ -103,8 +103,11 @@ int vie_counter2=49;
 e.vie=1;
 e.STATE=0;
 
+//----------------------enemy2------------------------
+Ennemi e2;
 
-
+e2.vie=1;
+e2.STATE=0;
 
 
 
@@ -369,7 +372,7 @@ if (enigme1==1){
 	lvl_depl1++;
 	if (lvl_depl1 == 1){
 		SDL_FreeSurface(bg.S[0]);
-		bg.S[0] = IMG_Load("Assets/bg/bg2.png");
+		bg.S[0] = IMG_Load("Assets/bg/bg0.png");
 	}
 }
 if(gamestate==1){

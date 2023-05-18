@@ -158,12 +158,14 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							b1->y+=SCREEN_HEIGHT*.85;
 							b2->y+=SCREEN_HEIGHT*.85;
 							dest->y+=SCREEN_HEIGHT*.85;
+							rect->y=rect->y+SCREEN_HEIGHT/2;
 						}
 						if (keys[SDLK_DOWN] && bg->R.y == 0){
 							bg->R.y=-SCREEN_HEIGHT*.85;
 							b1->y-=SCREEN_HEIGHT*.85;
 							b2->y-=SCREEN_HEIGHT*.85;
 							dest->y-=SCREEN_HEIGHT*.85;
+							rect->y=rect->y-SCREEN_HEIGHT/2;
 						}
 					}
 				}
@@ -173,12 +175,14 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 						b1->y+=SCREEN_HEIGHT*.85;
 						b2->y+=SCREEN_HEIGHT*.85;
 						dest->y+=SCREEN_HEIGHT*.85;
+						rect->y=rect->y+SCREEN_HEIGHT/2;
 					}
 					if (det_black!=0 && keys[SDLK_DOWN] && bg->R.y == 0){
-						bg->R.y=-SCREEN_HEIGHT*.85;
+								bg->R.y=-SCREEN_HEIGHT*.85;
 								b1->y-=SCREEN_HEIGHT*.85;
 								b2->y-=SCREEN_HEIGHT*.85;
 								dest->y-=SCREEN_HEIGHT*.85;
+								rect->y=rect->y-SCREEN_HEIGHT/2;
 					}
 				}
 				
