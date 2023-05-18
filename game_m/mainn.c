@@ -204,11 +204,11 @@ printf("Could not initialize SDL: %s.\n", SDL_GetError());
 screen=SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0,SDL_RESIZABLE);
 
   int t;
-  int det_black;
-  int det_green;
-  int det_red;
-  int det_blue;
-  int e1_stage=0;
+  int det_black = 0;
+  int det_green = 0;
+  int det_red = 0;
+  int det_blue = 0;
+  int e1_stage = 0 ;
 
 //----------------------------------------------------------------
 /*DECLARATION OF ANIMATIONS
@@ -350,7 +350,7 @@ if (level == 1){
 if (level == 3){
 	lvl_depl++;
 	t=collisionPP(p.cor,bg.M[1],bg.R,251, 220, 156);
-	det_black=collisionPP(p.cor,bg.M[1],bg.R,200, 200, 200);
+	det_black=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 40);
 	det_green=collisionPP(p.cor,bg.M[1],bg.R,40, 200, 40);
 	det_red=collisionPP(p.cor,bg.M[1],bg.R,200, 40, 40);
 	det_blue=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 200);
@@ -371,7 +371,7 @@ run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, 
 affichertemps(screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
 //printf("\nbg pos = %d",bg.R.x);
-printf("\ncol = %d",t);
+//printf("\ncol = %d",t);
 
 xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;

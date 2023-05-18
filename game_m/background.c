@@ -102,6 +102,10 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
+			printf("\n det_black = %d ", det_black);
+			printf("\n det_red = %d ", det_red);
+			printf("\n det_green = %d ", det_green);
+			printf("\n det_blue = %d ", det_blue);
 			
 			if (det_green != 0){
 				if(*level==1){
@@ -147,7 +151,6 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			}
 			Uint8* keys = SDL_GetKeyState(NULL);	
 			if(!(*game_ended)){
-			
 				if (*level == 1){
 					if (rect->x>1385){
 						if (keys[SDLK_UP] && bg->R.y < 0){
@@ -164,6 +167,21 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 						}
 					}
 				}
+				if(*level == 3){
+					if (det_black!=0 && keys[SDLK_UP] && bg->R.y < 0){
+						bg->R.y=0;
+						b1->y+=SCREEN_HEIGHT*.85;
+						b2->y+=SCREEN_HEIGHT*.85;
+						dest->y+=SCREEN_HEIGHT*.85;
+					}
+					if (det_black!=0 && keys[SDLK_DOWN] && bg->R.y == 0){
+						bg->R.y=-SCREEN_HEIGHT*.85;
+								b1->y-=SCREEN_HEIGHT*.85;
+								b2->y-=SCREEN_HEIGHT*.85;
+								dest->y-=SCREEN_HEIGHT*.85;
+					}
+				}
+				
 				if (keys[SDLK_RIGHT]){
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){
