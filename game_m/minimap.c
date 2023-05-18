@@ -22,7 +22,7 @@ int ms_to_sec(int milliseconds) {
 }
 
 void get_points(int x,int y,int w,int h, points *p){
-    printf("fonction get_points\n");
+    //printf("fonction get_points\n");
     p->p1x = x+w/6; p->p1y = y;
     p->p2x = x+w/2; p->p2y = y; 
     p->p3x = x+w-w/6; p->p3y = y; 
@@ -199,7 +199,7 @@ void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ) {
     
     m->image_miniature = IMG_Load(minimapNormal);
     m->image_miniature = resizeSurface(m->image_miniature,SCREEN_W/5,SCREEN_H/5);
-    printf("w %d  h %d",SCREEN_W/5,SCREEN_H/5);
+    //printf("w %d  h %d",SCREEN_W/5,SCREEN_H/5);
     if (m->image_miniature == NULL) {
         printf("Erreur lors du chargement de l'image miniature de la minimap: %s\n", SDL_GetError());
         exit(1);
@@ -259,12 +259,12 @@ void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, mi
 
 
 int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,int B) {
-    printf("collisionPP\n");
+    //printf("collisionPP\n");
     points p_points;
     get_points(p.x + abs(MasqueRect.x), p.y + abs(MasqueRect.y),
                p.w, p.h, &p_points);
     SDL_Color color = {R, G, B, 0};
-    printf("1\n");
+    //printf("1\n");
     for (int i = 1; i <= 8; i++) {
         int x = 0, y = 0;
         switch (i) {
@@ -301,22 +301,22 @@ int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,
                 y = p_points.p8y;
                 break;
         }
-        printf("2\n");
+        //printf("2\n");
 
         SDL_Color pixel_color = GetPixel(Masque, x, y);
-        printf("3\n");
-        printf("passed ?\n");
+        //printf("3\n");
+        //printf("passed ?\n");
         if (pixel_color.r == color.r && pixel_color.g == color.g && pixel_color.b == color.b) {
-            printf("pass1\n");
+            //printf("pass1\n");
             if(i == 1 || i == 4)
                 return 1;
-            printf("pass2\n");
+            //printf("pass2\n");
             if(i == 3 || i == 8)
                 return 2;
-            printf("pass3\n");
+            //printf("pass3\n");
             if(i == 5 || i == 6 || i == 7)
                 return 3;
-            printf("pass4\n");
+            //printf("pass4\n");
         }
         
     }
@@ -386,7 +386,7 @@ void afficherFULLminimap(minimap m, SDL_Surface *screen,int SCREEN_W,int SCREEN_
 }
 
 void miniMap(bool pressing_m,minimap *m,SDL_Rect pjr,SDL_Rect peg,SDL_Rect pen,SDL_Surface *screen,int SCREEN_W,int SCREEN_H,char minimapNormal[] , char minimapEnemie[] , char minimapEnigme[]){
-    printf("1\n");
+    //printf("1\n");
     if(pressing_m == false){
             
             smallmap(m,SCREEN_W,SCREEN_H,minimapNormal);

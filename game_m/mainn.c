@@ -200,6 +200,8 @@ printf("Could not initialize SDL: %s.\n", SDL_GetError());
 screen=SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0,SDL_RESIZABLE);
 
   int t;
+  int det_green;
+  int e1_stage=0;
 
 //----------------------------------------------------------------
 /*DECLARATION OF ANIMATIONS
@@ -222,11 +224,8 @@ e.dest.w=p.cor.w;
 e.dest.h=p.cor.h;
 b1.pos.x=-6000;
 				b1.pos.y=-6000;
-<<<<<<< HEAD
- points p_points;			
-=======
-		int t=0;		
->>>>>>> 9c257218ba60236d1ea8b05cccd51396ff688948
+ points p_points;					
+
 while(boucle)
 {      
 x = collisionBB(e.dest,b1.pos);
@@ -238,7 +237,7 @@ t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
 //afficher_image(screen,imge);
 //----------------------------------------------------
 
-printf(" x=%d || y=%d || xenemy=%d ||  p.vie=%d",p.cor.x,p.cor.y,e.dest.x,p.viep);
+//printf(" x=%d || y=%d || xenemy=%d ||  p.vie=%d",p.cor.x,p.cor.y,e.dest.x,p.viep);
 bool pressing_m = false;
 //---------------------------------------------
 while(SDL_PollEvent(&event))
@@ -338,34 +337,27 @@ while(SDL_PollEvent(&event))
             
 		     
 }}
-
+t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
+det_green=collisionPP(p.cor,bg.M,bg.R,40, 200, 40);
 //printf("\n p cor : %d",p.cor.x);
-run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex);
+run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, &e1_stage);
 //printf("\n movex : %d",movex);
-<<<<<<< HEAD
+
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
 
 
-t=collisionPP(p.cor,bg.M,bg.R,251, 220, 156);
-
-
-
-
-
-
-=======
-
 affichertemps(screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
-printf("col = %d\n",t);
->>>>>>> 9c257218ba60236d1ea8b05cccd51396ff688948
+printf("\nbg pos = %d",bg.R.x);
+printf("\ncol = %d",det_green);
+printf("\ne1_stage = %d",e1_stage);
+
 xp_map=p.cor.x-bg.R.x;
 SDL_Rect RP;
 RP = p.cor;
 RP.x = xp_map;
-<<<<<<< HEAD
-=======
+
 //miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
 
 if(t==3 && verif==1){
@@ -377,10 +369,6 @@ if(t==0 && verif ==0){
 }
 
 
-
-
-
->>>>>>> 9c257218ba60236d1ea8b05cccd51396ff688948
 
 //printf("col = %d\n",collisionPP(p->cor,bg->M,bg->R));
 //miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");

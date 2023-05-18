@@ -15,7 +15,7 @@ void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 }
 
 void afficherBack(background bg, SDL_Surface * screen){
-	SDL_BlitSurface(bg.M ,0, screen, &bg.R);
+	SDL_BlitSurface(bg.S[0] ,0, screen, &bg.R);
 }
 
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
@@ -90,11 +90,31 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex){
+void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int *e1_stage){
 			afficherBack(*bg,screen);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
+			printf("\ncol = %d",det_green);
+			printf("\ne1_stage = %d",*e1_stage);
+			if (det_green != 0){
+				if(bg->R.x <= 0 && bg->R.x > -1100 && bg->R.y != 0){
+					*e1_stage = 1;
+				}
+				if(bg->R.x <= -1100 && bg->R.x > -2800 && bg->R.y != 0){
+					*e1_stage = 2;
+				}
+				if(bg->R.x <= -3700 && bg->R.y != 0){
+					*e1_stage = 3;
+				}
+				if(bg->R.x <= -4000 && bg->R.y == 0){
+					*e1_stage = 4;
+				}
+				if(bg->R.x <= 0 && bg->R.x > -600 && bg->R.y == 0){
+					*e1_stage = 5;
+				}
+			}
+			
 			P->score++;
 			*anim_frame_time+=1;
 			if(*anim_frame_time ==10){
