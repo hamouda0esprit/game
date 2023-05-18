@@ -53,7 +53,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
  ref=(*e1_stage)+1;
  aff_e(framesattend,&ref,screen,e1->eni);
  *current_framereponse=*frame;
-  if(*current_framereponse==5){
+  if(*current_framereponse==10){
  *frame=1;
  }
  r->r.x=SCREEN_WIDT/4+200;
@@ -63,7 +63,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
   if(*next==2){
   ref=(*e1_stage)+2;
  aff_e(framesattend,&ref,screen,e1->eni);
-  if(*current_framereponse2==5){
+  if(*current_framereponse2==10){
  *frame=1;
  }
   *current_framereponse2=*frame;
@@ -77,7 +77,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
  if(*next==3){
  ref=(*e1_stage)+3;
  aff_e(framesattend,&ref,screen,e1->eni);
- if(*current_framereponse3==5){
+ if(*current_framereponse3==10){
  *frame=1;
  }
   *current_framereponse3=*frame;
@@ -99,7 +99,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);
  aff_e(framesnumber2,current_framereponse2,screen,r2->r);
  aff_e(framesnumber3,current_framereponse3,screen,r3->r);
  aff_e(framesnumber4,current_framereponse4,screen,r4->r);
- if(*current_framereponse4>4){
+ if(*current_framereponse4>9){
  *frame=1;
  }
  

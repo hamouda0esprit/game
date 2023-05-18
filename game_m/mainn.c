@@ -32,7 +32,8 @@ int SCREEN_WIDTH = 1710;
 int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);
 int SCREEN_HEIGHT = (float)(SCREEN_W / 1.7777777777777777);
 
-int lvl_depl = 0;
+int lvl_depl1 = 0;
+int lvl_depl2 = 0;
 
 //Background task
 
@@ -232,12 +233,12 @@ e.dest.h=p.cor.h;
 b1.pos.x=-6000;
 				b1.pos.y=-6000;
  points p_points;					
-SDL_Surface *framesattend[10],*framesnumber1[4],*framesnumber2[4],*framesnumber3[4],*framesnumber4[4],framefinal[1];
+SDL_Surface *framesattend[10],*framesnumber1[9],*framesnumber2[9],*framesnumber3[9],*framesnumber4[9],framefinal[1];
 loadenigmenumbers(10,framesattend,"numbers/r%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(4,framesnumber1,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(4,framesnumber2,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(4,framesnumber3,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmeanswer(4,framesnumber4,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(9,framesnumber1,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(9,framesnumber2,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(9,framesnumber3,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(9,framesnumber4,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmenumbers(1,framefinal,"final2/a%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 reponse r,r2,r3,r4; 
 		
@@ -352,19 +353,25 @@ if (level == 1){
 	det_green=collisionPP(p.cor,bg.M[0],bg.R,40, 200, 40);
 }
 if (level == 3){
-	lvl_depl++;
+	lvl_depl2++;
 	t=collisionPP(p.cor,bg.M[1],bg.R,251, 220, 156);
 	det_black=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 40);
 	det_green=collisionPP(p.cor,bg.M[1],bg.R,40, 200, 40);
 	det_red=collisionPP(p.cor,bg.M[1],bg.R,200, 40, 40);
 	det_blue=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 200);
 }
-if (lvl_depl==1){
+if (lvl_depl2==1){
 	bg.R.x = 0;
 	bg.R.y = -SCREEN_HEIGHT*.85;
 	p.cor.x = SCREEN_WIDTH/2+p.cor.w/2;
 }
-
+if (enigme1==1){
+	lvl_depl1++;
+	if (lvl_depl1 == 1){
+		SDL_FreeSurface(bg.S[0]);
+		bg.S[0] = IMG_Load("Assets/bg/bg2.png");
+	}
+}
 if(gamestate==1){
 
 run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1);
