@@ -97,16 +97,17 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1){
+void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			/*printf("\n det_black = %d ", det_black);
+			printf("\n enigme1 = %d", *enigme1);
+			printf("\n det_black = %d ", det_black);
 			printf("\n det_red = %d ", det_red);
 			printf("\n det_green = %d ", det_green);
 			printf("\n det_blue = %d ", det_blue);
-			*/
+			
 			if (det_green != 0){
 				if(*level==1){
 					if(bg->R.x <= 0 && bg->R.x > -1100 && bg->R.y != 0){
@@ -129,7 +130,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			}else{
 				*e1_stage = 0;
 			}
-			if (*level==1 && *enigme1==1){
+			if (*level==1 && *enigme1 == 1){
 				if(bg->R.x <= 0 && bg->R.x > -300 && bg->R.y == 0 && *limit && rect->x < 300){
 					*level+=1;
 				}
@@ -137,6 +138,16 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			if (*level==2){
 				if (rect->x > SCREEN_WIDTH-SCREEN_WIDTH/4){
 					*level+=1;
+				}
+			}
+			if (*level == 3){
+				if (det_blue!=0 && *enigme2 == 0){
+					if(rect->x >= SCREEN_WIDTH/2){
+						rect->x = rect->x - SCREEN_WIDTH;
+					}else{
+						rect->x = rect->x + SCREEN_WIDTH;
+					}
+					
 				}
 			}
 			
@@ -190,7 +201,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){
 							if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
-							if(t==0 || t==1 || t==3){
+							if((t==0 || t==1 || t==3) && (det_red == 0 || det_red == 1)){
 								scrolling(&(bg->R),0,SCREEN_WIDTH);
 								if (!(*limit)){
 									   scrolling(dest,0,SCREEN_WIDTH);
@@ -201,7 +212,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 								}
 							}
 						}
-						if(t==0 || t==1 || t==3){
+						if((t==0 || t==1 || t==3) && (det_red == 0 || det_red == 1)){
 							scrolling(rect,1,SCREEN_WIDTH);
 						}
 						last_move_time = current_time;
@@ -212,7 +223,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){ 
 						if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
-							if(t==0 || t==2 || t==3){
+							if(t==0 || t==2 || t==3 && det_red == 0 || det_red == 2){
 								scrolling(&(bg->R),1,SCREEN_WIDTH);
 								if (!(*limit)){
 									   scrolling(dest,1,SCREEN_WIDTH);
@@ -223,7 +234,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 								}
 							}
 						}
-						if(t==0 || t==2 || t==3){
+						if(t==0 || t==2 || t==3 && det_red == 0 || det_red == 2){
 							scrolling(rect,0,SCREEN_WIDTH);
 						}
 						

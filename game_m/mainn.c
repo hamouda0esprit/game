@@ -243,19 +243,20 @@ loadenigmeanswer(9,framesnumber2,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmeanswer(9,framesnumber3,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmeanswer(9,framesnumber4,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 loadenigmenumbers(4,framefinal,"final2/a%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
-loadenigmenumbers(4,framefinal,"lives/live%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+//loadenigmenumbers(4,framefinal,"lives/live%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
 reponse r,r2,r3,r4; 
 		
 srand(time(0));
 int alea=rand()%(4)+1; 
 int gamestate=1;
-int currentframeenigme=1,int currentframelive=1;
+int currentframeenigme=1, currentframelive=1;
 int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,current_framereponse4=0;
 int next=0;
 int frame;
 int ref;
 enigmme e1;
 int enigme1 = 0;
+int enigme2 = 0;
 int verifshoot=1;
 int orr_b = 0;
 b1.pos.w=0;
@@ -386,7 +387,7 @@ if (enigme1==1){
 }
 if(gamestate==1){
 
-run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1);
+run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
 //printf("\n movex : %d",movex);
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
