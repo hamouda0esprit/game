@@ -102,11 +102,11 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			printf("\n det_black = %d ", det_black);
+			/*printf("\n det_black = %d ", det_black);
 			printf("\n det_red = %d ", det_red);
 			printf("\n det_green = %d ", det_green);
 			printf("\n det_blue = %d ", det_blue);
-			
+			*/
 			if (det_green != 0){
 				if(*level==1){
 					if(bg->R.x <= 0 && bg->R.x > -1100 && bg->R.y != 0){
@@ -129,8 +129,8 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			}else{
 				*e1_stage = 0;
 			}
-			if (*level==1 /*&& enigme1==1*/){
-				if(bg->R.x <= 0 && bg->R.x > -400 && bg->R.y == 0 && *limit){
+			if (*level==1 && *enigme1==1){
+				if(bg->R.x <= 0 && bg->R.x > -300 && bg->R.y == 0 && *limit && rect->x < 300){
 					*level+=1;
 				}
 			}

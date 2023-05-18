@@ -15,7 +15,7 @@
 #define SCORE_POSITION_X 10
 #define SCORE_POSITION_Y 10
 #include "Link.h"
-
+#include "lot5.h"
 #include "minimap.h"
 
 
@@ -25,7 +25,7 @@ void main_2()
 
 //Uint32 start_time = SDL_GetTicks();
 int level=1;
-int enigme1 = 0;
+
 int xp_map;
 int SCREEN_W = 1710;
 int SCREEN_WIDTH = 1710;
@@ -232,7 +232,27 @@ e.dest.h=p.cor.h;
 b1.pos.x=-6000;
 				b1.pos.y=-6000;
  points p_points;					
-
+SDL_Surface *framesattend[10],*framesnumber1[4],*framesnumber2[4],*framesnumber3[4],*framesnumber4[4],framefinal[1];
+loadenigmenumbers(10,framesattend,"numbers/r%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(4,framesnumber1,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(4,framesnumber2,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(4,framesnumber3,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmeanswer(4,framesnumber4,"answer/%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+loadenigmenumbers(1,framefinal,"final2/a%d.png",SCREEN_WIDTH,SCREEN_HEIGHT);
+reponse r,r2,r3,r4; 
+		
+srand(time(0));
+int alea=rand()%(4)+1; 
+int gamestate=1;
+int currentframeenigme=1;
+int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,current_framereponse4=0;
+int next=0;
+int frame;
+int ref;
+enigmme e1;
+int enigme1 = 0;
+b1.pos.w=0;
+b1.pos.h=65535;
 while(boucle)
 {      
 x = collisionBB(e.dest,b1.pos);
@@ -276,24 +296,22 @@ while(SDL_PollEvent(&event))
                         b1.pos.y=p.cor.y+100;
                         bigx= b1.pos.x;
                         hit=1; }  
-                    if (event.key.keysym.sym == SDLK_d) {
-                       dir2=1; 
-                       }
-			
-            
-                    if (event.key.keysym.sym == SDLK_q) {
-                        dir2=0; 
-                    }
-                    if (event.key.keysym.sym == SDLK_z) {
-                        jump2=0;
-                        if(p2.cor.y==grav2)
-                        velocity2=-40;
-                              } 
-                    if (event.key.keysym.sym == SDLK_f) {
-                        b2.pos.x=p2.cor.x+100;
-                        b2.pos.y=p2.cor.y+150;
-                        
-                        hit2=1; }  
+                     if (event.key.keysym.sym == SDLK_RETURN && e1_stage!=0) {
+                       gamestate=2;
+                       next=0;
+                    }   
+                 if (event.key.keysym.sym == SDLK_c && e1_stage!=0) {
+                 gamestate=1;
+                 next=0;
+                      }  
+                 if (event.key.keysym.sym == SDLK_k && e1_stage==5 && gamestate==2) {
+                 frame++;
+                      }
+                 if (event.key.keysym.sym == SDLK_SPACE && e1_stage==5 && gamestate==2) {
+                    next++;
+                    frame=1;
+          
+                    }    
 					if(event.key.keysym.sym == SDLK_TAB){
                         pressing_m = true;
                         printf("m yes\n");
@@ -322,23 +340,9 @@ while(SDL_PollEvent(&event))
                         jump=1;
                       
                   }
-                  if (event.key.keysym.sym == SDLK_d) {
-                        orientation2=0;
-                        dir2=2;
-                        stop2=1;
-                         
-                    }
-                    if (event.key.keysym.sym == SDLK_q) {
-                        orientation2=1;
-                        dir2=2;
-                        stop2=1;
-                        
-                   }
-                    if (event.key.keysym.sym == SDLK_z) {
-                        jump2=1;
-                      
-                  }
-                   
+                 
+                  
+                  
                     break;
             
 		     
@@ -360,10 +364,11 @@ if (lvl_depl==1){
 	bg.R.y = -SCREEN_HEIGHT*.85;
 	p.cor.x = SCREEN_WIDTH/2+p.cor.w/2;
 }
-//printf("\n p cor : %d",p.cor.x);
+
+if(gamestate==1){
+
 run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1);
 //printf("\n movex : %d",movex);
-
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nt = %d\n",start_time);
 //printf("\ne1_stage = %d",e1_stage);
@@ -560,10 +565,14 @@ if(t==0 && verif ==0){
       							 	bigx2=b2.pos.x;
        								hit2=1;
      	 								hitready2=0;
-      							}}}}
+      							}}}}}
  								
  
- 
+ if(gamestate==2){
+enigmefinal(&enigme1,&gamestate,ref,&r,&r2,&r3,&r4,&next,&frame,&currentframeenigme,&current_framereponse,&current_framereponse2,&current_framereponse3,&current_framereponse4,screen,&e1,&e1_stage,framesattend,framesnumber1,framesnumber2,framesnumber3,framesnumber4,framefinal);
+
+
+ }
 //-----------------------------------------------END-----------------------------------        
  
 
