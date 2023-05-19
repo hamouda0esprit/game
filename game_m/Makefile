@@ -12,7 +12,7 @@ RM = rm -rf
 
 EXEC = prog
 # -l
-LIBS = -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
+LIBS = -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lserialport
 # -L
 LIBSPATH = 
 # -I
@@ -22,7 +22,7 @@ SOURCES = mainn.c carac.c background.c fonction.c Menu.c Functions.c minimap.c l
 OBJECTS = $(SOURCES:.c=.o)
 
 
-all : mainn.o carac.o background.o fonction.o Main.o Functions.o minimap.o lot5.o -lm
+all : mainn.o carac.o background.o fonction.o Main.o Functions.o minimap.o lot5.o arduino.o -lm
 	$(CC) $^ -o $(EXEC) $(INCLUDESPATH) $(LIBSPATH) $(LIBS)
 
 %.o : %.c

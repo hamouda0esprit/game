@@ -19,7 +19,6 @@
 #include "minimap.h"
 
 
-
 void main_2()
 {
 
@@ -199,9 +198,6 @@ SDL_Surface* framesenemy[NUM_FRAMESstopright],*frameslenemy[NUM_FRAMESstopleft],
 SDL_Surface* framescarac[NUM_FRAMESstopright],*frameslcarac[NUM_FRAMESstopleft],*framesrightcarac[NUM_FRAMESright],*framesleftcarac[NUM_FRAMESleft],*framesjumpcarac[NUM_FRAMESjump],*framessscarac[NUM_FRAMESss];
  
  int stopl=1,stopr=1,move=0;
- 
-  /*if(!Arduino_connect(SERIAL_PORT, 9600))
-        exit(EXIT_FAILURE);  */
 if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER)==-1)
 {
 printf("Could not initialize SDL: %s.\n", SDL_GetError());
@@ -648,6 +644,7 @@ SDL_Flip(screen);
 
 SDL_Delay(10);
 }
+
 }
 
 void aff_e(SDL_Surface **framesright,int *current_frame21,SDL_Surface *screen,SDL_Rect dest){
