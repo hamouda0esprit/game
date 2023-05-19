@@ -97,12 +97,12 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
+void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			printf("\n enigme1 = %d", *enigme1);
+			printf("\n enigme2 = %d", *enigme2);
 			printf("\n det_black = %d ", det_black);
 			printf("\n det_red = %d ", det_red);
 			printf("\n det_green = %d ", det_green);
@@ -141,6 +141,9 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 				}
 			}
 			if (*level == 3){
+				if (det_green !=0){
+					*enigme2 = 1;
+				}
 				if (det_blue!=0 && *enigme2 == 0){
 					if(rect->x >= SCREEN_WIDTH/2){
 						rect->x = rect->x - SCREEN_WIDTH;
@@ -168,14 +171,15 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 							bg->R.y=0;
 							b1->y+=SCREEN_HEIGHT*.85;
 							b2->y+=SCREEN_HEIGHT*.85;
-							dest->y+=SCREEN_HEIGHT*.85;
+							//dest->y+=SCREEN_HEIGHT*.85;
 							rect->y=rect->y+SCREEN_HEIGHT/2;
+							*test=1;
 						}
 						if (keys[SDLK_DOWN] && bg->R.y == 0){
 							bg->R.y=-SCREEN_HEIGHT*.85;
 							b1->y-=SCREEN_HEIGHT*.85;
 							b2->y-=SCREEN_HEIGHT*.85;
-							dest->y-=SCREEN_HEIGHT*.85;
+							//dest->y-=SCREEN_HEIGHT*.85;
 							rect->y=rect->y-SCREEN_HEIGHT/2;
 						}
 					}
@@ -186,6 +190,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 						b1->y+=SCREEN_HEIGHT*.85;
 						b2->y+=SCREEN_HEIGHT*.85;
 						dest->y+=SCREEN_HEIGHT*.85;
+						printf("hello");
 						rect->y=rect->y+SCREEN_HEIGHT/2;
 					}
 					if (det_black!=0 && keys[SDLK_DOWN] && bg->R.y == 0){
@@ -234,7 +239,7 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 								}
 							}
 						}
-						if(t==0 || t==2 || t==3 && det_red == 0 || det_red == 2){
+						if((t==0 || t==2 || t==3) && (det_red == 0 || det_red == 2)){
 							scrolling(rect,0,SCREEN_WIDTH);
 						}
 						
@@ -275,13 +280,13 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			       *limit = 0;
 				}
 			}
-			printf("\nlevel & limit= %d | %d",*level,*limit);
+			//printf("\nlevel & limit= %d | %d",*level,*limit);
 			
 			if (rect->x < rect->w/3){
 						rect->x = rect->w/3;
 					}
 			*trigger = 0;
-			printf("\nplayer pos : %d",rect->x);
+			//printf("\nplayer pos : %d",rect->x);
 			if(*limit){
 				if(*level==1 || *level==3){
 					if(bg->R.x >=(-SCREEN_WIDTH*2.4175)/2){
@@ -330,3 +335,61 @@ void run_game(background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, in
 			//printf("\n bg pos = %d", bg->R.x);
 			
 }
+void initialiser_audio(Mix_Music *music)
+{
+if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,MIX_DEFAULT_CHANNELS,1024)==-1){
+    printf("%s",SDL_GetError());
+    
+}
+music=Mix_LoadMUS("bp.mp3");
+Mix_PlayMusic(music,-1);
+Mix_VolumeMusic(MIX_MAX_VOLUME);
+
+}
+void initialiser_audio1(Mix_Music *music)
+{
+if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,MIX_DEFAULT_CHANNELS,1024)==-1){
+    printf("%s",SDL_GetError());
+    
+}
+music=Mix_LoadMUS("transition.mp3");
+Mix_PlayMusic(music,-1);
+Mix_VolumeMusic(MIX_MAX_VOLUME);
+
+}
+void initialiser_audio2(Mix_Music *music)
+{
+if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,MIX_DEFAULT_CHANNELS,1024)==-1){
+    printf("%s",SDL_GetError());
+    
+}
+music=Mix_LoadMUS("an.mp3");
+Mix_PlayMusic(music,-1);
+Mix_VolumeMusic(MIX_MAX_VOLUME);
+
+}
+
+void liberer_musique(Mix_Music *music)
+{
+Mix_FreeMusic(music);
+}
+void initialiser_audiobref(Mix_Chunk *music)
+{
+Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+music = Mix_LoadWAV("simple.wav");
+Mix_PlayChannel( -1, music, 0 );
+if(music==NULL) printf("%s",SDL_GetError());
+}
+
+void liberer_musiquebref(Mix_Chunk *music)
+{
+Mix_FreeChunk(music);
+}
+
+
+
+
+
+
+
+

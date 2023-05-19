@@ -24,8 +24,9 @@ void main_2()
 {
 
 //Uint32 start_time = SDL_GetTicks();
-int level=1;
-
+int level=1,nour=0,nour1=0,nour2=0;;
+Mix_Music *music,*music1,*music2;
+Mix_Chunk *mus;
 int xp_map;
 int SCREEN_W = 1710;
 int SCREEN_WIDTH = 1710;
@@ -34,6 +35,7 @@ int SCREEN_HEIGHT = (float)(SCREEN_W / 1.7777777777777777);
 
 int lvl_depl1 = 0;
 int lvl_depl2 = 0;
+int lvl_depl3 = 0;
 
 //Background task
 
@@ -205,7 +207,7 @@ if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER)==-1)
 printf("Could not initialize SDL: %s.\n", SDL_GetError());
 }
 
-screen=SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0,SDL_RESIZABLE);
+screen=SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0,SDL_HWSURFACE | SDL_DOUBLEBUF);
 
   int t;
   int det_black = 0;
@@ -266,7 +268,7 @@ r5.r.x=50;
 r5.r.y=50;
 r6.r.x=700;
 r6.r.y=50;
-
+int test=0;
 while(boucle)
 {   
  
@@ -368,33 +370,27 @@ while(SDL_PollEvent(&event))
             
 		     
 }}
-if (level == 1){
-	t=collisionPP(p.cor,bg.M[0],bg.R,251, 220, 156);
-	det_green=collisionPP(p.cor,bg.M[0],bg.R,40, 200, 40);
-}
-if (level == 3){
-	lvl_depl2++;
-	t=collisionPP(p.cor,bg.M[1],bg.R,251, 220, 156);
-	det_black=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 40);
-	det_green=collisionPP(p.cor,bg.M[1],bg.R,40, 200, 40);
-	det_red=collisionPP(p.cor,bg.M[1],bg.R,200, 40, 40);
-	det_blue=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 200);
-}
-if (lvl_depl2==1){
-	bg.R.x = 0;
-	bg.R.y = -SCREEN_HEIGHT*.85;
-	p.cor.x = SCREEN_WIDTH/2+p.cor.w/2;
-}
+
+
 if (enigme1==1){
 	lvl_depl1++;
 	if (lvl_depl1 == 1){
 		SDL_FreeSurface(bg.S[0]);
-		bg.S[0] = IMG_Load("Assets/bg/bg0.png");
+		Resize(&(bg.S[0]), "Assets/bg/bg02.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	}
 }
+if (enigme2==1){
+	lvl_depl3++;
+	if (lvl_depl3 == 1){
+		SDL_FreeSurface(bg.S[2]);
+		Resize(&(bg.S[2]), "Assets/bg/bg22.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+		SDL_FreeSurface(bg.M[1]);
+		Resize(&(bg.M[1]), "Assets/BG_M22.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
+	}
+}
+printf("\nxenemy= %d || yenemy= %d || px= %d || py= %d",e.dest.x,e.dest.y,p.cor.x,p.cor.y);
 if(gamestate==1){
-
-run_game(&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
+run_game(&test,&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
 aff_e(&viecaractere,&currentframelive,screen,r5.r); 
 aff_e(&vieenemy,&currentframeliveenemy,screen,r6.r);//printf("\n movex : %d",movex);
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
@@ -523,12 +519,11 @@ if(t==0 && verif ==0){
 							
 						}
 						//-------------------- Bullet to the right------------
-						if(xp2==0 && vie_counter2>50){
+						if((xp2==0 && vie_counter2>50)){
      		 			currentframelive=p.viep;
      		 			pvieref=p.viep;
-     				 	p.viep--;
-     				 	
-     		 			vie_counter2=0;}
+     				 	p.viep--; 	
+     		 		vie_counter2=0;}
 						if(e.direction>0){
 					
 					if(xp2==1){
@@ -608,7 +603,45 @@ enigmefinal(&enigme1,&gamestate,ref,&r,&r2,&r3,&r4,&next,&frame,&currentframeeni
 
  }
 //-----------------------------------------------END-----------------------------------        
- 
+ printf("%d",level);
+if (level == 1){
+	t=collisionPP(p.cor,bg.M[0],bg.R,251, 220, 156);
+	det_green=collisionPP(p.cor,bg.M[0],bg.R,40, 200, 40);
+}
+if (level == 2){
+	det_black=0;
+	det_green=0;
+	det_red=0;
+	det_blue=0;
+
+}
+if (level == 3){
+	lvl_depl2++;
+	t=collisionPP(p.cor,bg.M[1],bg.R,251, 220, 156);
+	det_black=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 40);
+	det_green=collisionPP(p.cor,bg.M[1],bg.R,40, 200, 40);
+	det_red=collisionPP(p.cor,bg.M[1],bg.R,200, 40, 40);
+	det_blue=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 200);
+
+}
+if (lvl_depl2==1){
+	bg.R.x = 0;
+	bg.R.y = -SCREEN_HEIGHT*.85;
+	p.cor.x = SCREEN_WIDTH/2+p.cor.w/2;
+	e.dest.y=grav;
+	e.dest.x=SCREEN_WIDTH+SCREEN_WIDTH/2;
+	movex=SCREEN_WIDTH+SCREEN_WIDTH/2;
+
+}
+if(level == 1 &&nour==0)
+{
+initialiser_audio(music);
+nour=1;} 
+if(level == 3 &&nour1==0&&nour==1)
+{
+liberer_musique(music);
+initialiser_audio1(music1);
+nour1=1;} 
 
 //printf("\nxp_map : %d",xp_map);
 SDL_Flip(screen);
