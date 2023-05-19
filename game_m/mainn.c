@@ -27,6 +27,9 @@ void main_2()
 int level=1;
 
 int xp_map;
+int xe_map;
+int yp_map;
+int ye_map;
 int SCREEN_W = 1710;
 int SCREEN_WIDTH = 1710;
 int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);
@@ -34,6 +37,10 @@ int SCREEN_HEIGHT = (float)(SCREEN_W / 1.7777777777777777);
 
 int lvl_depl1 = 0;
 int lvl_depl2 = 0;
+
+int map_W = 6952;
+int map_H = 1608;
+
 
 //Background task
 
@@ -186,7 +193,7 @@ int tee;
 
 
 minimap  m;
-initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png");
+initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png",map_W,map_H);
 
 
 //printf("aaaaa %d \n",ms_to_sec(start_time));
@@ -407,11 +414,23 @@ affichertemps(screen,temps,SCREEN_W,SCREEN_H);
 //printf("\ncol = %d",t);
 
 xp_map=p.cor.x-bg.R.x;
+yp_map=p.cor.y-bg.R.y;
 SDL_Rect RP;
 RP = p.cor;
 RP.x = xp_map;
+RP.y = yp_map;
 
-//miniMap(pressing_m,&m,RP,eg,dest,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
+xe_map=e.dest.x-bg.R.x;
+ye_map=e.dest.y-bg.R.y;
+SDL_Rect RE;
+RE = e.dest;
+RE.x = xe_map;
+RE.y = ye_map;
+
+printf("\n\n\nplayer %d %d\n",p.cor.x,p.cor.y);
+printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
+
+miniMap(pressing_m,&m,RP,eg,RE,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
 
 if(t==3 && verif==1){
 grav=p.cor.y;
