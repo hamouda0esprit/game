@@ -44,7 +44,7 @@ typedef struct{
 
 int ms_to_sec(int milliseconds);
 void format_time(int seconds, char time_str[]);
-void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] );
+void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ,int map_W,int map_H);
 void afficherminimap (minimap m, SDL_Surface * screen,int SCREEN_W,int SCREEN_H);
 void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, minimap *m, int redimensionnement,int SCREEN_W,int SCREEN_H);
 void affichertemps(SDL_Surface* screen, char tmp[], int SCREEN_W, int SCREEN_H);
@@ -58,4 +58,4 @@ void fullmap(minimap * m,int SCREEN_W,int SCREEN_H,char minimapNormal[] );
 void smallmap(minimap * m,int SCREEN_W,int SCREEN_H,char minimapNormal[] );
 void maj_fullmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[], char minimapEnemie[] , char minimapEnigme[] );
 void afficherFULLminimap(minimap m, SDL_Surface *screen,int SCREEN_W,int SCREEN_H);
-void miniMap(bool pressing_m,minimap *m,SDL_Rect pjr,SDL_Rect peg,SDL_Rect pen,SDL_Surface *screen,int SCREEN_W,int SCREEN_H, char minimapNormal[] , char minimapEnemie[] , char minimapEnigme[] );
+void miniMap(bool pressing_m,minimap *m,SDL_Rect pjr,SDL_Rect peg,SDL_Rect pen,SDL_Surface *screen,int SCREEN_W,int SCREEN_H, char minimapNormal[] , char minimapEnemie[] , char minimapEnigme[]);

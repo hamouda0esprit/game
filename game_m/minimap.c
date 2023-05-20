@@ -192,13 +192,13 @@ void affichertemps(SDL_Surface* screen, char tmp[], int SCREEN_W, int SCREEN_H) 
 
 
 
-void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ) {
+void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ,int map_W,int map_H) {
     
     m->positionMinimap.x = SCREEN_W/64; 
     m->positionMinimap.y = SCREEN_W/64; 
     
     m->image_miniature = IMG_Load(minimapNormal);
-    m->image_miniature = resizeSurface(m->image_miniature,SCREEN_W/5,SCREEN_H/5);
+    m->image_miniature = resizeSurface(m->image_miniature,((map_W*SCREEN_H)/map_H)/10,SCREEN_H/10);
     //printf("w %d  h %d",SCREEN_W/5,SCREEN_H/5);
     if (m->image_miniature == NULL) {
         printf("Erreur lors du chargement de l'image miniature de la minimap: %s\n", SDL_GetError());
@@ -207,7 +207,7 @@ void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ) {
     
     
     m->bonhomm = IMG_Load("./assets/steve.jpg");
-    
+    m->bonhomm = resizeSurface(m->bonhomm,SCREEN_H/34,SCREEN_H/34);
     if (m->bonhomm == NULL) {
         printf("Erreur lors du chargement de l'image du bonhomme miniature: %s\n", SDL_GetError());
         exit(1);
@@ -215,12 +215,12 @@ void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ) {
     
     m->positionBonhomme.x = 0; 
     m->positionBonhomme.y = 0; 
-    m->positionBonhomme.w = 40;
-    m->positionBonhomme.h = 40;
+    m->positionBonhomme.w = SCREEN_H/34;
+    m->positionBonhomme.h = SCREEN_H/34;
 
     
     m->enigme = IMG_Load("./assets/enigme.png");
-    
+    m->enigme = resizeSurface(m->enigme,SCREEN_H/34,SCREEN_H/34);
     if (m->enigme == NULL) {
         printf("Erreur lors du chargement de l'enigme miniature: %s\n", SDL_GetError());
         exit(1);
@@ -233,7 +233,7 @@ void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ) {
 
     
     m->enemi = IMG_Load("./assets/enemi.png");
-    
+    m->enemi = resizeSurface(m->enemi,SCREEN_H/34,SCREEN_H/34);
     if (m->enemi == NULL) {
         printf("Erreur lors du chargement de l'enemi miniature: %s\n", SDL_GetError());
         exit(1);
@@ -247,12 +247,12 @@ void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ) {
 
 }
 void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, minimap *m, int redimensionnement,int SCREEN_W,int SCREEN_H){
-    m->positionBonhomme.x = (((posJoueur.x)) / redimensionnement + m->positionMinimap.x)- (m->positionBonhomme.w /2);
-    m->positionBonhomme.y = (((posJoueur.y)) / redimensionnement + m->positionMinimap.y)- (m->positionBonhomme.h /2);
-    m->positionEnemi.x = (((posEnemie.x)) / redimensionnement + m->positionMinimap.x)-(m->positionEnemi.w /2);
-    m->positionEnemi.y = (((posEnemie.y)) / redimensionnement + m->positionMinimap.y)-(m->positionEnemi.h /2);
-    m->positionEnigme.x = (((posEnigme.x)) / redimensionnement + m->positionMinimap.x)-(m->positionEnigme.w /2);
-    m->positionEnigme.y = (((posEnigme.y)) / redimensionnement + m->positionMinimap.y)-(m->positionEnigme.h /2);
+    m->positionBonhomme.x = (((posJoueur.x)) / redimensionnement + m->positionMinimap.x)- (m->positionBonhomme.w /2) + m->positionBonhomme.w / 2;
+    m->positionBonhomme.y = (((posJoueur.y)) / redimensionnement + m->positionMinimap.y)- (m->positionBonhomme.h /2) - m->positionBonhomme.w / 2;
+    m->positionEnemi.x = (((posEnemie.x)) / redimensionnement + m->positionMinimap.x)-(m->positionEnemi.w /2) + m->positionBonhomme.w / 2;
+    m->positionEnemi.y = (((posEnemie.y)) / redimensionnement + m->positionMinimap.y)-(m->positionEnemi.h /2) - m->positionBonhomme.w / 2;
+    m->positionEnigme.x = (((posEnigme.x)) / redimensionnement + m->positionMinimap.x)-(m->positionEnigme.w /2) + m->positionBonhomme.w / 2;
+    m->positionEnigme.y = (((posEnigme.y)) / redimensionnement + m->positionMinimap.y)-(m->positionEnigme.h /2) - m->positionBonhomme.w / 2;
 }
 
 
@@ -389,26 +389,26 @@ void miniMap(bool pressing_m,minimap *m,SDL_Rect pjr,SDL_Rect peg,SDL_Rect pen,S
     //printf("1\n");
     if(pressing_m == false){
             
-            smallmap(m,SCREEN_W,SCREEN_H,minimapNormal);
+           // smallmap(m,SCREEN_W,SCREEN_H,minimapNormal);
             
-            annimerMinimap(pjr,pen,peg, m, 5,SCREEN_W,SCREEN_H);
+            annimerMinimap(pjr,pen,peg, m, 15,SCREEN_W,SCREEN_H);
             
             
-            maj_map(m,screen,SCREEN_W,SCREEN_H,minimapNormal,minimapEnemie,minimapEnigme);
+            //maj_map(m,screen,SCREEN_W,SCREEN_H,minimapNormal,minimapEnemie,minimapEnigme);
             
             afficherminimap(*m, screen,SCREEN_W,SCREEN_H);
             
             
-        }else{
+        }//else{
             
-            fullmap(m,SCREEN_W,SCREEN_H,minimapNormal);
+           // fullmap(m,SCREEN_W,SCREEN_H,minimapNormal);
             
-            annimerMinimap(pjr,pen,peg, m, 2,SCREEN_W,SCREEN_H);
+            //annimerMinimap(pjr,pen,peg, m, 2,SCREEN_W,SCREEN_H);
             
             
-            maj_fullmap(m,SCREEN_W,SCREEN_H,minimapNormal,minimapEnemie,minimapEnigme);
+            //maj_fullmap(m,SCREEN_W,SCREEN_H,minimapNormal,minimapEnemie,minimapEnigme);
             
-            afficherFULLminimap(*m, screen,SCREEN_W,SCREEN_H);
+           // afficherFULLminimap(*m, screen,SCREEN_W,SCREEN_H);
             
-        }
+        //}
 }
