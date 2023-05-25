@@ -18,7 +18,7 @@ typedef struct{
 	int score;
 }player;
 
-void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2);
+void run_game(SDL_Rect *rect2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2);
 void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT);
 void afficherBack(background bg, SDL_Surface *screen, int level);
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH);

@@ -97,16 +97,16 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
+void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			printf("\n enigme2 = %d", *enigme2);
+			/*printf("\n enigme2 = %d", *enigme2);
 			printf("\n det_black = %d ", det_black);
 			printf("\n det_red = %d ", det_red);
 			printf("\n det_green = %d ", det_green);
-			printf("\n det_blue = %d ", det_blue);
+			printf("\n det_blue = %d ", det_blue);*/
 			
 			if (det_green != 0){
 				if(*level==1){
@@ -171,15 +171,16 @@ void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* 
 							bg->R.y=0;
 							b1->y+=SCREEN_HEIGHT*.85;
 							b2->y+=SCREEN_HEIGHT*.85;
-							//dest->y+=SCREEN_HEIGHT*.85;
+							dest->y+=SCREEN_HEIGHT*.85;
 							rect->y=rect->y+SCREEN_HEIGHT/2;
+							
 							*test=1;
 						}
 						if (keys[SDLK_DOWN] && bg->R.y == 0){
 							bg->R.y=-SCREEN_HEIGHT*.85;
 							b1->y-=SCREEN_HEIGHT*.85;
 							b2->y-=SCREEN_HEIGHT*.85;
-							//dest->y-=SCREEN_HEIGHT*.85;
+							dest->y-=SCREEN_HEIGHT*.85;
 							rect->y=rect->y-SCREEN_HEIGHT/2;
 						}
 					}
@@ -190,6 +191,7 @@ void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* 
 						b1->y+=SCREEN_HEIGHT*.85;
 						b2->y+=SCREEN_HEIGHT*.85;
 						dest->y+=SCREEN_HEIGHT*.85;
+						dest2->y+=SCREEN_HEIGHT*.85;
 						printf("hello");
 						rect->y=rect->y+SCREEN_HEIGHT/2;
 					}
@@ -198,6 +200,7 @@ void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* 
 								b1->y-=SCREEN_HEIGHT*.85;
 								b2->y-=SCREEN_HEIGHT*.85;
 								dest->y-=SCREEN_HEIGHT*.85;
+								dest2->y-=SCREEN_HEIGHT*.85;
 								rect->y=rect->y-SCREEN_HEIGHT/2;
 					}
 				}
@@ -210,6 +213,7 @@ void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* 
 								scrolling(&(bg->R),0,SCREEN_WIDTH);
 								if (!(*limit)){
 									   scrolling(dest,0,SCREEN_WIDTH);
+									   scrolling(dest2,0,SCREEN_WIDTH);
 									   //dest->x-=SCREEN_WIDTH/40;
 										   *movex-=SCREEN_WIDTH/80;
 									   b1->x-=SCREEN_WIDTH/80;
@@ -232,6 +236,7 @@ void run_game(int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* 
 								scrolling(&(bg->R),1,SCREEN_WIDTH);
 								if (!(*limit)){
 									   scrolling(dest,1,SCREEN_WIDTH);
+									   scrolling(dest2,1,SCREEN_WIDTH);
 									   //dest->x+=SCREEN_WIDTH/40;
 										*movex+=SCREEN_WIDTH/80;
 									   b1->x+=SCREEN_WIDTH/80;

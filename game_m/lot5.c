@@ -52,10 +52,10 @@ aff_e(framesattend,e1_stage,screen,e1->eni);}
  if(*next==1){
  ref=(*e1_stage)+1;
  aff_e(framesattend,&ref,screen,e1->eni);
- *current_framereponse=*frame;
   if(*current_framereponse>9){
  *frame=1;
  }
+ *current_framereponse=*frame;
  r->r.x=SCREEN_WIDT/4+200;
  r->r.y=SCREEN_HEIG/2+110;
  aff_e(framesnumber1,current_framereponse,screen,r->r);

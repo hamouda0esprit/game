@@ -18,16 +18,16 @@ void init_bullett(bullett *b){
         //b->image = IMG_Load("bullet.png");
         Resizecaractere(&b->image, "bullet.png", 50,  50);
 }
-void affbullet(SDL_Surface *screen,bullet *b){
+void affbullet(SDL_Surface *screen,bullet *b,int speed){
         
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x+=20;
+        b->pos.x+=speed;
 
 }
-void affbulletleft(SDL_Surface *screen,bullet *b){
+void affbulletleft(SDL_Surface *screen,bullet *b,int speed){
            
         SDL_BlitSurface(b->image,NULL,screen,&b->pos);
-        b->pos.x-=20;
+        b->pos.x-=speed;
         
 }
 void afficher_image(SDL_Surface *screen, image imge)

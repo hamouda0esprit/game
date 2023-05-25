@@ -12,6 +12,7 @@
 
 // FONCTIONS OF STOP
 //------------------------------------------------
+
 void initialiser_imageBACK(image *imge,char dest[])
 {
 imge->url=dest;
@@ -71,14 +72,24 @@ void update_and_render_animationcaractere(int rep,SDL_Surface *screen, SDL_Surfa
 // FONCTIONS OF right
 //------------------------------------------------
 
-void player4(int *stopr,int *stopl,int* orientation,int *move,int* jump,int* dir,int* current_framess,Uint32* last_frame_time_stop_right,Uint32* last_frame_time_stop_left,Uint32* last_frame_time2,Uint32* last_frame_timess,Uint32* last_frame_timeleft ,Uint32* last_frame_timejump,int* current_framejump,int* current_frame_stop_right,int* current_frame_stop_left,int* current_frame2,int* current_frameleft,Personn *p,int* grav,int* velocity,int* stop,SDL_Surface *screen,SDL_Surface **frame_stop_right,SDL_Surface**frames_stop_left,SDL_Surface**framesright,SDL_Surface**framesleft,SDL_Surface**framesjump,SDL_Surface**framesss, int SCREEN_HEIGHT, int SCREEN_WIDTH){
+void player4(int  *pvieref,SDL_Surface** damage,int *currentframedamage,SDL_Rect r7,int *conteur,int *stopr,int *stopl,int* orientation,int *move,int* jump,int* dir,int* current_framess,Uint32* last_frame_time_stop_right,Uint32* last_frame_time_stop_left,Uint32* last_frame_time2,Uint32* last_frame_timess,Uint32* last_frame_timeleft ,Uint32* last_frame_timejump,int* current_framejump,int* current_frame_stop_right,int* current_frame_stop_left,int* current_frame2,int* current_frameleft,Personn *p,int* grav,int* velocity,int* stop,SDL_Surface *screen,SDL_Surface **frame_stop_right,SDL_Surface**frames_stop_left,SDL_Surface**framesright,SDL_Surface**framesleft,SDL_Surface**framesjump,SDL_Surface**framesss, int SCREEN_HEIGHT, int SCREEN_WIDTH){
 const int NUM_FRAME_stop_right = 13;
 const int NUM_FRAMES_stop_left = 13;
 const int NUM_FRAMESright = 13; 
 const int NUM_FRAMESleft = 13;
 const int NUM_FRAMESss = 6; 
 const int NUM_FRAMESjump = 6;
-
+if(*pvieref>p->viep){
+				aff_e(damage,currentframedamage,screen,r7);
+				(*currentframedamage)++;
+				if(*currentframedamage>12){
+				*currentframedamage=1;
+				}
+				(*conteur)++;}
+				if(*conteur == 12){
+				*pvieref=p->viep;
+				*currentframedamage=1;
+				*conteur=0;}
 
 //-------------CONDITIONS FOR MOUVEMENTS------------------			
 if((*stopr)==1&&(*stopl)==1){
@@ -112,10 +123,10 @@ if((*stopr)==0 && (*dir)==2){
 		    
 			
 	//-----------------------RIGHT AND lEFT------------------
-				if((*dir)==1){
+				if((*dir)==1){}
 					//p->cor.x+=SCREEN_WIDTH/40;
 					//p->cor.x+=20;
-					printf("test");}
+					//printf("test");}
 				else if((*dir)==0){
 					//p->cor.x-=SCREEN_WIDTH/40;
 					//p->cor.x-=20;
