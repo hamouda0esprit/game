@@ -324,6 +324,72 @@ int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,
     
 }
 
+int collisionPP2(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,int B) {
+    //printf("collisionPP\n");
+    points p_points;
+    get_points(p.x + abs(MasqueRect.x), p.y + abs(MasqueRect.y),
+               p.w, p.h, &p_points);
+    SDL_Color color = {R, G, B, 0};
+    //printf("1\n");
+    for (int i = 1; i <= 8; i++) {
+        int x = 0, y = 0;
+        switch (i) {
+            case 1:
+                x = p_points.p1x;
+                y = p_points.p1y;
+                break;
+            case 2:
+                x = p_points.p2x;
+                y = p_points.p2y;
+                break;
+            case 3:
+                x = p_points.p3x;
+                y = p_points.p3y;
+                break;
+            case 4:
+                x = p_points.p4x;
+                y = p_points.p4y;
+                break;
+            case 5:
+                x = p_points.p5x;
+                y = p_points.p5y;
+                break;
+            case 6:
+                x = p_points.p6x;
+                y = p_points.p6y;
+                break;
+            case 7:
+                x = p_points.p7x;
+                y = p_points.p7y;
+                break;
+            case 8:
+                x = p_points.p8x;
+                y = p_points.p8y;
+                break;
+        }
+        //printf("2\n");
+
+        SDL_Color pixel_color = GetPixel(Masque, x, y);
+        //printf("3\n");
+        //printf("passed ?\n");
+        if (pixel_color.r == color.r && pixel_color.g == color.g && pixel_color.b == color.b) {
+            //printf("pass1\n");
+            if(i == 1 || i == 4 || i == 5)
+                return 1;
+            //printf("pass2\n");
+            if(i == 3 || i == 8 || i == 7)
+                return 2;
+            //printf("pass3\n");
+            /*if(i == 5 || i == 6 || i == 7)
+                return 3;
+            //printf("pass4\n");*/
+        }
+        
+    }
+    return 0;
+    
+}
+
 SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height) {
     // Create a new surface with the desired width and height
     SDL_Surface* newSurface = SDL_CreateRGBSurface(surface->flags, width, height, surface->format->BitsPerPixel, surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);

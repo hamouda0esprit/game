@@ -1,4 +1,5 @@
 #include "background.h"
+#define SERIAL_PORT_BUFFER_LENGTH   20
 
 void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 	char ch[20];
@@ -25,11 +26,12 @@ void afficherBack(background bg, SDL_Surface * screen, int level){
 	SDL_BlitSurface(bg.S[level-1] ,0, screen, &bg.R);
 }
 
+
 void scrolling(SDL_Rect *r, int direction, int SCREEN_WIDTH){
 	if (direction==1){
-		r->x+=SCREEN_WIDTH/80;
+		r->x+=SCREEN_WIDTH/120;
 	}else{
-		r->x-=SCREEN_WIDTH/80;
+		r->x-=SCREEN_WIDTH/120;
 	}
 }
 
@@ -97,13 +99,15 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
+void run_game(int right, int left, int up, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
+			
+			int speed = SCREEN_WIDTH/120;
 			//SDL_BlitSurface(bg->S, 0, screen, &(bg->R));
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
-			/*printf("\n enigme2 = %d", *enigme2);
-			printf("\n det_black = %d ", det_black);
+			//printf("\n enigme2 = %d", *enigme2);
+			/*printf("\n det_black = %d ", det_black);
 			printf("\n det_red = %d ", det_red);
 			printf("\n det_green = %d ", det_green);
 			printf("\n det_blue = %d ", det_blue);*/
@@ -165,9 +169,9 @@ void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rec
 			}
 			Uint8* keys = SDL_GetKeyState(NULL);	
 			if(!(*game_ended)){
-				if (*level == 1){
+				if (*level == 1 && *state==1){
 					if (rect->x>1385){
-						if (keys[SDLK_UP] && bg->R.y < 0){
+						if ((keys[SDLK_UP] || up) && bg->R.y < 0){
 							bg->R.y=0;
 							b1->y+=SCREEN_HEIGHT*.85;
 							b2->y+=SCREEN_HEIGHT*.85;
@@ -186,7 +190,7 @@ void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rec
 					}
 				}
 				if(*level == 3){
-					if (det_black!=0 && keys[SDLK_UP] && bg->R.y < 0){
+					if (det_black!=0 && bg->R.y < 0 && (keys[SDLK_UP] || up)){
 						bg->R.y=0;
 						b1->y+=SCREEN_HEIGHT*.85;
 						b2->y+=SCREEN_HEIGHT*.85;
@@ -205,7 +209,7 @@ void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rec
 					}
 				}
 				
-				if (keys[SDLK_RIGHT]){
+				if (keys[SDLK_RIGHT] || right){
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){
 							if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
@@ -215,9 +219,9 @@ void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rec
 									   scrolling(dest,0,SCREEN_WIDTH);
 									   scrolling(dest2,0,SCREEN_WIDTH);
 									   //dest->x-=SCREEN_WIDTH/40;
-										   *movex-=SCREEN_WIDTH/80;
-									   b1->x-=SCREEN_WIDTH/80;
-									   b2->x-=SCREEN_WIDTH/80;
+										   *movex-=speed;
+									   b1->x-=speed;
+									   b2->x-=speed;
 								}
 							}
 						}
@@ -228,19 +232,19 @@ void run_game(SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rec
 					}
 				}
 				
-				if (keys[SDLK_LEFT]){
+				if (keys[SDLK_LEFT] || left){
 					Uint32 current_time = SDL_GetTicks();
 					if (current_time - last_move_time >= move_interval){ 
 						if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
-							if(t==0 || t==2 || t==3 && det_red == 0 || det_red == 2){
+							if((t==0 || t==2 || t==3) && (det_red == 0 || det_red == 2)){
 								scrolling(&(bg->R),1,SCREEN_WIDTH);
 								if (!(*limit)){
 									   scrolling(dest,1,SCREEN_WIDTH);
 									   scrolling(dest2,1,SCREEN_WIDTH);
 									   //dest->x+=SCREEN_WIDTH/40;
-										*movex+=SCREEN_WIDTH/80;
-									   b1->x+=SCREEN_WIDTH/80;
-									   b2->x+=SCREEN_WIDTH/80;
+										*movex+=speed;
+									   b1->x+=speed;
+									   b2->x+=speed;
 								}
 							}
 						}

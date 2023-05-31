@@ -79,7 +79,7 @@ const int NUM_FRAMESright = 13;
 const int NUM_FRAMESleft = 13;
 const int NUM_FRAMESss = 6; 
 const int NUM_FRAMESjump = 6;
-if(*pvieref>p->viep){
+if(*pvieref>p->viep && *pvieref<=3){
 				aff_e(damage,currentframedamage,screen,r7);
 				(*currentframedamage)++;
 				if(*currentframedamage>12){
