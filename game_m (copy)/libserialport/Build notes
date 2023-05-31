@@ -1,0 +1,13 @@
+
+  -----------------------
+    Build notes
+  -----------------------
+
+  Github repository : https://github.com/martinling/libserialport
+  Web site : http://sigrok.org/wiki/Libserialport
+
+  The libserialport is licensed under the GNU LESSER GENERAL PUBLIC LICENSE.
+
+  Built with the MinGW-w64 toolchain (i686-4.9.2-win32-dwarf-rt_v4-rev2)
+
+  Commit : 7c1101d
