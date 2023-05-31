@@ -1,7 +1,19 @@
 #include"IA2.h"
 
 
+SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height) {
+    // Create a new surface with the desired width and height
+    SDL_Surface* newSurface = SDL_CreateRGBSurface(surface->flags, width, height, surface->format->BitsPerPixel, surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
 
+    // Use SDL_gfx library to resize the surface
+    SDL_SoftStretch(surface, NULL, newSurface, NULL);
+
+    // Free the original surface
+    SDL_FreeSurface(surface);
+
+    // Return the resized surface
+    return newSurface;
+}
 
 
 void init_board(tto_board *b,int SCREEN_W, int SCREEN_H){
@@ -44,6 +56,8 @@ void init_board(tto_board *b,int SCREEN_W, int SCREEN_H){
 
 
             b->pieces_matrix[i][j] = IMG_Load("assets/none.png");
+            b->x_matrix[i][j] = IMG_Load("assets/x.png");
+            b->o_matrix[i][j] = IMG_Load("assets/o.png");
             if (b->pieces_matrix[i][j] == NULL)
             {
                 printf("Failed to load PNG image: %s", IMG_GetError());
@@ -51,7 +65,8 @@ void init_board(tto_board *b,int SCREEN_W, int SCREEN_H){
                 SDL_Quit();
             }
             b->pieces_matrix[i][j] = resizeSurface(b->pieces_matrix[i][j], ((SCREEN_H * 0.75)*0.2)*0.7, ((SCREEN_H * 0.75)*0.2)*0.7);
-
+            b->x_matrix[i][j] = resizeSurface(b->x_matrix[i][j], ((SCREEN_H * 0.75)*0.2)*0.7, ((SCREEN_H * 0.75)*0.2)*0.7);
+            b->o_matrix[i][j] = resizeSurface(b->o_matrix[i][j], ((SCREEN_H * 0.75)*0.2)*0.7, ((SCREEN_H * 0.75)*0.2)*0.7);
             b->pieces_position[i][j].x = 0;
             b->pieces_position[i][j].y = 0;
             b->pieces_position[i][j].h = ((SCREEN_H * 0.75)*0.2)*0.7;
@@ -99,7 +114,15 @@ void displayBoard(tto_board *game_board, SDL_Surface *screen) {
         
         for (int j = 0; j < 3; j++) {
             SDL_BlitSurface(game_board->images_matrix[i][j], NULL, screen, &game_board->images_position[i][j]);
-            SDL_BlitSurface(game_board->pieces_matrix[i][j], NULL, screen, &game_board->pieces_position[i][j]);
+            if(game_board->matrix[i][j] == 0){
+                SDL_BlitSurface(game_board->pieces_matrix[i][j], NULL, screen, &game_board->pieces_position[i][j]);
+            }else if(game_board->matrix[i][j] == 1){
+                SDL_BlitSurface(game_board->x_matrix[i][j], NULL, screen, &game_board->pieces_position[i][j]);
+            }else{
+                SDL_BlitSurface(game_board->o_matrix[i][j], NULL, screen, &game_board->pieces_position[i][j]);
+            }
+            
+            
         }
     }
 }
@@ -114,6 +137,8 @@ void freeBoard(tto_board *game_board) {
             
             SDL_FreeSurface(game_board->images_matrix[i][j]);
             SDL_FreeSurface(game_board->pieces_matrix[i][j]);
+            SDL_FreeSurface(game_board->x_matrix[i][j]);
+            SDL_FreeSurface(game_board->o_matrix[i][j]);
         }
     }
 
@@ -134,34 +159,6 @@ void freeBoard(tto_board *game_board) {
 
 
 
-
-
-void update_board(tto_board *b,int SCREEN_W,int SCREEN_H){
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (b->matrix[i][j] == 1) {
-                b->pieces_matrix[i][j] = IMG_Load("assets/x.png");
-            } else if (b->matrix[i][j] == -1)  {
-                b->pieces_matrix[i][j] = IMG_Load("assets/o.png");
-            }else{
-                b->pieces_matrix[i][j] = IMG_Load("assets/none.png");
-            }
-            b->pieces_matrix[i][j] = resizeSurface(b->pieces_matrix[i][j], ((SCREEN_H * 0.75)*0.2)*0.7, ((SCREEN_H * 0.75)*0.2)*0.7);
-        }
-    }
-
-    
-}
-void change_image_at_position(tto_board *my_board, int position, SDL_Surface *new_image,int SCREEN_H ) {
-    // Calculate the row and column of the cell based on the position
-    int row = (position - 1) / 3;
-    int col = (position - 1) % 3;
-
-    // Change the image surface at the specified position
-    my_board->pieces_matrix[row][col] = new_image;
-
-    my_board->pieces_matrix[row][col] = resizeSurface(my_board->pieces_matrix[row][col], ((SCREEN_H * 0.75)*0.2)*0.7, ((SCREEN_H * 0.75)*0.2)*0.7);
-}
 
 
 // Function to check if a given player has won
@@ -277,4 +274,136 @@ int find_best_move(int board[3][3]) {
         }
     }
     return best_move;
+}
+
+
+
+
+
+
+
+
+
+int AI_play(int board[3][3],int role){
+    int move;
+    if(check_draw(board)!= 1 && check_win(board, -role) != 1){
+        printf("user %d\n",check_win(board, -role));
+        move = find_best_move(board);
+        int row = (move-1) / 3;
+        int col = (move-1) % 3;
+        board[row][col] = -1;
+    }
+
+    return check_win(board, role);
+}
+
+
+bool user_play(int board[3][3],SDL_Event event,int startposx,int startposy,int SCREEN_W, int SCREEN_H){
+    bool changed = false;
+    while (SDL_PollEvent(&event)){
+        switch(event.type){
+            case SDL_MOUSEBUTTONDOWN:
+                if(event.button.button == SDL_BUTTON_LEFT){
+                    if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) )
+                        {
+                            if(board[0][0] == 0){
+                                board[0][0] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2))
+                        {
+                            if(board[0][1] == 0){
+                                board[0][1] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) )
+                        {
+                            if(board[0][2] == 0){
+                                board[0][2] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)  +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2 +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) )
+                        {
+                            if(board[1][0] == 0){
+                                board[1][0] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)  +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2 +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) )
+                        {
+                            if(board[1][1] == 0){
+                                board[1][1] = 1;
+                                changed = true;
+                            }
+                        }                   
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)  +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2 +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)))
+                        {
+                            if(board[1][2] == 0){
+                                board[1][2] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)  +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)+(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2 +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085) +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) )
+                        {
+                            if(board[2][0] == 0){
+                                board[2][0] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)  +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)+(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2 +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)+(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)))
+                        {
+                            if(board[2][1] == 0){
+                                board[2][1] = 1;
+                                changed = true;
+                            }
+                        }
+                    else if(event.motion.x>= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) && event.motion.x<= (int)(startposx +( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1) + ((SCREEN_H * 0.75)*0.2) + ( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2) && event.motion.y>= (int)(startposy +( (SCREEN_H * 0.75) * 0.1)  +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)+(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)) && event.motion.y<=(int)(startposy +( (SCREEN_H * 0.75) * 0.1)) + ((SCREEN_H * 0.75)*0.2 +(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)+(SCREEN_H * 0.75)*0.2 + ( SCREEN_H * 0.085)))
+                        {
+                           if(board[2][2] == 0){
+                                board[2][2] = 1;
+                                changed = true;
+                            }
+                        }
+                }
+                break;
+
+
+        }
+    }
+    return changed;
+    
+}
+
+
+int run_tictactoe(int open_riddle,tto_board *b,SDL_Event event,int startposx,int startposy,int SCREEN_W, int SCREEN_H,int * role, SDL_Surface *screen){
+    if(open_riddle == 1){
+        displayBoard(b,screen);
+        if (check_draw(b->matrix) != 1 && check_win(b->matrix, 1) != 1 && check_win(b->matrix, -1) != 1){
+            if (*role == -1){
+                AI_play(b->matrix, *role);
+                if(check_win(b->matrix, -1) == 1)
+                    return -1;
+                *role = 1;
+            }else{
+                int play;
+                play = user_play(b->matrix, event, startposx, startposy, SCREEN_W, SCREEN_H);
+                SDL_PollEvent(&event);
+                if (play == true){
+                    *role = -1;
+                }
+                if(check_win(b->matrix, 1) == 1)
+                        return 1;
+                    else if(check_draw(b->matrix) == 1)
+                        return 0;
+                    else
+                        return 3;
+                
+            }
+        }
+    }else{
+        return 3;
+    }
 }

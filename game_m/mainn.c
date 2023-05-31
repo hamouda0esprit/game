@@ -28,10 +28,7 @@ void main_2()
 int level=1,nour=0,nour1=0,nour2=0;;
 Mix_Music *music,*music1,*music2;
 Mix_Chunk *mus;
-int xp_map;
-int xe_map;
-int yp_map;
-int ye_map;
+
 int SCREEN_W = 1710;
 int SCREEN_WIDTH = 1710;
 int SCREEN_H = (float)(SCREEN_W / 1.7777777777777777);
@@ -43,6 +40,11 @@ int lvl_depl3 = 0;
 
 int map_W = 6952;
 int map_H = 1608;
+int xp_map;
+int xe_map;
+int yp_map;
+int ye_map;
+int changed3 = true;
 
 //Background task
 
@@ -80,7 +82,11 @@ int map_H = 1608;
 	
 	int Button_Clicked=0;
 minimap  m;
-initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png",map_W,map_H);
+initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png",map_W,map_H,7,1,2,1);
+SDL_Rect *RP = malloc(m.nbBonhomm * sizeof(SDL_Rect));
+SDL_Rect *RE = malloc(m.nbEnemi * sizeof(SDL_Rect));
+SDL_Rect *REG = malloc(m.nbEnemi * sizeof(SDL_Rect));
+SDL_Rect *no = malloc(m.nbEnigme * sizeof(SDL_Rect));
 char temps[20];
 //-------------------------manette-------------------
 int right=0,left=0,up=0;
@@ -203,10 +209,10 @@ int boucle=1;
 SDL_Event event;
 SDL_Surface *screen;
 image imge;
-char serialPortBuffer[SERIAL_PORT_BUFFER_LENGTH] = {0};
-    int serialPortReadDataLength = 0;   
-  if(!Arduino_connect(SERIAL_PORT, 9600))
-        exit(EXIT_FAILURE); 
+// char serialPortBuffer[SERIAL_PORT_BUFFER_LENGTH] = {0};
+//     int serialPortReadDataLength = 0;   
+//   if(!Arduino_connect(SERIAL_PORT, 9600))
+//         exit(EXIT_FAILURE); 
 if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER)==-1)
 {
 printf("Could not initialize SDL: %s.\n", SDL_GetError());
@@ -436,24 +442,59 @@ affichertemps(screen,temps,SCREEN_W,SCREEN_H);
 //printf("\nbg pos = %d",bg.R.x);
 //printf("\ncol = %d",t);
 
-xp_map=p.cor.x-bg.R.x;
-yp_map=p.cor.y-bg.R.y;
-SDL_Rect RP;
-RP = p.cor;
-RP.x = xp_map;
-RP.y = yp_map;
+if(level == 1){
+	xp_map=p.cor.x-bg.R.x;
+	yp_map=p.cor.y-bg.R.y;
+	RP[0] = p.cor;
+	RP[0].x = xp_map * 1.1;
+	RP[0].y = yp_map * 0.9;
 
-xe_map=e.dest.x-bg.R.x;
-ye_map=e.dest.y-bg.R.y;
-SDL_Rect RE;
-RE = e.dest;
-RE.x = xe_map;
-RE.y = ye_map;
+	//printf("enemie %d %d\n",e.dest.x,e.dest.y);
+	xe_map=e.dest.x-bg.R.x;
+	ye_map=e.dest.y-bg.R.y;
+	RE[0] = e.dest;
+	RE[0].x = xe_map * 0.64;
+	RE[0].y = ye_map * 0.6;
 
-//printf("\n\n\nplayer %d %d\n",p.cor.x,p.cor.y);
-//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
+	xe_map=e2.dest.x-bg.R.x;
+	ye_map=e2.dest.y-bg.R.y;
+	RE[1] = e2.dest;
+	RE[1].x = xe_map * 0.7;
+	RE[1].y = ye_map * 0.6;
 
-miniMap(pressing_m,&m,RP,eg,RE,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png");
+	REG[0] = eg;
+	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
+	//printf("enemie %d %d\n",RE[0].x,RE[0].y);
+
+	miniMap(pressing_m,&m,RP,REG,RE,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png",map_W,map_H);
+}
+
+if(level == 3){
+	if(changed3 == true){
+		map_W = 6952;
+		map_H = 1608;
+		initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg2.png",map_W,map_H,7,1,0,0);
+		changed3 = false;
+	}
+
+
+
+	xp_map=p.cor.x-bg.R.x;
+	yp_map=p.cor.y-bg.R.y;
+	RP[0] = p.cor;
+	RP[0].x = xp_map * 1.1;
+	RP[0].y = yp_map * 0.9;
+
+	no[0].x = -404;
+	no[0].y = -404;
+	no[0].w = -404;
+	no[0].h = -404;
+
+	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
+	//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
+
+	miniMap(pressing_m,&m,RP,no,no,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png",map_W,map_H);
+}
 
 if(t==3 && verif==1){
 grav=p.cor.y;
@@ -605,89 +646,89 @@ player4(&pvieref,damage,&currentframedamage,r7.r,&conteur,&stopr,&stopl,&orienta
    }
    currentframehint=nexthint;
  }
-  serialPortReadDataLength = Arduino_read(serialPortBuffer, SERIAL_PORT_BUFFER_LENGTH);
-        serialPortBuffer[serialPortReadDataLength] = 0;
+//   serialPortReadDataLength = Arduino_read(serialPortBuffer, SERIAL_PORT_BUFFER_LENGTH);
+//         serialPortBuffer[serialPortReadDataLength] = 0;
  //--------------------------------MANETTE-------------------------------
- printf("right= %d,left=%d,up=%d \n",right,left,up);
-    if(serialPortReadDataLength > 0)
-        {    
-            if(strStartsWith("R", serialPortBuffer))
-            {
-                 right=1;
-                 left=0;
-                 up=0;
-            }
-             if(strStartsWith("L", serialPortBuffer))
-            {
-                 left=1;
-                  right=0;
-                   up=0;
-            }
-            if(strStartsWith("U", serialPortBuffer))
-            {
-                 up=1;
-                   right=0;
-                 left=0;
-            }
-            if(strStartsWith("K", serialPortBuffer))
-            {
-                 up=1;
-                   right=1;
-                 left=0;
-            }
-            if(strStartsWith("O", serialPortBuffer))
-            {
-                 up=1;
-                   right=0;
-                 left=1;
-            }
-            if(strStartsWith("h", serialPortBuffer))
-            {
+//  printf("right= %d,left=%d,up=%d \n",right,left,up);
+//     if(serialPortReadDataLength > 0)
+//         {    
+//             if(strStartsWith("R", serialPortBuffer))
+//             {
+//                  right=1;
+//                  left=0;
+//                  up=0;
+//             }
+//              if(strStartsWith("L", serialPortBuffer))
+//             {
+//                  left=1;
+//                   right=0;
+//                    up=0;
+//             }
+//             if(strStartsWith("U", serialPortBuffer))
+//             {
+//                  up=1;
+//                    right=0;
+//                  left=0;
+//             }
+//             if(strStartsWith("K", serialPortBuffer))
+//             {
+//                  up=1;
+//                    right=1;
+//                  left=0;
+//             }
+//             if(strStartsWith("O", serialPortBuffer))
+//             {
+//                  up=1;
+//                    right=0;
+//                  left=1;
+//             }
+//             if(strStartsWith("h", serialPortBuffer))
+//             {
                  
-                 shoott=1;
-            }
-            if(strStartsWith("S", serialPortBuffer))
-            {
-                 right=0;
-                 left=0;
-                 up=0;
-            }
-             if (right ) {    
-             	dir=1; 
-             	stopr=0;
-               orientation=0;
-            }else{
-            	dir=2;
-					stopr=1;
-            }
-            if (left ) {
-            	dir=0; 
-               stopl=0;
-               orientation=1;
-            }else{
-            	dir=2;
-            	stopl=1;
-            }
-            if (up) {
-            	jump=0;
-               if(p.cor.y==grav)
-            	   velocity=-20;
-            }else{
-            	jump=1;
-            }
-            if(shoott && verifshoot==1){
-            b1.pos.x=p.cor.x+100;
-                        b1.pos.y=p.cor.y+100;
-                        bigx= b1.pos.x;
-                        hit=1; 
-                        orr_b = orientation;
-                        verifshoot=0;
-            }
-            else{
-            shoott=0;
-            }
+//                  shoott=1;
+//             }
+//             if(strStartsWith("S", serialPortBuffer))
+//             {
+//                  right=0;
+//                  left=0;
+//                  up=0;
+//             }
+//              if (right ) {    
+//              	dir=1; 
+//              	stopr=0;
+//                orientation=0;
+//             }else{
+//             	dir=2;
+// 					stopr=1;
+//             }
+//             if (left ) {
+//             	dir=0; 
+//                stopl=0;
+//                orientation=1;
+//             }else{
+//             	dir=2;
+//             	stopl=1;
+//             }
+//             if (up) {
+//             	jump=0;
+//                if(p.cor.y==grav)
+//             	   velocity=-20;
+//             }else{
+//             	jump=1;
+//             }
+//             if(shoott && verifshoot==1){
+//             b1.pos.x=p.cor.x+100;
+//                         b1.pos.y=p.cor.y+100;
+//                         bigx= b1.pos.x;
+//                         hit=1; 
+//                         orr_b = orientation;
+//                         verifshoot=0;
+//             }
+//             else{
+//             shoott=0;
+//             }
                              
-           }
+//            }
 //printf("\nxp_map : %d",xp_map);
 SDL_Flip(screen);
 

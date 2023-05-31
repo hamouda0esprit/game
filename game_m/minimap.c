@@ -67,36 +67,27 @@ float distance(int x1, int y1, int x2, int y2) {
     int dy = y2 - y1;
     return sqrt(dx * dx + dy * dy);
 }
-void maj_map(minimap *m, SDL_Surface *screen,int SCREEN_W,int SCREEN_H,char minimapNormal[], char minimapEnemie[] , char minimapEnigme[] ){
-    if (distance(m->positionBonhomme.x, m->positionBonhomme.y, m->positionEnemi.x, m->positionEnemi.y) < SCREEN_W/25) {
-        m->image_miniature = IMG_Load(minimapEnemie);
-    }
-    
-    else if (distance(m->positionBonhomme.x, m->positionBonhomme.y, m->positionEnigme.x, m->positionEnigme.y) < SCREEN_W/25) {
-        m->image_miniature = IMG_Load(minimapEnigme);
-    }
-    else{
-        m->image_miniature = IMG_Load(minimapNormal);
-    }
-
-    m->image_miniature = resizeSurface(m->image_miniature,SCREEN_W/5,SCREEN_H/5);
-}
-void afficherminimap(minimap m, SDL_Surface *screen,int SCREEN_W,int SCREEN_H) {
-    
+void afficherminimap(minimap m, SDL_Surface *screen, int SCREEN_W, int SCREEN_H, int map_W, int map_H) {
+    printf("printing\n");
     SDL_BlitSurface(m.image_miniature, NULL, screen, &m.positionMinimap);
 
-    
-    if (distance(m.positionBonhomme.x, m.positionBonhomme.y, m.positionEnemi.x, m.positionEnemi.y) < SCREEN_W/25) {
-        SDL_BlitSurface(m.enemi, NULL, screen, &m.positionEnemi);
+    for (int i = 0; i < m.nbEnemi; i++) {
+        printf("1\n");
+        SDL_BlitSurface(m.enemi, NULL, screen, &m.positionEnemi[i]);
     }
 
-    
-    if (distance(m.positionBonhomme.x, m.positionBonhomme.y, m.positionEnigme.x, m.positionEnigme.y) < SCREEN_W/25) {
-        SDL_BlitSurface(m.enigme, NULL, screen, &m.positionEnigme);
+    for (int i = 0; i < m.nbEnigme; i++) {
+        printf("2\n");
+        SDL_BlitSurface(m.enigme, NULL, screen, &m.positionEnigme[i]);
     }
 
-    SDL_BlitSurface(m.bonhomm, NULL, screen, &m.positionBonhomme);
+    for (int i = 0; i < m.nbBonhomm; i++) {
+        printf("3\n");
+        SDL_BlitSurface(m.bonhomm, NULL, screen, &m.positionBonhomme[i]);
+    }
 }
+
+
 
 
 
@@ -192,68 +183,99 @@ void affichertemps(SDL_Surface* screen, char tmp[], int SCREEN_W, int SCREEN_H) 
 
 
 
-void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ,int map_W,int map_H) {
+void initmap(minimap *m, int SCREEN_W, int SCREEN_H, char minimapNormal[], int map_W, int map_H, int redim, int nbPlayer, int nbEnemie, int nbEnigme) {
+    // Set the position of the minimap
+    m->positionMinimap.x = SCREEN_H / 64;
+    m->positionMinimap.y = SCREEN_H / 64;
+    m->positionMinimap.w = ((SCREEN_H / redim) * map_W / map_H);
+    m->positionMinimap.h = SCREEN_H / redim;
     
-    m->positionMinimap.x = SCREEN_W/64; 
-    m->positionMinimap.y = SCREEN_W/64; 
-    
+
+    m->nbBonhomm = nbPlayer;
+    m->nbEnemi = nbEnemie;
+    m->nbEnigme = nbEnigme;
+
+
+    // Load and resize the image for the minimap
     m->image_miniature = IMG_Load(minimapNormal);
-    m->image_miniature = resizeSurface(m->image_miniature,((map_W*SCREEN_H)/map_H)/10,SCREEN_H/10);
-    //printf("w %d  h %d",SCREEN_W/5,SCREEN_H/5);
+    m->image_miniature = resizeSurface(m->image_miniature, m->positionMinimap.w, m->positionMinimap.h);
     if (m->image_miniature == NULL) {
         printf("Erreur lors du chargement de l'image miniature de la minimap: %s\n", SDL_GetError());
         exit(1);
     }
-    
-    
+
+    // Load and resize the image for the character
     m->bonhomm = IMG_Load("./assets/steve.jpg");
-    m->bonhomm = resizeSurface(m->bonhomm,SCREEN_H/34,SCREEN_H/34);
+    m->bonhomm = resizeSurface(m->bonhomm, SCREEN_H / 40, SCREEN_H / 40);
     if (m->bonhomm == NULL) {
         printf("Erreur lors du chargement de l'image du bonhomme miniature: %s\n", SDL_GetError());
         exit(1);
     }
-    
-    m->positionBonhomme.x = 0; 
-    m->positionBonhomme.y = 0; 
-    m->positionBonhomme.w = SCREEN_H/34;
-    m->positionBonhomme.h = SCREEN_H/34;
 
-    
+    // Set the positions and sizes of the characters
+    m->positionBonhomme = malloc(sizeof(SDL_Rect) * m->nbBonhomm);
+    for (int i = 0; i < m->nbBonhomm; i++) {
+        m->positionBonhomme[i].x = 0;
+        m->positionBonhomme[i].y = 0;
+        m->positionBonhomme[i].w = SCREEN_H / 40;
+        m->positionBonhomme[i].h = SCREEN_H / 40;
+    }
+
+    // Load and resize the image for the puzzle/enigma
     m->enigme = IMG_Load("./assets/enigme.png");
-    m->enigme = resizeSurface(m->enigme,SCREEN_H/34,SCREEN_H/34);
+    m->enigme = resizeSurface(m->enigme, SCREEN_H / 34, SCREEN_H / 34);
     if (m->enigme == NULL) {
         printf("Erreur lors du chargement de l'enigme miniature: %s\n", SDL_GetError());
         exit(1);
     }
-    
-    m->positionEnigme.x = 0; 
-    m->positionEnigme.y = 0; 
-    m->positionEnigme.w = 40;
-    m->positionEnigme.h = 40;
 
-    
+    // Set the positions and sizes of the puzzles/enigmas
+    m->positionEnigme = malloc(sizeof(SDL_Rect) * m->nbEnigme);
+    for (int i = 0; i < m->nbEnigme; i++) {
+        m->positionEnigme[i].x = 0;
+        m->positionEnigme[i].y = 0;
+        m->positionEnigme[i].w = SCREEN_H / 34;
+        m->positionEnigme[i].h = SCREEN_H / 34;
+    }
+
+    // Load and resize the image for the enemy
     m->enemi = IMG_Load("./assets/enemi.png");
-    m->enemi = resizeSurface(m->enemi,SCREEN_H/34,SCREEN_H/34);
+    m->enemi = resizeSurface(m->enemi, SCREEN_H / 34, SCREEN_H / 34);
     if (m->enemi == NULL) {
         printf("Erreur lors du chargement de l'enemi miniature: %s\n", SDL_GetError());
         exit(1);
     }
+
+    // Set the positions and sizes of the enemies
+    m->positionEnemi = malloc(sizeof(SDL_Rect) * m->nbEnemi);
+    for (int i = 0; i < m->nbEnemi; i++) {
+        m->positionEnemi[i].x = 0;
+        m->positionEnemi[i].y = 0;
+        m->positionEnemi[i].w = SCREEN_H / 34;
+        m->positionEnemi[i].h = SCREEN_H / 34;
+    }
+}
+
+
+void annimerMinimap(SDL_Rect *posJoueur, SDL_Rect *posEnemie, SDL_Rect *posEnigme, minimap *m, int redimensionnement, int SCREEN_W, int SCREEN_H, int map_W, int map_H) {
+    for (int i = 0; i < m->nbBonhomm; i++) {
+        m->positionBonhomme[i].x = ((posJoueur[i].x * m->positionMinimap.w) / map_W) + m->positionMinimap.x;
+        m->positionBonhomme[i].y = ((posJoueur[i].y * m->positionMinimap.h) / map_H) + m->positionMinimap.y;
+    }
     
-    m->positionEnemi.x = 0;
-    m->positionEnemi.y = 0; 
-    m->positionEnemi.w = 40;
-    m->positionEnemi.h = 40;
-
-
+    printf("res = %d\n", m->positionMinimap.w);
+    
+    for (int i = 0; i < m->nbEnemi; i++) {
+        m->positionEnemi[i].x = (((posEnemie[i].x)) / redimensionnement + m->positionMinimap.x) - (m->positionEnemi[i].w / 2) + m->positionBonhomme[i].w / 2;
+        m->positionEnemi[i].y = (((posEnemie[i].y)) / redimensionnement + m->positionMinimap.y) - (m->positionEnemi[i].h / 2) - m->positionBonhomme[i].w / 2;
+    }
+    
+    for (int i = 0; i < m->nbEnigme; i++) {
+        m->positionEnigme[i].x = (((posEnigme[i].x)) / redimensionnement + m->positionMinimap.x) - (m->positionEnigme[i].w / 2) + m->positionBonhomme[i].w / 2;
+        m->positionEnigme[i].y = (((posEnigme[i].y)) / redimensionnement + m->positionMinimap.y) - (m->positionEnigme[i].h / 2) - m->positionBonhomme[i].w / 2;
+    }
 }
-void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, minimap *m, int redimensionnement,int SCREEN_W,int SCREEN_H){
-    m->positionBonhomme.x = (((posJoueur.x)) / redimensionnement + m->positionMinimap.x)- (m->positionBonhomme.w /2) + m->positionBonhomme.w / 2;
-    m->positionBonhomme.y = (((posJoueur.y)) / redimensionnement + m->positionMinimap.y)- (m->positionBonhomme.h /2) - m->positionBonhomme.w / 2;
-    m->positionEnemi.x = (((posEnemie.x)) / redimensionnement + m->positionMinimap.x)-(m->positionEnemi.w /2) + m->positionBonhomme.w / 2;
-    m->positionEnemi.y = (((posEnemie.y)) / redimensionnement + m->positionMinimap.y)-(m->positionEnemi.h /2) - m->positionBonhomme.w / 2;
-    m->positionEnigme.x = (((posEnigme.x)) / redimensionnement + m->positionMinimap.x)-(m->positionEnigme.w /2) + m->positionBonhomme.w / 2;
-    m->positionEnigme.y = (((posEnigme.y)) / redimensionnement + m->positionMinimap.y)-(m->positionEnigme.h /2) - m->positionBonhomme.w / 2;
-}
+
 
 
 
@@ -404,77 +426,12 @@ SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height) {
     return newSurface;
 }
 
-void fullmap(minimap * m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ){
-    m->image_miniature = IMG_Load(minimapNormal);
-    m->image_miniature = resizeSurface(m->image_miniature,SCREEN_W/2,SCREEN_H/2);
-    m->positionMinimap.x = SCREEN_W /4;
-    m->positionMinimap.y = SCREEN_H /4; 
-}
-void smallmap(minimap * m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ){
-    m->image_miniature = IMG_Load(minimapNormal);
-    m->image_miniature = resizeSurface(m->image_miniature,SCREEN_W/5,SCREEN_H/5);
-    m->positionMinimap.x = SCREEN_W/64;
-    m->positionMinimap.y = SCREEN_W/64; 
-}
 
-void maj_fullmap(minimap *m, int SCREEN_W,int SCREEN_H,char minimapNormal[], char minimapEnemie[] , char minimapEnigme[] ){
-    if (distance(m->positionBonhomme.x, m->positionBonhomme.y, m->positionEnemi.x, m->positionEnemi.y) < SCREEN_W/10) {
-        m->image_miniature = IMG_Load(minimapEnemie);
-    }
 
-   
-    else if (distance(m->positionBonhomme.x, m->positionBonhomme.y, m->positionEnigme.x, m->positionEnigme.y) < SCREEN_W/10) {
-        m->image_miniature = IMG_Load(minimapEnigme);
-    }
-    else{
-        m->image_miniature = IMG_Load(minimapNormal);
-    }
 
-    m->image_miniature = resizeSurface(m->image_miniature,SCREEN_W/2,SCREEN_H/2);
-}
 
-void afficherFULLminimap(minimap m, SDL_Surface *screen,int SCREEN_W,int SCREEN_H) {
-    
-    SDL_BlitSurface(m.image_miniature, NULL, screen, &m.positionMinimap);
-
-   
-    if (distance(m.positionBonhomme.x, m.positionBonhomme.y, m.positionEnemi.x, m.positionEnemi.y) < SCREEN_W/10) {
-        SDL_BlitSurface(m.enemi, NULL, screen, &m.positionEnemi);
-    }
-
-    
-    if (distance(m.positionBonhomme.x, m.positionBonhomme.y, m.positionEnigme.x, m.positionEnigme.y) < SCREEN_W/10) {
-        SDL_BlitSurface(m.enigme, NULL, screen, &m.positionEnigme);
-    }
-
-    
-    SDL_BlitSurface(m.bonhomm, NULL, screen, &m.positionBonhomme);
-}
-
-void miniMap(bool pressing_m,minimap *m,SDL_Rect pjr,SDL_Rect peg,SDL_Rect pen,SDL_Surface *screen,int SCREEN_W,int SCREEN_H,char minimapNormal[] , char minimapEnemie[] , char minimapEnigme[]){
-    //printf("1\n");
-    if(pressing_m == false){
-            
-           // smallmap(m,SCREEN_W,SCREEN_H,minimapNormal);
-            
-            annimerMinimap(pjr,pen,peg, m, 15,SCREEN_W,SCREEN_H);
-            
-            
-            //maj_map(m,screen,SCREEN_W,SCREEN_H,minimapNormal,minimapEnemie,minimapEnigme);
-            
-            afficherminimap(*m, screen,SCREEN_W,SCREEN_H);
-            
-            
-        }//else{
-            
-           // fullmap(m,SCREEN_W,SCREEN_H,minimapNormal);
-            
-            //annimerMinimap(pjr,pen,peg, m, 2,SCREEN_W,SCREEN_H);
-            
-            
-            //maj_fullmap(m,SCREEN_W,SCREEN_H,minimapNormal,minimapEnemie,minimapEnigme);
-            
-           // afficherFULLminimap(*m, screen,SCREEN_W,SCREEN_H);
-            
-        //}
+void miniMap(bool pressing_m, minimap *m, SDL_Rect *pjr, SDL_Rect *peg, SDL_Rect *pen, SDL_Surface *screen, int SCREEN_W, int SCREEN_H, char minimapNormal[], char minimapEnemie[], char minimapEnigme[], int map_W, int map_H) {
+    printf("inside minimap fnc\n");
+    annimerMinimap(pjr, pen, peg, m, 7, SCREEN_W, SCREEN_H, map_W, map_H);
+    afficherminimap(*m, screen, SCREEN_W, SCREEN_H, map_W, map_H);
 }
