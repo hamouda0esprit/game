@@ -1,19 +1,7 @@
 #include"IA2.h"
+#include"minimap.h"
 
 
-SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height) {
-    // Create a new surface with the desired width and height
-    SDL_Surface* newSurface = SDL_CreateRGBSurface(surface->flags, width, height, surface->format->BitsPerPixel, surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
-
-    // Use SDL_gfx library to resize the surface
-    SDL_SoftStretch(surface, NULL, newSurface, NULL);
-
-    // Free the original surface
-    SDL_FreeSurface(surface);
-
-    // Return the resized surface
-    return newSurface;
-}
 
 
 void init_board(tto_board *b,int SCREEN_W, int SCREEN_H){

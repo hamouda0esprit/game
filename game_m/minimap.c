@@ -68,21 +68,17 @@ float distance(int x1, int y1, int x2, int y2) {
     return sqrt(dx * dx + dy * dy);
 }
 void afficherminimap(minimap m, SDL_Surface *screen, int SCREEN_W, int SCREEN_H, int map_W, int map_H) {
-    printf("printing\n");
     SDL_BlitSurface(m.image_miniature, NULL, screen, &m.positionMinimap);
 
     for (int i = 0; i < m.nbEnemi; i++) {
-        printf("1\n");
         SDL_BlitSurface(m.enemi, NULL, screen, &m.positionEnemi[i]);
     }
 
     for (int i = 0; i < m.nbEnigme; i++) {
-        printf("2\n");
         SDL_BlitSurface(m.enigme, NULL, screen, &m.positionEnigme[i]);
     }
 
     for (int i = 0; i < m.nbBonhomm; i++) {
-        printf("3\n");
         SDL_BlitSurface(m.bonhomm, NULL, screen, &m.positionBonhomme[i]);
     }
 }
@@ -263,7 +259,6 @@ void annimerMinimap(SDL_Rect *posJoueur, SDL_Rect *posEnemie, SDL_Rect *posEnigm
         m->positionBonhomme[i].y = ((posJoueur[i].y * m->positionMinimap.h) / map_H) + m->positionMinimap.y;
     }
     
-    printf("res = %d\n", m->positionMinimap.w);
     
     for (int i = 0; i < m->nbEnemi; i++) {
         m->positionEnemi[i].x = (((posEnemie[i].x)) / redimensionnement + m->positionMinimap.x) - (m->positionEnemi[i].w / 2) + m->positionBonhomme[i].w / 2;
@@ -431,7 +426,6 @@ SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height) {
 
 
 void miniMap(bool pressing_m, minimap *m, SDL_Rect *pjr, SDL_Rect *peg, SDL_Rect *pen, SDL_Surface *screen, int SCREEN_W, int SCREEN_H, char minimapNormal[], char minimapEnemie[], char minimapEnigme[], int map_W, int map_H) {
-    printf("inside minimap fnc\n");
     annimerMinimap(pjr, pen, peg, m, 7, SCREEN_W, SCREEN_H, map_W, map_H);
     afficherminimap(*m, screen, SCREEN_W, SCREEN_H, map_W, map_H);
 }

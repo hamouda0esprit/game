@@ -17,6 +17,7 @@
 #include "Link.h"
 #include "lot5.h"
 #include "minimap.h"
+#include "IA2.h"
 #define SERIAL_PORT "/dev/ttyACM0"
 #define SERIAL_PORT_BUFFER_LENGTH   20
 
@@ -45,6 +46,12 @@ int xe_map;
 int yp_map;
 int ye_map;
 int changed3 = true;
+bool modifmape2 = false;
+
+int startposx = (int)((SCREEN_W - (SCREEN_H * 0.75)) / 2);
+int startposy = (int)((SCREEN_H - (SCREEN_H * 0.75)) / 2);
+int role = 1;
+int play_tictactoe;
 
 //Background task
 
@@ -83,6 +90,8 @@ int changed3 = true;
 	int Button_Clicked=0;
 minimap  m;
 initmap(&m,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png",map_W,map_H,7,1,2,1);
+tto_board b;
+init_board(&b,SCREEN_W,SCREEN_H); 
 SDL_Rect *RP = malloc(m.nbBonhomm * sizeof(SDL_Rect));
 SDL_Rect *RE = malloc(m.nbEnemi * sizeof(SDL_Rect));
 SDL_Rect *REG = malloc(m.nbEnemi * sizeof(SDL_Rect));
@@ -250,8 +259,9 @@ int gamestate=1;
 int currentframeenigme=1, currentframelive=4, currentframeliveenemy=4,currentframeliveenemy2=4,currentframedamage=1;
 int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,current_framereponse4=0;
 int next=0;
-int frame;
+int frame,veriftic=0;
 int ref;
+
 enigmme e1;
 int enigme1 = 0;
 int enigme2 = 0;
@@ -286,12 +296,18 @@ hints.r.y=60;
 helps.r.y=20;
 int verifhint=0;
 int nexthint=1;
-int staterobots=0;
+int keep=3,keepframe=4,done=1;
+int staterobots=0,staterobots1=0,staterobots2=0;
 while(boucle)
 {
-
-if(e2.vie==0 && e.vie==0){
-staterobots=1;
+if(e.vie==0){
+staterobots1=1;
+}
+if(e2.vie==0){
+staterobots2=1;
+}
+if(staterobots1 && staterobots2){
+staterobots=1;;
 }
  rectvieenemy2.r.x=e2.dest.x-20;
  rectvieenemy2.r.y=e2.dest.y-50;
@@ -337,6 +353,25 @@ while(SDL_PollEvent(&event))
                               } 
                      if (event.key.keysym.sym == SDLK_UP&& bg.R.y < 0 && p.cor.x>1385 && staterobots==0) {
                        staterobots=4;}
+                         //================ROBOG IN UPPER LEVEL=================================
+                      if (event.key.keysym.sym == SDLK_UP&& bg.R.y < 0 && p.cor.x>1385 && staterobots==1&& e2.vie==0 && done==1) {
+                       e2.vie=keep;
+                       currentframeliveenemy2=keepframe;
+                       done=0;
+                       
+                  }
+                  if (event.key.keysym.sym == SDLK_UP&& bg.R.y < 0 && p.cor.x>1385  && done==0) {
+                       e2.vie=keep;
+                       currentframeliveenemy2=keepframe;
+                       printf("done1");
+                  }
+                  if (event.key.keysym.sym == SDLK_DOWN && bg.R.y == 0 && p.cor.x>1385  && staterobots==1&& done==0) {
+                       keep=e2.vie;
+                       keepframe=currentframeliveenemy2;
+                       e2.vie=0;
+                       printf("done2");
+                  }
+                  //================================================================================
                     if (event.key.keysym.sym == SDLK_SPACE && verifshoot==1) {
                         b1.pos.x=p.cor.x+100;
                         b1.pos.y=p.cor.y+100;
@@ -346,6 +381,10 @@ while(SDL_PollEvent(&event))
                         verifshoot=0;}  
                       if (event.key.keysym.sym == SDLK_RETURN && gamestate==3) {
                       suivant++;
+                      
+                    }  
+                    if (event.key.keysym.sym == SDLK_RETURN && det_green!=0 && veriftic==0) {
+                      gamestate=5;
                       
                     }  
                     if (event.key.keysym.sym == SDLK_s && verifhint==1) {
@@ -632,6 +671,28 @@ enigmefinal(&enigme1,&gamestate,ref,&r,&r2,&r3,&r4,&next,&frame,&currentframeeni
  }
 player4(&pvieref,damage,&currentframedamage,r7.r,&conteur,&stopr,&stopl,&orientation,&move,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&pcontrols,&gravcontr,&velocity,&stop,screen,framescarac,frameslcarac,framesrightcarac,framesleftcarac,framesjumpcarac,framessscarac,SCREEN_HEIGHT,SCREEN_WIDTH);
  }}
+ if(gamestate==5 && veriftic==0){
+       play_tictactoe = run_tictactoe(1,&b,event,startposx,startposy,SCREEN_W,SCREEN_H,&role, screen);
+       if(play_tictactoe==1){
+       enigme2=1;
+       gamestate=1;
+       if(modifmape2 == false){
+              m.image_miniature = IMG_Load("Assets/bg/bg22.png");
+              m.image_miniature = resizeSurface(m.image_miniature, m.positionMinimap.w, m.positionMinimap.h);
+              modifmape2 = true;
+       }
+       veriftic=1;
+       }
+       if(play_tictactoe==0 ||play_tictactoe==-1){
+       for(int i=0;i<3;i++){
+             for(int j=0;j<3;j++){
+                     b.matrix[i][j] = 0;
+              } 
+       }
+       role = 1;
+       gamestate=1;
+       }
+ }
  //-----------------CONTROLS--------------------
   if(e2.dest.x-p.cor.x<600 && gamestate==1 && verifhint==0){
  gamestate=4;
@@ -809,7 +870,7 @@ void shoot(Personn *p,int *currentframelive,int *xp2,int *pvieref,int *hit2,int*
      
      	//-------------------------SENDING BULLET TO LEFT ------------------------------- 
      			if(e->vie>0){
-     			if (bg->R.y<0){
+     			
       			if(e->direction<0){
      							if(*xp==1)
     							 	(*vie_counter)++;
@@ -887,7 +948,7 @@ void shoot(Personn *p,int *currentframelive,int *xp2,int *pvieref,int *hit2,int*
 								if (*bullet_counter>100){
 									*hitready2=0;
 									*bullet_counter=0;}}}
-}}}
+}}
 int strStartsWith(const char *pre, const char *str)
 {
     size_t lenpre = strlen(pre),

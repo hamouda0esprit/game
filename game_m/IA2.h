@@ -29,7 +29,7 @@ typedef struct {
 
 
 
-SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height);
+
 
 void init_board(tto_board *b,int SCREEN_W, int SCREEN_H);
 void displayBoard(tto_board *game_board, SDL_Surface *screen);

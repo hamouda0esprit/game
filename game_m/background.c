@@ -145,9 +145,6 @@ void run_game(int right, int left, int up, int *state,SDL_Rect *dest2,int* test,
 				}
 			}
 			if (*level == 3){
-				if (det_green !=0){
-					*enigme2 = 1;
-				}
 				if (det_blue!=0 && *enigme2 == 0){
 					if(rect->x >= SCREEN_WIDTH/2){
 						rect->x = rect->x - SCREEN_WIDTH;
