@@ -126,5 +126,5 @@ void move_following(SDL_Surface *screen, SDL_Surface **frames, int *current_fram
 {    update_and_render_animationenemy(4,screen,frames,current_frame,last_frame_time,NUM_FRAMES,e,SCREEN_WI,SCREEN_HEI );
 	aff_e(frames,current_frame,screen,e->dest);
      			      		
-       e->dest.x+=e->direction*2;
+       e->dest.x+=e->direction*1.5;
 }

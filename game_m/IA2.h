@@ -20,20 +20,20 @@ typedef struct {
 
     SDL_Surface *pieces_matrix[3][3];
     SDL_Rect pieces_position[3][3];
+
+    SDL_Surface *x_matrix[3][3];
+
+    SDL_Surface *o_matrix[3][3];
 }tto_board;
 
 
-void init_board(tto_board *b,int SCREEN_W, int SCREEN_H);
 
-SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height);
+
+
+
+void init_board(tto_board *b,int SCREEN_W, int SCREEN_H);
 void displayBoard(tto_board *game_board, SDL_Surface *screen);
 void freeBoard(tto_board *game_board);
-
-int verify_matrix(int matrix[3][3]);
-void reverse_neighbors(int matrix[3][3], int position);
-void update_board(tto_board *b,int SCREEN_W,int SCREEN_H);
-
-void change_image_at_position(tto_board *my_board, int position, SDL_Surface *new_image,int SCREEN_H );
 
 
 
@@ -43,3 +43,8 @@ int check_draw(int board[3][3]);
 int find_best_move(int board[3][3]);
 int minimax(int board[3][3], int depth, int is_maximizing_player) ;
 int evaluate(int board[3][3]);
+
+bool user_play(int board[3][3],SDL_Event event,int startposx,int startposy,int SCREEN_W, int SCREEN_H);
+int AI_play(int board[3][3],int role);
+
+int run_tictactoe(int open_riddle,tto_board *b,SDL_Event event,int startposx,int startposy,int SCREEN_W, int SCREEN_H,int * role, SDL_Surface *screen);

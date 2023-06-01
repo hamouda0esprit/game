@@ -7,16 +7,23 @@
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_ttf.h>
 #include <math.h>
-typedef struct{
-    SDL_Surface * image_miniature;
+typedef struct {
+    SDL_Surface *image_miniature;
     SDL_Rect positionMinimap;
-    SDL_Surface * bonhomm;
-    SDL_Rect positionBonhomme;
-    SDL_Surface * enigme;
-    SDL_Rect positionEnigme;
-    SDL_Surface * enemi;
-    SDL_Rect positionEnemi;
-}minimap;
+
+    int nbBonhomm;
+    SDL_Surface *bonhomm;
+    SDL_Rect *positionBonhomme;
+
+    int nbEnigme;
+    SDL_Surface *enigme;
+    SDL_Rect *positionEnigme;
+    
+    int nbEnemi;
+    SDL_Surface *enemi;
+    SDL_Rect *positionEnemi;
+} minimap;
+
 
 typedef struct{
     
@@ -44,19 +51,14 @@ typedef struct{
 
 int ms_to_sec(int milliseconds);
 void format_time(int seconds, char time_str[]);
-void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ,int map_W,int map_H);
-void afficherminimap (minimap m, SDL_Surface * screen,int SCREEN_W,int SCREEN_H);
-void annimerMinimap(SDL_Rect posJoueur,SDL_Rect posEnemie,SDL_Rect posEnigme, minimap *m, int redimensionnement,int SCREEN_W,int SCREEN_H);
+void initmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[] ,int map_W,int map_H,int redim,int nbPlayer,int nbEnemie,int nbEnigme);
+void afficherminimap (minimap m, SDL_Surface * screen,int SCREEN_W,int SCREEN_H,int map_W,int map_H);
+void annimerMinimap(SDL_Rect *posJoueur,SDL_Rect *posEnemie,SDL_Rect *posEnigme, minimap *m, int redimensionnement,int SCREEN_W,int SCREEN_H,int map_W,int map_H);
 void affichertemps(SDL_Surface* screen, char tmp[], int SCREEN_W, int SCREEN_H);
 int collisionPP(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,int B);
 int collisionPP2(SDL_Rect p, SDL_Surface *Masque,SDL_Rect MasqueRect,int R,int G,int B);
 void get_points(int x,int y,int w,int h,points *p); 
 SDL_Color GetPixel(SDL_Surface *pSurface,int x,int y); 
 void LibererMinimap (minimap * m);
-void maj_map(minimap *m, SDL_Surface *screen,int SCREEN_W,int SCREEN_H,char minimapNormal[], char minimapEnemie[] , char minimapEnigme[] );
 SDL_Surface* resizeSurface(SDL_Surface* surface, int width, int height);
-void fullmap(minimap * m,int SCREEN_W,int SCREEN_H,char minimapNormal[] );
-void smallmap(minimap * m,int SCREEN_W,int SCREEN_H,char minimapNormal[] );
-void maj_fullmap(minimap *m,int SCREEN_W,int SCREEN_H,char minimapNormal[], char minimapEnemie[] , char minimapEnigme[] );
-void afficherFULLminimap(minimap m, SDL_Surface *screen,int SCREEN_W,int SCREEN_H);
-void miniMap(bool pressing_m,minimap *m,SDL_Rect pjr,SDL_Rect peg,SDL_Rect pen,SDL_Surface *screen,int SCREEN_W,int SCREEN_H, char minimapNormal[] , char minimapEnemie[] , char minimapEnigme[]);
+void miniMap(bool pressing_m, minimap *m, SDL_Rect *pjr, SDL_Rect *peg, SDL_Rect *pen, SDL_Surface *screen, int SCREEN_W, int SCREEN_H, char minimapNormal[], char minimapEnemie[], char minimapEnigme[], int map_W, int map_H);
