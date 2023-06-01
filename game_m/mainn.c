@@ -274,7 +274,11 @@ int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,curre
 int next=0;
 int frame,veriftic=0;
 int ref;
+<<<<<<< HEAD
 int levelexist=0;
+=======
+
+>>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
 enigmme e1;
 int enigme1 = 0;
 int enigme2 = 0;
@@ -310,7 +314,11 @@ helps.r.y=20;
 int verifhint=0;
 int nexthint=1;
 int keep=3,keepframe=4,done=1;
+<<<<<<< HEAD
 int staterobots=0,staterobots1=0,staterobots2=0,currentframeliveenemy3=4;
+=======
+int staterobots=0,staterobots1=0,staterobots2=0;
+>>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
 while(boucle)
 {
 if(e.vie==0){
@@ -529,6 +537,7 @@ if(level == 3){
 		changed3 = false;
 	}
 
+<<<<<<< HEAD
 
 
 	xp_map=p.cor.x-bg.R.x;
@@ -545,6 +554,24 @@ if(level == 3){
 	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
 	//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
 
+=======
+
+
+	xp_map=p.cor.x-bg.R.x;
+	yp_map=p.cor.y-bg.R.y;
+	RP[0] = p.cor;
+	RP[0].x = xp_map * 1.1;
+	RP[0].y = yp_map * 0.9;
+
+	no[0].x = -404;
+	no[0].y = -404;
+	no[0].w = -404;
+	no[0].h = -404;
+
+	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
+	//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
+
+>>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
 	miniMap(pressing_m,&m,RP,no,no,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png",map_W,map_H);
 }
 
@@ -726,6 +753,7 @@ player4(&pvieref,damage,&currentframedamage,r7.r,&conteur,&stopr,&stopl,&orienta
    }
    currentframehint=nexthint;
  }
+<<<<<<< HEAD
  printf("leve=%d \n",levelexist);
  if(levelexist==2){
  if(e3.vie>0){
@@ -741,6 +769,8 @@ aff_e(&vieenemy4,&currentframeliveenemy4,screen,rectvieenemy4.r);
 enemymouvements(&b1,&currentframeliveenemy4,&xe4,&ye4,&bigxe4,&be4,&hitready2e4,&e4,&p,&hit2e4,&hit3e4,&movexe4,framesrightenemy4,framesleftenemy4,screen,framesleftenemy4,framesrightenemy4,&oke4,&current_frameleft12e4,&current_frame212e4,&last_frame_timeleft12e4,&last_frame_time212e4);
 shoot(&p,&currentframelive,&xp2e4,&pvieref,&hit2e4,&xp,&be4,&e4,&bullet_counter2e4,&bullet_counter2e4,&hitready2e4,&vie_counter,&vie_counter2,screen,&bg);}
  }
+=======
+>>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
 //   serialPortReadDataLength = Arduino_read(serialPortBuffer, SERIAL_PORT_BUFFER_LENGTH);
 //         serialPortBuffer[serialPortReadDataLength] = 0;
  //--------------------------------MANETTE-------------------------------

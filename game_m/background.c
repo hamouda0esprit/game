@@ -192,7 +192,7 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 						b1->y+=SCREEN_HEIGHT*.85;
 						b2->y+=SCREEN_HEIGHT*.85;
 						dest3->y+=SCREEN_HEIGHT*.85;
-						dest4->x+=10000;
+						dest4->x+=11000;
 						rect->y=rect->y+SCREEN_HEIGHT/2;
 					}
 					if (det_black!=0 && keys[SDLK_DOWN] && bg->R.y == 0){
@@ -200,7 +200,7 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 								b1->y-=SCREEN_HEIGHT*.85;
 								b2->y-=SCREEN_HEIGHT*.85;
 								dest3->y-=SCREEN_HEIGHT*.85;
-								dest4->x-=10000;
+								dest4->x-=11000;
 								rect->y=rect->y-SCREEN_HEIGHT/2;
 					}
 				}
