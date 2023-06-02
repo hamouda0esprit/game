@@ -4,13 +4,16 @@
 void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 	char ch[20];
 	
-	for (int i=0;i<=2;i++){
+	for (int i=0;i<=3;i++){
 		initAnim(i,&ch);
-		if(i==0 || i==2){
+		if (i==0 || i==2){
 			Resize(&(b->S[i]), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 		}
-		if(i==1){
+		if (i==1){
 			Resize(&(b->S[i]), ch, SCREEN_WIDTH*2, SCREEN_HEIGHT);
+		}
+		if (i==3){
+		       Resize(&(b->S[i]), ch, SCREEN_WIDTH*5, SCREEN_HEIGHT*.92);
 		}
 		
 	}
@@ -99,7 +102,7 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *dest3, int right, int left, int up, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
+void run_game(int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *dest3, int right, int left, int up, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
 			
 			int speed = SCREEN_WIDTH/120;
@@ -107,10 +110,10 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 			//printf("\n bg pos x : %d\n bg pos y : %d",bg->R.x,bg->R.y);
 			//printf("\n limit : %d",*limit);
 			//printf("\n enigme2 = %d", *enigme2);
-			/*printf("\n det_black = %d ", det_black);
-			printf("\n det_red = %d ", det_red);
-			printf("\n det_green = %d ", det_green);
-			printf("\n det_blue = %d ", det_blue);*/
+			//printf("\n det_black = %d ", det_black);
+			//printf("\n det_red = %d ", det_red);
+			//printf("\n det_green = %d ", det_green);
+			//printf("\n det_blue = %d ", det_blue);
 			
 			if (det_green != 0){
 				if(*level==1){
@@ -145,7 +148,7 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 				}
 			}
 			if (*level == 3){
-				if (det_blue!=0 && *enigme2 == 0){
+				if (det_blue!=0){
 					if(rect->x >= SCREEN_WIDTH/2){
 						rect->x = rect->x - SCREEN_WIDTH;
 					}else{
@@ -153,8 +156,21 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 					}
 					
 				}
+				if (*enigme2 == 1 && bg->R.y == 0 && rect->x >= SCREEN_WIDTH/1.5 && *limit == 1){
+				       *level += 1;
+				}
 			}
 			
+			if (*level == 4 && ( t == 0 || t == 3 ) && *limit == 0){
+			       rect->x-=speed/1.2;
+			       bg->R.x-=speed/1.2;
+			}
+			if (*level == 4 && *enigme3 == 1 && det_blue != 0){
+			       //printf("\nwon ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! ");
+			}
+			if (*level == 4 && det_green !=0){
+			       *enigme3 = 1;
+			}
 			P->score++;
 			*anim_frame_time+=1;
 			if(*anim_frame_time ==10){
@@ -204,72 +220,144 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 								rect->y=rect->y-SCREEN_HEIGHT/2;
 					}
 				}
-				
-				if (keys[SDLK_RIGHT] || right){
-					Uint32 current_time = SDL_GetTicks();
-					if (current_time - last_move_time >= move_interval){
-							if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
-							if((t==0 || t==1 || t==3) && (det_red == 0 || det_red == 1)){
-								scrolling(&(bg->R),0,SCREEN_WIDTH);
-								if (!(*limit)){
-									if(*level == 1){
-									   scrolling(dest,0,SCREEN_WIDTH);
-									   scrolling(dest2,0,SCREEN_WIDTH);
-									   *movex-=speed;
-									   //*movex3-=speed;
-									}
-									if(*level == 3){
-									   scrolling(dest3,0,SCREEN_WIDTH);
-									   scrolling(dest4,0,SCREEN_WIDTH);
-									   /**movex3-=speed;
-									   *movex4-=speed;*/
-									}
-									   //dest->x-=SCREEN_WIDTH/40;
-										
-									   b1->x-=speed;
-									   b2->x-=speed;
-								}
-							}
-						}
-						if((t==0 || t==1 || t==3) && (det_red == 0 || det_red == 1)){
-							scrolling(rect,1,SCREEN_WIDTH);
-						}
-						last_move_time = current_time;
-					}
-				}
-				
-				if (keys[SDLK_LEFT] || left){
-					Uint32 current_time = SDL_GetTicks();
-					if (current_time - last_move_time >= move_interval){ 
-						if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
-							if((t==0 || t==2 || t==3) && (det_red == 0 || det_red == 2)){
-								scrolling(&(bg->R),1,SCREEN_WIDTH);
-								if (!(*limit)){
-									   if(*level == 1){
-									   scrolling(dest,1,SCREEN_WIDTH);
-									   scrolling(dest2,1,SCREEN_WIDTH);
-									   *movex+=speed;
-									   //*movex2+=speed;
-									}
-									if(*level == 3){
-									   scrolling(dest3,1,SCREEN_WIDTH);
-									   scrolling(dest4,1,SCREEN_WIDTH);
-									   /**movex3+=speed;
-									   *movex4+=speed;*/
-									}
-									   //dest->x+=SCREEN_WIDTH/40;
-										
-									   b1->x+=speed;
-									   b2->x+=speed;
-								}
-							}
-						}
-						if((t==0 || t==2 || t==3) && (det_red == 0 || det_red == 2)){
-							scrolling(rect,0,SCREEN_WIDTH);
-						}
-						
-						last_move_time = current_time;
-					}
+				if (*level != 4){
+				       if (keys[SDLK_RIGHT] || right){
+					       Uint32 current_time = SDL_GetTicks();
+					       if (current_time - last_move_time >= move_interval){
+							       if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
+							       if((t==0 || t==1 || t==3) && (det_red == 0 || det_red == 1)){
+								       scrolling(&(bg->R),0,SCREEN_WIDTH);
+								       if (!(*limit)){
+									       if(*level == 1){
+									          scrolling(dest,0,SCREEN_WIDTH);
+									          scrolling(dest2,0,SCREEN_WIDTH);
+									          *movex-=speed;
+									          //*movex3-=speed;
+									       }
+									       if(*level == 3){
+									          scrolling(dest3,0,SCREEN_WIDTH);
+									          scrolling(dest4,0,SCREEN_WIDTH);
+									          /**movex3-=speed;
+									          *movex4-=speed;*/
+									       }
+									          //dest->x-=SCREEN_WIDTH/40;
+										       
+									          b1->x-=speed;
+									          b2->x-=speed;
+								       }
+							       }
+						       }
+						       if((t==0 || t==1 || t==3) && (det_red == 0 || det_red == 1)){
+							       scrolling(rect,1,SCREEN_WIDTH);
+						       }
+						       last_move_time = current_time;
+					       }
+				       }
+				       
+				       if (keys[SDLK_LEFT] || left){
+					       Uint32 current_time = SDL_GetTicks();
+					       if (current_time - last_move_time >= move_interval){ 
+						       if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
+							       if((t==0 || t==2 || t==3) && (det_red == 0 || det_red == 2)){
+								       scrolling(&(bg->R),1,SCREEN_WIDTH);
+								       if (!(*limit)){
+									          if(*level == 1){
+									          scrolling(dest,1,SCREEN_WIDTH);
+									          scrolling(dest2,1,SCREEN_WIDTH);
+									          *movex+=speed;
+									          //*movex2+=speed;
+									       }
+									       if(*level == 3){
+									          scrolling(dest3,1,SCREEN_WIDTH);
+									          scrolling(dest4,1,SCREEN_WIDTH);
+									          /**movex3+=speed;
+									          *movex4+=speed;*/
+									       }
+									          //dest->x+=SCREEN_WIDTH/40;
+										       
+									          b1->x+=speed;
+									          b2->x+=speed;
+								       }
+							       }
+						       }
+						       if((t==0 || t==2 || t==3) && (det_red == 0 || det_red == 2)){
+							       scrolling(rect,0,SCREEN_WIDTH);
+						       }
+						       
+						       last_move_time = current_time;
+					       }
+				       }
+				}else{
+				       if (det_red != 0){
+				              bg->R.x = 0;
+                                          dest->x = 0;
+				       }
+				       if (keys[SDLK_RIGHT] || right){
+					       Uint32 current_time = SDL_GetTicks();
+					       if (current_time - last_move_time >= move_interval){
+							       if(*trigger==1 && rect->x > (SCREEN_WIDTH / 2)){
+							       if(t==0 || t==1 || t==3){
+								       scrolling(&(bg->R),0,SCREEN_WIDTH);
+								       if (!(*limit)){
+									       if(*level == 1){
+									          scrolling(dest,0,SCREEN_WIDTH);
+									          scrolling(dest2,0,SCREEN_WIDTH);
+									          *movex-=speed;
+									          //*movex3-=speed;
+									       }
+									       if(*level == 3){
+									          scrolling(dest3,0,SCREEN_WIDTH);
+									          scrolling(dest4,0,SCREEN_WIDTH);
+									          /**movex3-=speed;
+									          *movex4-=speed;*/
+									       }
+									          //dest->x-=SCREEN_WIDTH/40;
+										       
+									          b1->x-=speed;
+									          b2->x-=speed;
+								       }
+							       }
+						       }
+						       if(t==0 || t==1 || t==3){
+							       scrolling(rect,1,SCREEN_WIDTH);
+						       }
+						       last_move_time = current_time;
+					       }
+				       }
+				       
+				       if (keys[SDLK_LEFT] || left){
+					       Uint32 current_time = SDL_GetTicks();
+					       if (current_time - last_move_time >= move_interval){ 
+						       if(*trigger==1 && rect->x < (SCREEN_WIDTH / 2)){
+							       if(t==0 || t==2 || t==3){
+								       scrolling(&(bg->R),1,SCREEN_WIDTH);
+								       if (!(*limit)){
+									          if(*level == 1){
+									          scrolling(dest,1,SCREEN_WIDTH);
+									          scrolling(dest2,1,SCREEN_WIDTH);
+									          *movex+=speed;
+									          //*movex2+=speed;
+									       }
+									       if(*level == 3){
+									          scrolling(dest3,1,SCREEN_WIDTH);
+									          scrolling(dest4,1,SCREEN_WIDTH);
+									          /**movex3+=speed;
+									          *movex4+=speed;*/
+									       }
+									          //dest->x+=SCREEN_WIDTH/40;
+										       
+									          b1->x+=speed;
+									          b2->x+=speed;
+								       }
+							       }
+						       }
+						       if(t==0 || t==2 || t==3){
+							       scrolling(rect,0,SCREEN_WIDTH);
+						       }
+						       
+						       last_move_time = current_time;
+					       }
+				       }
 				}
 			}else{
 				
@@ -305,6 +393,19 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 			       *limit = 0;
 				}
 			}
+			if(*level==4){
+			       if(bg->R.x >= 0){
+					bg->R.x = 0;
+					*limit = 1;
+				}
+				if (bg->R.x <= -SCREEN_WIDTH*3.6175-SCREEN_WIDTH/3){
+					bg->R.x = -SCREEN_WIDTH*3.6175-SCREEN_WIDTH/3;
+					*limit = 1;
+				}
+				if ((bg->R.x > -SCREEN_WIDTH*3.6-SCREEN_WIDTH/3)&&(bg->R.x < 0)){
+			       *limit = 0;
+				}
+			}
 			//printf("\nlevel & limit= %d | %d",*level,*limit);
 			
 			if (rect->x < rect->w/3){
@@ -330,6 +431,22 @@ void run_game(int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *
 					}
 				}if(*level==2){
 					if(bg->R.x >=(-SCREEN_WIDTH*0.5175)/2){
+						if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
+							rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
+							*trigger = 1;
+						}
+					}else{
+						if(rect->x <= SCREEN_WIDTH/3){
+							rect->x = SCREEN_WIDTH/3;
+							*trigger = 1;
+						}
+						if(rect->x+rect->w >= SCREEN_WIDTH - SCREEN_WIDTH/50){
+							rect->x = SCREEN_WIDTH-rect->w-SCREEN_WIDTH/50;
+						}
+					}
+				}
+				if(*level==4){
+					if(bg->R.x >=(-SCREEN_WIDTH*3.6175)/2){
 						if(rect->x+rect->w >= SCREEN_WIDTH-(SCREEN_WIDTH/3)){
 							rect->x = SCREEN_WIDTH-(rect->w)-(SCREEN_WIDTH/3);
 							*trigger = 1;

@@ -378,7 +378,7 @@ int run_tictactoe(int open_riddle,tto_board *b,SDL_Event event,int startposx,int
             }else{
                 int play;
                 play = user_play(b->matrix, event, startposx, startposy, SCREEN_W, SCREEN_H);
-                SDL_PollEvent(&event);
+                
                 if (play == true){
                     *role = -1;
                 }

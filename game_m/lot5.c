@@ -110,6 +110,7 @@ aff_e(framesattend,e1_stage,screen,e1->eni);}
  *currentframeenigme=3;
  aff_e(framefinal,currentframeenigme,screen,e1->eni);
  *enigme1=1;
+ *gamestate=1;
  }
  else{
  *currentframeenigme=4;

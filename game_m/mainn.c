@@ -38,6 +38,9 @@ int SCREEN_HEIGHT = (float)(SCREEN_W / 1.7777777777777777);
 int lvl_depl1 = 0;
 int lvl_depl2 = 0;
 int lvl_depl3 = 0;
+int lvl_depl4 = 0;
+int lvl_depl5 = 0;
+int lvl_depl6 = 0;
 
 int map_W = 6952;
 int map_H = 1608;
@@ -65,6 +68,9 @@ int play_tictactoe;
        background bg;
        bg.R.x = 0;
        bg.R.y = 0;
+
+       SDL_Surface *M3;
+       Resize(&(M3), "Assets/BG_M3.png", SCREEN_WIDTH*5, SCREEN_HEIGHT*.92);
 
 	int anim_frame=0;
 	int anim_frame_time=0;
@@ -274,14 +280,13 @@ int current_framereponse=0,current_framereponse2=0,current_framereponse3=0,curre
 int next=0;
 int frame,veriftic=0;
 int ref;
-<<<<<<< HEAD
-int levelexist=0;
-=======
 
->>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
+int levelexist=0;
+
 enigmme e1;
 int enigme1 = 0;
 int enigme2 = 0;
+int enigme3 = 0;
 b1.pos.w=0;
 b1.pos.h=65535;
 r5.r.x=50;
@@ -293,16 +298,16 @@ int test=0;
 //----------condition du compteur de damage--------------
 int round=0;
 //-----------HINT AND CONTROLLS-----------------
-SDL_Surface controlls[12],hint[6],help[2];
-loadenigmeanswer(12,controlls,"controls/controls%d.png",1500,800);
-loadenigmeanswer(6,hint,"hints/control%d.png",1500,800);
+SDL_Surface controlls[16],hint[13],help[2];
+loadenigmeanswer(16,controlls,"controls/controls%d.png",1500,800);
+loadenigmeanswer(13,hint,"hints/control%d.png",1500,800);
 loadenigmeanswer(2,help,"help/help%d.png",700,300);
 reponse contr,hints,helps;
 Personn pcontrols;
 contr.r.x=SCREEN_WIDTH/15;
 hints.r.x=SCREEN_WIDTH/15;
 helps.r.x=SCREEN_WIDTH/4+100;
-int conteurcontrols=0,gravcontr=510;
+int conteurcontrols=0,conteurcontrols2=0,gravcontr=510;
 int currentframecontrol=1,currentframehint=1,currentframehelp=1;
 pcontrols.cor.w=SCREEN_WIDTH/10;
 pcontrols.cor.h=SCREEN_WIDTH/7+SCREEN_WIDTH/40;
@@ -314,11 +319,9 @@ helps.r.y=20;
 int verifhint=0;
 int nexthint=1;
 int keep=3,keepframe=4,done=1;
-<<<<<<< HEAD
+
 int staterobots=0,staterobots1=0,staterobots2=0,currentframeliveenemy3=4;
-=======
-int staterobots=0,staterobots1=0,staterobots2=0;
->>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
+
 while(boucle)
 {
 if(e.vie==0){
@@ -404,18 +407,24 @@ while(SDL_PollEvent(&event))
                       suivant++;
                       
                     }  
-                    if (event.key.keysym.sym == SDLK_RETURN && det_green!=0 && veriftic==0) {
+                    if (event.key.keysym.sym == SDLK_RETURN && det_green!=0 && veriftic==0 && levelexist==2) {
                       gamestate=5;
                       
                     }  
-                    if (event.key.keysym.sym == SDLK_s && verifhint==1) {
+                    if (event.key.keysym.sym == SDLK_RETURN && verifhint==1) {
                       nexthint++;
                      
                       
                     }  
-                     if (event.key.keysym.sym == SDLK_RETURN && e1_stage!=0) {
+                     if (event.key.keysym.sym == SDLK_RETURN && verifhint==3) {
+                      nexthint++;
+                     
+                      
+                    }  
+                     if (event.key.keysym.sym == SDLK_RETURN && e1_stage!=0 && gamestate==1 && enigme1!=1) {
                        gamestate=2;
                        next=0;
+                       nexthint=10;
                     }   
                  if (event.key.keysym.sym == SDLK_ESCAPE && e1_stage!=0) {
                  gamestate=1;
@@ -486,11 +495,18 @@ if (enigme2==1){
 		Resize(&(bg.M[1]), "Assets/BG_M22.png", SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
 	}
 }
+if (enigme3==1){
+       lvl_depl5++;
+       if (lvl_depl5 == 1){
+              SDL_FreeSurface(bg.S[3]);
+              Resize(&(bg.S[3]), "Assets/bg/bg33.png", SCREEN_WIDTH*5, SCREEN_HEIGHT*.92);
+       }
+}
 //printf("\nxenemy= %d || yenemy= %d || px= %d || py= %d",e.dest.x,e.dest.y,p.cor.x,p.cor.y);
 
 //----------------------------------gamestate1------------------------------
 if(gamestate==1){
-run_game(&movexe2, &movexe4, &e4.dest , &movexe3, &e3.dest, right, left , up, &staterobots, &e2.dest, &test,&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
+run_game(&enigme3 ,&movexe2, &movexe4, &e4.dest , &movexe3, &e3.dest, right, left , up, &staterobots, &e2.dest, &test,&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
 aff_e(&viecaractere,&currentframelive,screen,r5.r); 
 //printf("\n movex : %d",movex);
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
@@ -537,24 +553,7 @@ if(level == 3){
 		changed3 = false;
 	}
 
-<<<<<<< HEAD
 
-
-	xp_map=p.cor.x-bg.R.x;
-	yp_map=p.cor.y-bg.R.y;
-	RP[0] = p.cor;
-	RP[0].x = xp_map * 1.1;
-	RP[0].y = yp_map * 0.9;
-
-	no[0].x = -404;
-	no[0].y = -404;
-	no[0].w = -404;
-	no[0].h = -404;
-
-	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
-	//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
-
-=======
 
 
 	xp_map=p.cor.x-bg.R.x;
@@ -571,10 +570,30 @@ if(level == 3){
 	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
 	//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
 
->>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
+
+
+
+	xp_map=p.cor.x-bg.R.x;
+	yp_map=p.cor.y-bg.R.y;
+	RP[0] = p.cor;
+	RP[0].x = xp_map * 1.1;
+	RP[0].y = yp_map * 0.9;
+
+	no[0].x = -404;
+	no[0].y = -404;
+	no[0].w = -404;
+	no[0].h = -404;
+
+	//printf("\n\n\nplayer %d %d\n",RP[0].x,RP[0].y);
+	//printf("\n\nenemie %d %d\n",e.dest.x,e.dest.y);
+
+
 	miniMap(pressing_m,&m,RP,no,no,screen,SCREEN_W,SCREEN_H,"Assets/bg/bg0.png","Assets/bg/bg0.png","Assets/bg/bg0.png",map_W,map_H);
 }
-
+//----------LEVEL SKIP-----------//
+if (level <3){
+       level++;
+} 
 if(t==3 && verif==1){
 grav=p.cor.y;
 verif=0;}
@@ -645,7 +664,7 @@ xe3 = collisionBB(e3.dest,b1.pos);
 xe4 = collisionBB(e4.dest,b1.pos);  
  //printf("%d",level);
  
- printf("e4 : %d %d", e4.dest.x ,e4.dest.y);
+ //printf("e4 : %d %d", e4.dest.x ,e4.dest.y);
  
 if (level == 1){
 	t=collisionPP(p.cor,bg.M[0],bg.R,251, 220, 156);
@@ -665,10 +684,21 @@ if (level == 3){
 	det_green=collisionPP(p.cor,bg.M[1],bg.R,40, 200, 40);
 	det_red=collisionPP2(p.cor,bg.M[1],bg.R,200, 40, 40);
 	det_blue=collisionPP(p.cor,bg.M[1],bg.R,40, 40, 200);
-
 }
+if (level == 4){
+       lvl_depl4++;
+       t=collisionPP(p.cor,M3,bg.R,251, 220, 156);
+       if( limit == 1 ){
+              det_green=collisionPP(p.cor,M3,bg.R,40, 200, 40);
+       }
+	det_red=collisionPP2(p.cor,M3,bg.R,200, 40, 40);
+	det_blue=collisionPP(p.cor,M3,bg.R,40, 40, 200);
+}
+
+
+// if (level == 4 && det_green !=0)  enigme3 detection test
 if (lvl_depl2==1){
-levelexist=2;
+       levelexist=2;
 	bg.R.x = 0;
 	bg.R.y = -SCREEN_HEIGHT*.85;
 	p.cor.x = SCREEN_WIDTH/2+p.cor.w/2;
@@ -676,6 +706,11 @@ levelexist=2;
 	e.dest.x=SCREEN_WIDTH+SCREEN_WIDTH/2;
 	movex=SCREEN_WIDTH+SCREEN_WIDTH/2;
 
+}
+//printf("\n level : %d",level);
+if (lvl_depl4==1){
+       bg.R.x = 0;
+       p.cor.x = 0;
 }
 if(level == 1 &&nour==0)
 {
@@ -700,12 +735,30 @@ nour1=1;
  currentframehelp=1;
  aff_e(&help,&currentframehelp,screen,helps.r); 
  }
- if(gamestate==2){
+ if(gamestate==2 && enigme1!=1){
+
 enigmefinal(&enigme1,&gamestate,ref,&r,&r2,&r3,&r4,&next,&frame,&currentframeenigme,&current_framereponse,&current_framereponse2,&current_framereponse3,&current_framereponse4,screen,&e1,&e1_stage,framesattend,framesnumber1,framesnumber2,framesnumber3,framesnumber4,framefinal);
+ if(conteurcontrols2>=0){
+ conteurcontrols2++;
+ if(conteurcontrols2==10){
+ verifhint=3;
+nexthint=10;
+ conteurcontrols2=-100;
+ }
+ } if(verifhint==3 && e1_stage==5){
+ bullet_counter2e2=0;
+ bullet_countere22=0;
+ 
+  aff_e(&hint,&nexthint,screen,hints.r); 
+   if(nexthint>12){
+   verifhint==0;
+   }
+ }
+
  }
  //-----------------CONTROLS--------------------
- if(gamestate==3){
- if(suivant==1){
+if(gamestate==3){
+ if(suivant==2){
  gamestate=1;
  suivant=0;
  }
@@ -714,6 +767,17 @@ enigmefinal(&enigme1,&gamestate,ref,&r,&r2,&r3,&r4,&next,&frame,&currentframeeni
  currentframecontrol++;
  if(currentframecontrol==12){
  currentframecontrol=1;
+ }
+player4(&pvieref,damage,&currentframedamage,r7.r,&conteur,&stopr,&stopl,&orientation,&move,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&pcontrols,&gravcontr,&velocity,&stop,screen,framescarac,frameslcarac,framesrightcarac,framesleftcarac,framesjumpcarac,framessscarac,SCREEN_HEIGHT,SCREEN_WIDTH);
+ }
+  if(suivant==1){
+  if(currentframecontrol<13){
+ currentframecontrol=13;
+ }
+ aff_e(&controlls,&currentframecontrol,screen,contr.r); 
+ currentframecontrol++;
+ if(currentframecontrol>16){
+ currentframecontrol=12;
  }
 player4(&pvieref,damage,&currentframedamage,r7.r,&conteur,&stopr,&stopl,&orientation,&move,&jump,&dir,&current_framess,&last_frame_time_stop_right,&last_frame_time_stop_left,&last_frame_time3,&last_frame_timess,&last_frame_timeleft ,&last_frame_timejump,&current_framejump,&current_frame,&current_framel,&current_frame3,&current_frameleft,&pcontrols,&gravcontr,&velocity,&stop,screen,framescarac,frameslcarac,framesrightcarac,framesleftcarac,framesjumpcarac,framessscarac,SCREEN_HEIGHT,SCREEN_WIDTH);
  }}
@@ -753,9 +817,9 @@ player4(&pvieref,damage,&currentframedamage,r7.r,&conteur,&stopr,&stopl,&orienta
    }
    currentframehint=nexthint;
  }
-<<<<<<< HEAD
- printf("leve=%d \n",levelexist);
- if(levelexist==2){
+
+ //printf("leve=%d \n",levelexist);
+ if(levelexist==2 && level != 4){
  if(e3.vie>0){
  rectvieenemy3.r.x=e3.dest.x-20;
  rectvieenemy3.r.y=e3.dest.y-50;
@@ -769,8 +833,7 @@ aff_e(&vieenemy4,&currentframeliveenemy4,screen,rectvieenemy4.r);
 enemymouvements(&b1,&currentframeliveenemy4,&xe4,&ye4,&bigxe4,&be4,&hitready2e4,&e4,&p,&hit2e4,&hit3e4,&movexe4,framesrightenemy4,framesleftenemy4,screen,framesleftenemy4,framesrightenemy4,&oke4,&current_frameleft12e4,&current_frame212e4,&last_frame_timeleft12e4,&last_frame_time212e4);
 shoot(&p,&currentframelive,&xp2e4,&pvieref,&hit2e4,&xp,&be4,&e4,&bullet_counter2e4,&bullet_counter2e4,&hitready2e4,&vie_counter,&vie_counter2,screen,&bg);}
  }
-=======
->>>>>>> 76d4ca70e4945067fa1275e9ea6299a41f0c380c
+
 //   serialPortReadDataLength = Arduino_read(serialPortBuffer, SERIAL_PORT_BUFFER_LENGTH);
 //         serialPortBuffer[serialPortReadDataLength] = 0;
  //--------------------------------MANETTE-------------------------------
