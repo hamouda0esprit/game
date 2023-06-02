@@ -470,14 +470,14 @@ int Main_Menu() {
 		i++;
 		if(i<2){
 			if(res==1){
-				SCREEN_WIDTH=1600;
+				SCREEN_WIDTH=1700;
 				//Calculating new sizes
 				calc_res(SCREEN_WIDTH, &SCREEN_HEIGHT, &MENU_BG_WIDTH, &MENU_BG_HEIGHT, &BUTTON_WIDTH, &BUTTON_HEIGHT, &S_BUTTON_WIDTH, &S_BUTTON_HEIGHT, &SLIDER_WIDTH, &SLIDER_HEIGHT, &SLIDER_WIDTH_KNOB, &SLIDER_HEIGHT_KNOB, &center_x, &center_y, &m_center_x, &m_center_y, &s_center_x, &s_center_y, &slider_center_x, &slider_center_y); 
 				
 				//Rendering screen
 				screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
 			}else{
-				SCREEN_WIDTH=1200;
+				SCREEN_WIDTH=1700;
 				//Calculating new sizes
 				calc_res(SCREEN_WIDTH, &SCREEN_HEIGHT, &MENU_BG_WIDTH, &MENU_BG_HEIGHT, &BUTTON_WIDTH, &BUTTON_HEIGHT, &S_BUTTON_WIDTH, &S_BUTTON_HEIGHT, &SLIDER_WIDTH, &SLIDER_HEIGHT, &SLIDER_WIDTH_KNOB, &SLIDER_HEIGHT_KNOB, &center_x, &center_y, &m_center_x, &m_center_y, &s_center_x, &s_center_y, &slider_center_x, &slider_center_y); 
 				

@@ -185,7 +185,7 @@ e2.dest.w=p.cor.w;
 e2.dest.h=p.cor.h; 
 SDL_Surface* framesenemy2[13],*frameslenemy2[13],*framesrightenemy2[13],*framesleftenemy2[13],*framesjumpenemy2[6],*framesssenemy2[6];
 int bigxe2,movexe2=2300,oke2=0,hit3e2=0,xpe2=0,xp2e2=0,hitready2e2=1,bullet_counter2e2 = 0,bullet_countere22 = 0,hit2e2=0,xe2,ye2=1;
-
+int testtt;
 Uint32 last_frame_time212 = 0;
 int current_frame212 = 3;
 Uint32 last_frame_timeleft12 = 0;
@@ -239,10 +239,10 @@ int boucle=1;
 SDL_Event event;
 SDL_Surface *screen;
 image imge;
-// char serialPortBuffer[SERIAL_PORT_BUFFER_LENGTH] = {0};
-//     int serialPortReadDataLength = 0;   
-//   if(!Arduino_connect(SERIAL_PORT, 9600))
-//         exit(EXIT_FAILURE); 
+ char serialPortBuffer[SERIAL_PORT_BUFFER_LENGTH] = {0};
+     int serialPortReadDataLength = 0;   
+   if(!Arduino_connect(SERIAL_PORT, 9600))
+         exit(EXIT_FAILURE); 
 if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER)==-1)
 {
 printf("Could not initialize SDL: %s.\n", SDL_GetError());
@@ -302,9 +302,9 @@ int test=0;
 //----------condition du compteur de damage--------------
 int round=0;
 //-----------HINT AND CONTROLLS-----------------
-SDL_Surface controlls[8],hint[12],help[2];
+SDL_Surface controlls[8],hint[13],help[2];
 loadenigmeanswer(8,controlls,"controls/controls%d.png",1500,800);
-loadenigmeanswer(12,hint,"hints/control%d.png",1500,800);
+loadenigmeanswer(13,hint,"hints/control%d.png",1500,800);
 loadenigmeanswer(2,help,"help/help%d.png",700,300);
 reponse contr,hints,helps;
 Personn pcontrols;
@@ -328,6 +328,19 @@ int detect=0;
 int robotdetect=2;
 int t1=0;
 int staterobots=0,staterobots1=0,staterobots2=0,currentframeliveenemy3=4;
+int moin;
+int plus;
+int down;
+
+char playername[10] = "";
+//Initializing Fonts
+	TTF_Init();
+	TTF_Font *font;
+	SDL_Color text_color = {255, 0, 0};
+	font = TTF_OpenFont("M_Assets/Fonts/Helvetica-Bold.ttf", SCREEN_WIDTH/40);
+	SDL_Rect text_rect = {0,SCREEN_HEIGHT/2};
+	SDL_Surface *text_name;
+	SDLKey key;
 
 while(boucle)
 {
@@ -361,6 +374,19 @@ while(SDL_PollEvent(&event))
 		boucle=0;
 		break;
 	    case SDL_KEYDOWN:
+	           if (gamestate == 6){
+	           		key = event.key.keysym.sym;
+			        	char* keyName = SDL_GetKeyName(key);
+			        	if (key != SDLK_RETURN){
+			        		strcat(playername,keyName);
+			        	}
+			        	
+	           	}
+	           	
+	           	if (event.key.keysym.sym == SDLK_RETURN && gamestate==6) {
+	           		Score_Storing(&P, playername);
+	           		boucle = 0;
+	           	}
 		       if(event.key.keysym.sym == SDLK_p){
 				printf("\nGAME ENDED !\n");
 				game_ended=1;
@@ -418,16 +444,17 @@ while(SDL_PollEvent(&event))
                       gamestate=5;
                       
                     }  
-                    if (event.key.keysym.sym == SDLK_RETURN && verifhint==1) {
-                      nexthint++;
-                     
-                      
-                    }  
-                     if (event.key.keysym.sym == SDLK_RETURN && verifhint==3) {
+                     if (event.key.keysym.sym == SDLK_RETURN && verifhint==1&&e1_stage!=5 ) {
                       nexthint++;
                      
                       
                     } 
+                    if (event.key.keysym.sym == SDLK_RETURN && testtt==1&& gamestate==2) {
+                      nexthint++;
+                     
+                      
+                    }  
+                   
                      if (event.key.keysym.sym == SDLK_RETURN && level==4 && det_green !=0 ) {
                       lightdet=1;
                      
@@ -518,7 +545,7 @@ if (enigme3==1){
 
 //----------------------------------gamestate1------------------------------
 if(gamestate==1){
-run_game(e4,&robotdetect,&detect,&enigme3 ,&movexe2, &movexe4, &e4.dest , &movexe3, &e3.dest, right, left , up, &staterobots, &e2.dest, &test,&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
+run_game(e4,&robotdetect,&detect,&enigme3 ,&movexe2, &movexe4, &e4.dest , &movexe3, &e3.dest, right, left , up,down, &staterobots, &e2.dest, &test,&bg, &P, &p.cor, screen, SCREEN_W, SCREEN_H, &g_e_a, 180, &anim_frame, &anim_frame_time, move_interval, last_move_time, &game_ended, &trigger, &boucle, &e.dest, &b1, &b2, &limit, &level, &movex, t, det_green, det_red, det_blue, det_black, &e1_stage, &enigme1, &enigme2);
 aff_e(&viecaractere,&currentframelive,screen,r5.r); 
 //printf("\n movex : %d",movex);
 //affichertemps(start_time,screen,temps,SCREEN_W,SCREEN_H);
@@ -764,22 +791,20 @@ nour1=1;
  if(gamestate==2 && enigme1!=1){
 
 enigmefinal(&enigme1,&gamestate,ref,&r,&r2,&r3,&r4,&next,&frame,&currentframeenigme,&current_framereponse,&current_framereponse2,&current_framereponse3,&current_framereponse4,screen,&e1,&e1_stage,framesattend,framesnumber1,framesnumber2,framesnumber3,framesnumber4,framefinal);
- if(conteurcontrols2>=0){
+ /*if(conteurcontrols2>=0){
  conteurcontrols2++;
  if(conteurcontrols2==10){
- verifhint=3;
-nexthint=10;
+ testtt=1;
+ nexthint=10;
  conteurcontrols2=-100;
  }
- } if(verifhint==3 && e1_stage==5){
- bullet_counter2e2=0;
- bullet_countere22=0;
- 
-  aff_e(&hint,&nexthint,screen,hints.r); 
+ } if(testtt==1){
    if(nexthint>12){
-   verifhint==0;
+   testtt==0;
    }
- }
+  aff_e(&hint,&nexthint,screen,hints.r); 
+   
+ }*/
 
  }
  //-----------------CONTROLS--------------------
@@ -866,96 +891,225 @@ enemymouvements(&b1,&currentframeliveenemy4,&xe4,&ye4,&bigxe4,&be4,&hitready2e4,
 shoot(&p,&currentframelive,&xp2e4,&pvieref,&hit2e4,&xp,&be4,&e4,&bullet_counter2e4,&bullet_counter2e4,&hitready2e4,&vie_counter,&vie_counter2,screen,&bg);}
  }
 
-//   serialPortReadDataLength = Arduino_read(serialPortBuffer, SERIAL_PORT_BUFFER_LENGTH);
-//         serialPortBuffer[serialPortReadDataLength] = 0;
- //--------------------------------MANETTE-------------------------------
-//  printf("right= %d,left=%d,up=%d \n",right,left,up);
-//     if(serialPortReadDataLength > 0)
-//         {    
-//             if(strStartsWith("R", serialPortBuffer))
-//             {
-//                  right=1;
-//                  left=0;
-//                  up=0;
-//             }
-//              if(strStartsWith("L", serialPortBuffer))
-//             {
-//                  left=1;
-//                   right=0;
-//                    up=0;
-//             }
-//             if(strStartsWith("U", serialPortBuffer))
-//             {
-//                  up=1;
-//                    right=0;
-//                  left=0;
-//             }
-//             if(strStartsWith("K", serialPortBuffer))
-//             {
-//                  up=1;
-//                    right=1;
-//                  left=0;
-//             }
-//             if(strStartsWith("O", serialPortBuffer))
-//             {
-//                  up=1;
-//                    right=0;
-//                  left=1;
-//             }
-//             if(strStartsWith("h", serialPortBuffer))
-//             {
+   serialPortReadDataLength = Arduino_read(serialPortBuffer, SERIAL_PORT_BUFFER_LENGTH);
+         serialPortBuffer[serialPortReadDataLength] = 0;
+// --------------------------------MANETTE-------------------------------
+  printf("right= %d,left=%d,up=%d \n",right,left,up);
+     if(serialPortReadDataLength > 0)
+         {    
+             if(strStartsWith("R", serialPortBuffer))
+             {
+                  right=1;
+                  left=0;
+                  up=0;
+                  down=0;
+                  plus=0;
+                  moin=0;
+                   shoott=0;
+             }
+              if(strStartsWith("L", serialPortBuffer))
+             {
+                  left=1;
+                   right=0;
+                    up=0;
+                    down=0;
+                     plus=0;
+                  moin=0;
+                   shoott=0;
+                    
+             }
+              if(strStartsWith("D", serialPortBuffer))
+             {
+                  left=0;
+                   right=0;
+                    up=0;
+                    down=1;
+                     plus=0;
+                  moin=0;
+                   shoott=0;
+             }
+             if(strStartsWith("U", serialPortBuffer))
+             {
+                  up=1;
+                    right=0;
+                  left=0;
+                  down=0;
+                   plus=0;
+                  moin=0;
+             }
+             if(strStartsWith("K", serialPortBuffer))
+             {
+                  up=1;
+                    right=1;
+                  left=0;
+                  down=0;
+                   plus=0;
+                  moin=0;
+                   shoott=0;
+             }
+             if(strStartsWith("O", serialPortBuffer))
+             {
+                  up=1;
+                    right=0;
+                  left=1;
+                  down=0;
+                   plus=0;
+                  moin=0;
+                   shoott=0;
+            }
+             if(strStartsWith("h", serialPortBuffer))
+             {
                  
-//                  shoott=1;
-//             }
-//             if(strStartsWith("S", serialPortBuffer))
-//             {
-//                  right=0;
-//                  left=0;
-//                  up=0;
-//             }
-//              if (right ) {    
-//              	dir=1; 
-//              	stopr=0;
-//                orientation=0;
-//             }else{
-//             	dir=2;
-// 					stopr=1;
-//             }
-//             if (left ) {
-//             	dir=0; 
-//                stopl=0;
-//                orientation=1;
-//             }else{
-//             	dir=2;
-//             	stopl=1;
-//             }
-//             if (up) {
-//             	jump=0;
-//                if(p.cor.y==grav)
-//             	   velocity=-20;
-//             }else{
-//             	jump=1;
-//             }
-//             if(shoott && verifshoot==1){
-//             b1.pos.x=p.cor.x+100;
-//                         b1.pos.y=p.cor.y+100;
-//                         bigx= b1.pos.x;
-//                         hit=1; 
-//                         orr_b = orientation;
-//                         verifshoot=0;
-//             }
-//             else{
-//             shoott=0;
-//             }
+                  shoott=1;
+             }
+             if(strStartsWith("p", serialPortBuffer))
+             {
+                 plus=1;
+                  
+             }
+             if(strStartsWith("m", serialPortBuffer))
+             {
+                 moin=1;
+                  
+             }
+           if(strStartsWith("S", serialPortBuffer))
+             {
+                  right=0;
+                  left=0;
+                  up=0;
+                  down=0;
+                   plus=0;
+                  moin=0;
+                  shoott=0;
+             }
+              if (right ) {    
+              	dir=1; 
+              	stopr=0;
+                orientation=0;
+                 shoott=0;
+             }else{
+             	dir=2;
+ 					stopr=1;
+             }
+             if (left ) {
+             	dir=0; 
+                stopl=0;
+                orientation=1;
+             }else{
+             	dir=2;
+             	stopl=1;
+             }
+             if (up) {
+             	jump=0;
+                if(p.cor.y==grav)
+             	   velocity=-20;
+             }else{
+             	jump=1;
+             }
+             if(shoott && verifshoot==1){
+             b1.pos.x=p.cor.x+100;
+                         b1.pos.y=p.cor.y+100;
+                         bigx= b1.pos.x;
+                         hit=1; 
+                         orr_b = orientation;
+                         verifshoot=0;
+             }
+            
+             if (up==1 &&  bg.R.y < 0 && p.cor.x>1385 && staterobots==0) {
+                       staterobots=4;}
+                         //================ROBOG IN UPPER LEVEL=================================
+                      if (up && bg.R.y < 0 && p.cor.x>1385 && staterobots==1&& e2.vie==0 && done==1) {
+                       e2.vie=keep;
+                       currentframeliveenemy2=keepframe;
+                       done=0;
+                       
+                  }
+                  if (up && bg.R.y < 0 && p.cor.x>1385  && done==0) {
+                       e2.vie=keep;
+                       currentframeliveenemy2=keepframe;
+                       printf("done1");
+                  }
+                  if (down && bg.R.y == 0 && p.cor.x>1385  && staterobots==1&& done==0) {
+                       keep=e2.vie;
+                       keepframe=currentframeliveenemy2;
+                       e2.vie=0;
+                       printf("done2");
+                  }
+                  //================================================================================
+            
+                      if (plus && gamestate==3) {
+                      suivant++;
+                      
+                    }  
+                    if (plus && det_green!=0 && veriftic==0 && levelexist==2) {
+                      gamestate=5;
+                      
+                    }  
+                    if (plus && verifhint==1&&e1_stage!=5) {
+                      nexthint++;
+                     
+                      
+                    }  
+                     if (plus && testtt==1 && gamestate==2 ) {
+                      nexthint++;
+                     
+                      
+                    } 
+                     if (plus && level==4 && det_green !=0 ) {
+                      lightdet=1;
+                     
+                      
+                    }   
+                     if (plus && e1_stage!=0 && gamestate==1 && enigme1!=1) {
+                       gamestate=2;
+                       next=0;
+                       nexthint=10;
+                    }   
+                 if (moin && e1_stage!=0) {
+                 gamestate=1;
+                 next=0;
+                      }  
+                 if (shoott && e1_stage==5 && gamestate==2) {
+                 frame++;
+                      }
+                 if (plus && e1_stage==5 && gamestate==2) {
+                    next++;
+                    frame=1;
+          
+                    } 
+                      if (left && e1_stage==5 && gamestate==2) {
+                    next--;
+              
+                    }      
+					
                              
-//            }
-//printf("\nxp_map : %d",xp_map);
+            }
+printf("\nxp_map : %d",xp_map);
+
+if (p.viep == 0){
+	gamestate = 7;
+}
+if (gamestate == 7){
+       SDL_BlitSurface(bg.S[8], NULL, screen, NULL);
+}
+if (level==4 && det_blue!=0 && enigme3 == 1){
+       gamestate = 6;
+}
+if (gamestate == 6){
+	SDL_BlitSurface(bg.S[9], NULL, screen, NULL);
+	text_rect.x = (SCREEN_WIDTH/ 2) -SCREEN_WIDTH/20 ;
+	text_name = TTF_RenderText_Blended(font, playername, text_color);
+	SDL_BlitSurface(text_name, NULL, screen, &text_rect);
+}
+
 SDL_Flip(screen);
 
 SDL_Delay(10);
 }
 
 }
+
+
 
 
 void aff_e(SDL_Surface **framesright,int *current_frame21,SDL_Surface *screen,SDL_Rect dest){

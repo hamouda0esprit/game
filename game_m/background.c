@@ -4,7 +4,7 @@
 void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 	char ch[20];
 	
-	for (int i=0;i<=3;i++){
+	for (int i=0;i<=10;i++){
 		initAnim(i,&ch);
 		if (i==0 || i==2){
 			Resize(&(b->S[i]), ch, SCREEN_WIDTH*3.75, SCREEN_HEIGHT*1.8);
@@ -14,6 +14,12 @@ void initBack(background *b, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 		}
 		if (i==3){
 		       Resize(&(b->S[i]), ch, SCREEN_WIDTH*5, SCREEN_HEIGHT*.92);
+		}
+		if (i==8){
+			Resize(&(b->S[i]), ch, SCREEN_WIDTH, SCREEN_HEIGHT);
+		}
+		if (i==9){
+			Resize(&(b->S[i]), ch, SCREEN_WIDTH, SCREEN_HEIGHT);
 		}
 		
 	}
@@ -42,15 +48,15 @@ void initAnim(int i, char *ch){
 	sprintf(ch, "Assets/bg/bg%d.png", i);
 }
 
-void Score_Storing(player *P){
+void Score_Storing(player *P, char *ch){
 	FILE *fp = fopen("Assets/Files/scores.txt", "a");
 	
-	printf("\nInput Your Name : ");
+	/*printf("\nInput Your Name : ");
 	fflush(stdin);
-	scanf("%s",P->name);
+	scanf("%s",P->name);*/
 	printf("\nYour Score : %d\n",P->score);
 	
-	fprintf(fp, "%s %d\n", P->name, P->score);
+	fprintf(fp, "%s %d\n", ch, P->score);
 	fclose(fp);
 }
 
@@ -83,11 +89,12 @@ void Score_Extracting(char *ch1, int *x1, char *ch2, int *x2, char *ch3, int *x3
 	fclose(fp);
 }
 
+
 int comparePlayers(const void *a, const void *b) {
 	player *playerA = (player *)a;
 	player *playerB = (player *)b;
 
-	return (playerB->score - playerA->score);
+	return (playerA->score - playerB->score);
 }
 
 void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
@@ -102,7 +109,7 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(Ennemi e,int *detectrobot,int *detect,int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *dest3, int right, int left, int up, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
+void run_game(Ennemi e,int *detectrobot,int *detect,int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *dest3, int right, int left, int up,int down, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
 			
 			int speed = SCREEN_WIDTH/120;
@@ -196,7 +203,7 @@ void run_game(Ennemi e,int *detectrobot,int *detect,int *enigme3 ,int *movex2, i
 							
 							*test=1;
 						}
-						if (keys[SDLK_DOWN] && bg->R.y == 0){
+						if (keys[SDLK_DOWN]||down && bg->R.y == 0){
 							bg->R.y=-SCREEN_HEIGHT*.85;
 							b1->y-=SCREEN_HEIGHT*.85;
 							b2->y-=SCREEN_HEIGHT*.85;
@@ -368,7 +375,7 @@ void run_game(Ennemi e,int *detectrobot,int *detect,int *enigme3 ,int *movex2, i
 				
 				if(*g_e_a<1){
 					*g_e_a+=1;
-					Score_Storing(P);
+					//Score_Storing(P);
 					*done = 0;
 				}
 			}
