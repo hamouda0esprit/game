@@ -18,11 +18,11 @@ LIBSPATH =
 # -I
 INCLUDESPATH = 
 
-SOURCES = mainn.c carac.c background.c fonction.c Menu.c Functions.c minimap.c IA2.c lot5.c -lm
+SOURCES = mainn.c carac.c background.c fonction.c Menu.c Functions.c minimap.c IA2.c lights.c lot5.c -lm
 OBJECTS = $(SOURCES:.c=.o)
 
 
-all : mainn.o carac.o background.o fonction.o Main.o Functions.o minimap.o IA2.o lot5.o arduino.o -lm
+all : mainn.o carac.o background.o fonction.o Main.o Functions.o minimap.o IA2.o lights.o lot5.o arduino.o -lm
 	$(CC) $^ -o $(EXEC) $(INCLUDESPATH) $(LIBSPATH) $(LIBS)
 
 %.o : %.c
@@ -45,6 +45,9 @@ minimap.o : minimap.c minimap.h
 	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
 IA2.o : IA2.c IA2.h
 	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
+lights.o : lights.c lights.h
+	$(CC) $(CFLAGS) $(INCLUDESPATH) -c $< -o $@
+
 clean :
 	$(RM) *.o
 	

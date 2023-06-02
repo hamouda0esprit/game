@@ -76,6 +76,8 @@ int Main_Menu() {
 	SDL_Rect button4Rect;// = {SCREEN_WIDTH/40, SCREEN_HEIGHT/40, S_BUTTON_WIDTH, S_BUTTON_HEIGHT};
 	SDL_Rect button5Rect;
 	SDL_Rect button6Rect;
+	SDL_Rect button7Rect;
+	SDL_Rect button8Rect;
 	
 	SDL_Surface *button1Image ; 
 	SDL_Surface *button1HImage ; 
@@ -94,6 +96,13 @@ int Main_Menu() {
 	
 	SDL_Surface *button6Image ;
 	SDL_Surface *button6HImage ;
+	
+	SDL_Surface *button7Image ;
+	SDL_Surface *button7HImage ;
+	
+	SDL_Surface *button8Image ;
+	SDL_Surface *button8HImage ;
+	
 	
 	//Audio Controller
 	SDL_Rect slider;// = {slider_center_x, slider_center_y - (SCREEN_HEIGHT/6), SLIDER_WIDTH, SLIDER_HEIGHT};
@@ -181,6 +190,8 @@ int Main_Menu() {
 	bool isMouseOverButton4 = false;
 	bool isMouseOverButton5 = false;
 	bool isMouseOverButton6 = false;
+	bool isMouseOverButton7 = false;
+	bool isMouseOverButton8 = false;
 	
 	bool isSettingsClicked = false;
 	bool isPlayClicked = false;
@@ -192,6 +203,8 @@ int Main_Menu() {
 	bool AlreadyHovered4 = false;
 	bool AlreadyHovered5 = false;
 	bool AlreadyHovered6 = false;
+	bool AlreadyHovered7 = false;
+	bool AlreadyHovered8 = false;
 	
 	bool isAudioControllerClicked = false;
 	
@@ -201,7 +214,8 @@ int Main_Menu() {
 	Mix_VolumeMusic(volume/2);
 	
 	int res = 0;
-	int i=0;
+	int i = 0;
+	int play_res = 0;
 	
 	int selector = 0;
 	int selector2 = 0;
@@ -356,6 +370,8 @@ int Main_Menu() {
 							MOD(&AlreadyHovered6, &isMouseOverButton6, isSettingsClicked, event, button6Rect, BUTTON_WIDTH, BUTTON_HEIGHT, Audio_Button_Hover);
 						}else{
 							MOD(&AlreadyHovered4, &isMouseOverButton4, isSettingsClicked, event, button4Rect, S_BUTTON_WIDTH, S_BUTTON_HEIGHT, Audio_Button_Hover);
+							MOD(&AlreadyHovered7, &isMouseOverButton7, isSettingsClicked, event, button7Rect, S_BUTTON_WIDTH, S_BUTTON_HEIGHT, Audio_Button_Hover);
+							MOD(&AlreadyHovered8, &isMouseOverButton8, isSettingsClicked, event, button8Rect, S_BUTTON_WIDTH, S_BUTTON_HEIGHT, Audio_Button_Hover);
 						}
 						
 						//Mouse over audio slider detection
@@ -436,6 +452,12 @@ int Main_Menu() {
 									res = 0;
 								}
 							}
+							if (isMouseOverButton7 && isPlayClicked) {
+							       return 1;
+							}
+							if (isMouseOverButton8 && isPlayClicked) {
+							       return 2;
+							}
 						}
 					}
 					break;
@@ -474,6 +496,8 @@ int Main_Menu() {
 			button4Rect = calc_Rec(button4Rect ,SCREEN_WIDTH/40 , SCREEN_HEIGHT/40, S_BUTTON_WIDTH, S_BUTTON_HEIGHT);
 			button5Rect = calc_Rec(button5Rect ,center_x , center_y  + SCREEN_WIDTH/7, BUTTON_WIDTH, BUTTON_HEIGHT);
 			button6Rect = calc_Rec(button5Rect ,SCREEN_WIDTH - SCREEN_WIDTH/15 , SCREEN_HEIGHT - SCREEN_HEIGHT/8.5, BUTTON_WIDTH, BUTTON_HEIGHT);
+			button7Rect = calc_Rec(button7Rect ,center_x ,center_y - SCREEN_WIDTH/20, BUTTON_WIDTH, BUTTON_HEIGHT);
+			button8Rect = calc_Rec(button8Rect ,center_x ,center_y + SCREEN_WIDTH/8, BUTTON_WIDTH, BUTTON_HEIGHT);
 			
 			//Resizing and repositioning audio slider
 			slider = calc_Rec(slider,slider_center_x, slider_center_y - (SCREEN_HEIGHT/9), SLIDER_WIDTH, SLIDER_HEIGHT);
@@ -499,6 +523,10 @@ int Main_Menu() {
 			Resize(&(button4HImage), "M_Assets/Back_button_hover.png", S_BUTTON_WIDTH, S_BUTTON_HEIGHT);
 			Resize(&(button6Image), "M_Assets/B_SB.png", S_BUTTON_WIDTH/4, S_BUTTON_WIDTH/4);
 			Resize(&(button6HImage), "M_Assets/B_SB_H.png", S_BUTTON_WIDTH/4, S_BUTTON_WIDTH/4);
+			Resize(&(button7Image), "M_Assets/SOLO.png", BUTTON_WIDTH,  BUTTON_HEIGHT);
+			Resize(&(button7HImage), "M_Assets/SOLO_H.png", BUTTON_WIDTH,  BUTTON_HEIGHT);
+			Resize(&(button8Image), "M_Assets/COOP.png",  BUTTON_WIDTH,  BUTTON_HEIGHT);
+			Resize(&(button8HImage), "M_Assets/COOP_H.png", BUTTON_WIDTH,  BUTTON_HEIGHT);
 			if(res==1){
 				Resize(&(button5Image), "M_Assets/FSM_button.png", BUTTON_WIDTH, BUTTON_HEIGHT);
 				Resize(&(button5HImage), "M_Assets/FSM_button_hover.png", BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -553,8 +581,8 @@ int Main_Menu() {
 		
 		if(isPlayClicked){
 			//SDL_FreeSurface(background);
-			Resize(&(background), "M_Assets/BG_PLAY_C.png", SCREEN_WIDTH, SCREEN_HEIGHT);
-			done = SDL_TRUE;
+			//Resize(&(background), "M_Assets/BG_PLAY_C.png", SCREEN_WIDTH, SCREEN_HEIGHT);
+			//done = SDL_TRUE;
 		}else{
 			if(isSettingsClicked){
 				//SDL_FreeSurface(background);
@@ -619,6 +647,8 @@ int Main_Menu() {
 				}
 			}else{
 				BHTC(isMouseOverButton4, screen, button4HImage, button4Image, button4Rect);
+				BHTC(isMouseOverButton7, screen, button7HImage, button7Image, button7Rect);
+				BHTC(isMouseOverButton8, screen, button8HImage, button8Image, button8Rect);
 				selector=0;
 				selector2=0;
 				if (selector3==1){
@@ -672,7 +702,7 @@ int Main_Menu() {
 	
 	//Quit SDL
 	SDL_Quit();
-	return isPlayClicked;
+	//return isPlayClicked;
 }
 
 //Mouse over detection function

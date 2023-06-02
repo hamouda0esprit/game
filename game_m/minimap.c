@@ -201,8 +201,8 @@ void initmap(minimap *m, int SCREEN_W, int SCREEN_H, char minimapNormal[], int m
     }
 
     // Load and resize the image for the character
-    m->bonhomm = IMG_Load("./assets/steve.jpg");
-    m->bonhomm = resizeSurface(m->bonhomm, SCREEN_H / 40, SCREEN_H / 40);
+    m->bonhomm = IMG_Load("./assets/steve.png");
+    m->bonhomm = resizeSurface(m->bonhomm, SCREEN_H / 70, SCREEN_H / 70);
     if (m->bonhomm == NULL) {
         printf("Erreur lors du chargement de l'image du bonhomme miniature: %s\n", SDL_GetError());
         exit(1);
@@ -219,7 +219,7 @@ void initmap(minimap *m, int SCREEN_W, int SCREEN_H, char minimapNormal[], int m
 
     // Load and resize the image for the puzzle/enigma
     m->enigme = IMG_Load("./assets/enigme.png");
-    m->enigme = resizeSurface(m->enigme, SCREEN_H / 34, SCREEN_H / 34);
+    m->enigme = resizeSurface(m->enigme, SCREEN_H / 70,SCREEN_H / 70);
     if (m->enigme == NULL) {
         printf("Erreur lors du chargement de l'enigme miniature: %s\n", SDL_GetError());
         exit(1);
@@ -235,8 +235,8 @@ void initmap(minimap *m, int SCREEN_W, int SCREEN_H, char minimapNormal[], int m
     }
 
     // Load and resize the image for the enemy
-    m->enemi = IMG_Load("./assets/enemi.png");
-    m->enemi = resizeSurface(m->enemi, SCREEN_H / 34, SCREEN_H / 34);
+    m->enemi = IMG_Load("./assets/enemi.jpg");
+    m->enemi = resizeSurface(m->enemi, SCREEN_H / 70, SCREEN_H / 70);
     if (m->enemi == NULL) {
         printf("Erreur lors du chargement de l'enemi miniature: %s\n", SDL_GetError());
         exit(1);

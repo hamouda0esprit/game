@@ -102,7 +102,7 @@ void Resize(SDL_Surface *(*Image), char dir[], int WIDTH, int HEIGHT){
 	SDL_FreeSurface(Buffer);
 }
 
-void run_game(int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *dest3, int right, int left, int up, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
+void run_game(Ennemi e,int *detectrobot,int *detect,int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *movex3, SDL_Rect *dest3, int right, int left, int up, int *state,SDL_Rect *dest2,int* test,background* bg, player* P, SDL_Rect *rect, SDL_Surface* screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int *g_e_a, int WIDTH, int *anim_frame, int *anim_frame_time, Uint32 move_interval, Uint32 last_move_time, int *game_ended, int *trigger, int *done, SDL_Rect *dest, SDL_Rect *b1, SDL_Rect *b2, int *limit, int *level, int *movex, int t, int det_green, int det_red, int det_blue, int det_black,int *e1_stage, int *enigme1, int *enigme2){
 			afficherBack(*bg,screen,*level);
 			
 			int speed = SCREEN_WIDTH/120;
@@ -156,8 +156,13 @@ void run_game(int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *move
 					}
 					
 				}
-				if (*enigme2 == 1 && bg->R.y == 0 && rect->x >= SCREEN_WIDTH/1.5 && *limit == 1){
+				if (*enigme2 == 1 && bg->R.y == 0 && rect->x >= SCREEN_WIDTH/1.5 && *limit == 1 && e.vie<=0){
 				       *level += 1;
+				       *detectrobot=1;
+				}
+				if (*enigme2 == 1 && bg->R.y == 0 && rect->x >= SCREEN_WIDTH/1.5 && *limit == 1 && e.vie>0){
+				       
+				       *detectrobot=5;
 				}
 			}
 			
@@ -166,11 +171,9 @@ void run_game(int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *move
 			       bg->R.x-=speed/1.2;
 			}
 			if (*level == 4 && *enigme3 == 1 && det_blue != 0){
-			       //printf("\nwon ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! ");
+			       printf("\nwon ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! won ! ");
 			}
-			if (*level == 4 && det_green !=0){
-			       *enigme3 = 1;
-			}
+			
 			P->score++;
 			*anim_frame_time+=1;
 			if(*anim_frame_time ==10){
@@ -204,6 +207,7 @@ void run_game(int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *move
 				}
 				if(*level == 3){
 					if (det_black!=0 && bg->R.y < 0 && (keys[SDLK_UP] || up)){
+					*detect=0;
 						bg->R.y=0;
 						b1->y+=SCREEN_HEIGHT*.85;
 						b2->y+=SCREEN_HEIGHT*.85;
@@ -212,6 +216,7 @@ void run_game(int *enigme3 ,int *movex2, int *movex4, SDL_Rect *dest4, int *move
 						rect->y=rect->y+SCREEN_HEIGHT/2;
 					}
 					if (det_black!=0 && keys[SDLK_DOWN] && bg->R.y == 0){
+					                     *detect=1;
 								bg->R.y=-SCREEN_HEIGHT*.85;
 								b1->y-=SCREEN_HEIGHT*.85;
 								b2->y-=SCREEN_HEIGHT*.85;
